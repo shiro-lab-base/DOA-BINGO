@@ -1,0 +1,1769 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>DOA BINGO</title>
+
+  <style>
+
+    * {
+
+      box-sizing: border-box;
+
+    }
+
+    body {
+
+      margin: 0;
+
+      min-height: 100vh;
+
+      background: #111;
+
+      color: #fff;
+
+      font-family: Arial, sans-serif;
+
+    }
+
+    button,
+
+    select {
+
+      font: inherit;
+
+    }
+
+    .screen {
+
+      display: none;
+
+      width: 100%;
+
+      min-height: 100vh;
+
+      padding: 24px 18px;
+
+    }
+
+    .screen.active {
+
+      display: flex;
+
+      flex-direction: column;
+
+      align-items: center;
+
+    }
+
+    .container {
+
+      width: 100%;
+
+      max-width: 500px;
+
+      text-align: center;
+
+    }
+
+    h1 {
+
+      margin: 0;
+
+      font-size: 38px;
+
+      letter-spacing: 4px;
+
+    }
+
+    h2 {
+
+      margin: 0 0 28px;
+
+      letter-spacing: 2px;
+
+    }
+
+    .subtitle {
+
+      margin-top: 8px;
+
+      color: #888;
+
+      font-size: 13px;
+
+    }
+
+    .main-button {
+
+      width: 100%;
+
+      min-height: 52px;
+
+      margin-top: 20px;
+
+      border: 0;
+
+      border-radius: 8px;
+
+      background: #fff;
+
+      color: #000;
+
+      font-weight: bold;
+
+      cursor: pointer;
+
+    }
+
+    .secondary-button {
+
+      width: 100%;
+
+      min-height: 48px;
+
+      margin-top: 12px;
+
+      border: 1px solid #666;
+
+      border-radius: 8px;
+
+      background: transparent;
+
+      color: #fff;
+
+      font-weight: bold;
+
+      cursor: pointer;
+
+    }
+
+    /* =========================
+
+       TITLE
+
+    ========================= */
+
+    #titleScreen {
+
+      justify-content: center;
+
+    }
+
+    .title-wrap {
+
+      width: 100%;
+
+      max-width: 420px;
+
+      text-align: center;
+
+    }
+
+    /* =========================
+
+       SETTINGS
+
+    ========================= */
+
+    .setting-box {
+
+      margin-bottom: 18px;
+
+      text-align: left;
+
+    }
+
+    .setting-box label {
+
+      display: block;
+
+      margin-bottom: 7px;
+
+      font-size: 14px;
+
+      color: #aaa;
+
+    }
+
+    .setting-box select {
+
+      width: 100%;
+
+      height: 48px;
+
+      padding: 0 12px;
+
+      border: 1px solid #555;
+
+      border-radius: 8px;
+
+      background: #1c1c1c;
+
+      color: #fff;
+
+    }
+
+    #settingError {
+
+      min-height: 24px;
+
+      margin-top: 12px;
+
+      color: #ff5555;
+
+      font-size: 14px;
+
+    }
+
+    /* =========================
+
+       GAME
+
+    ========================= */
+
+    #gameScreen {
+
+      justify-content: flex-start;
+
+    }
+
+    .game-header {
+
+      margin-bottom: 18px;
+
+    }
+
+    .game-title {
+
+      margin: 0;
+
+      font-size: 26px;
+
+      letter-spacing: 3px;
+
+    }
+
+    #status {
+
+      min-height: 38px;
+
+      margin-top: 12px;
+
+      font-size: 20px;
+
+      font-weight: bold;
+
+    }
+
+    #gameInfo {
+
+      color: #888;
+
+      font-size: 12px;
+
+    }
+
+    #board {
+
+      display: grid;
+
+      width: 100%;
+
+      gap: 8px;
+
+      margin: 12px auto 0;
+
+    }
+
+    .card {
+
+      padding: 0;
+
+      border: 0;
+
+      border-radius: 8px;
+
+      overflow: hidden;
+
+      background: transparent;
+
+      aspect-ratio: 63 / 88;
+
+      cursor: pointer;
+
+      transition: transform 0.12s ease;
+
+    }
+
+    .card:active {
+
+      transform: scale(0.96);
+
+    }
+
+    .card:disabled {
+
+      cursor: default;
+
+    }
+
+    .card img {
+
+      display: block;
+
+      width: 100%;
+
+      height: 100%;
+
+      object-fit: cover;
+
+    }
+
+    /* =========================
+
+       RESULT
+
+    ========================= */
+
+    #resultScreen {
+
+      justify-content: center;
+
+    }
+
+    .result-box {
+
+      width: 100%;
+
+      max-width: 420px;
+
+      padding: 26px 20px;
+
+      border: 1px solid #444;
+
+      border-radius: 12px;
+
+      background: #191919;
+
+      text-align: center;
+
+    }
+
+    #resultTitle {
+
+      margin-bottom: 22px;
+
+      color: #d00000;
+
+      font-size: 32px;
+
+      font-weight: bold;
+
+    }
+
+    .result-line {
+
+      margin: 10px 0;
+
+      font-size: 20px;
+
+    }
+
+    .total-shots {
+
+      margin: 22px 0;
+
+      font-size: 34px;
+
+      font-weight: bold;
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+  <!-- =========================
+
+       TITLE
+
+  ========================== -->
+
+  <section id="titleScreen" class="screen active">
+
+    <div class="title-wrap">
+
+      <h1>DOA BINGO</h1>
+
+      <div class="subtitle">
+
+        DEAD OR ALIVE
+
+      </div>
+
+      <button id="titleStartButton" class="main-button">
+
+        START
+
+      </button>
+
+    </div>
+
+  </section>
+
+  <!-- =========================
+
+       SETTINGS
+
+  ========================== -->
+
+  <section id="settingsScreen" class="screen">
+
+    <div class="container">
+
+      <h2>GAME SETTINGS</h2>
+
+      <div class="setting-box">
+
+        <label for="humanCount">
+
+          HUMAN PLAYERS
+
+        </label>
+
+        <select id="humanCount">
+
+          <option value="1" selected>1</option>
+
+          <option value="2">2</option>
+
+          <option value="3">3</option>
+
+          <option value="4">4</option>
+
+        </select>
+
+      </div>
+
+      <div class="setting-box">
+
+        <label for="cpuCount">
+
+          CPU PLAYERS
+
+        </label>
+
+        <select id="cpuCount">
+
+          <option value="0">0</option>
+
+          <option value="1" selected>1</option>
+
+          <option value="2">2</option>
+
+          <option value="3">3</option>
+
+        </select>
+
+      </div>
+
+      <div class="setting-box">
+
+        <label for="boardSize">
+
+          BOARD SIZE
+
+        </label>
+
+        <select id="boardSize">
+
+          <option value="3" selected>3 × 3</option>
+
+          <option value="4">4 × 4</option>
+
+          <option value="5">5 × 5</option>
+
+        </select>
+
+      </div>
+
+      <div class="setting-box">
+
+        <label for="deadCount">
+
+          DEAD CARDS
+
+        </label>
+
+        <select id="deadCount"></select>
+
+      </div>
+
+      <div id="settingError"></div>
+
+      <button id="gameStartButton" class="main-button">
+
+        START GAME
+
+      </button>
+
+      <button id="backTitleButton" class="secondary-button">
+
+        TITLE
+
+      </button>
+
+    </div>
+
+  </section>
+
+  <!-- =========================
+
+       GAME
+
+  ========================== -->
+
+  <section id="gameScreen" class="screen">
+
+    <div class="container">
+
+      <div class="game-header">
+
+        <div class="game-title">
+
+          DOA BINGO
+
+        </div>
+
+        <div id="status">
+
+          PLAYER 1 TURN
+
+        </div>
+
+        <div id="gameInfo"></div>
+
+      </div>
+
+      <div id="board"></div>
+
+    </div>
+
+  </section>
+
+  <!-- =========================
+
+       RESULT
+
+  ========================== -->
+
+  <section id="resultScreen" class="screen">
+
+    <div class="result-box">
+
+      <div id="resultTitle">
+
+        PLAYER 1 LOSE
+
+      </div>
+
+      <div class="result-line">
+
+        DEAD：1
+
+      </div>
+
+      <div class="result-line">
+
+        BINGO：
+
+        <span id="resultBingo">0</span>
+
+      </div>
+
+      <div class="total-shots">
+
+        TOTAL：
+
+        <span id="resultShots">1</span>
+
+        SHOTS
+
+      </div>
+
+      <button id="retryButton" class="main-button">
+
+        PLAY AGAIN
+
+      </button>
+
+      <button id="resultSettingsButton" class="secondary-button">
+
+        SETTINGS
+
+      </button>
+
+    </div>
+
+  </section>
+
+  <script>
+
+    // =========================================
+
+    // IMAGE FILES
+
+    // =========================================
+
+    const IMAGE_BACK =
+
+      "images/doa-back.png";
+
+    const IMAGE_ALIVE =
+
+      "images/doa-alive.png";
+
+    const IMAGE_DEAD =
+
+      "images/doa-dead.png";
+
+    // =========================================
+
+    // HTML
+
+    // =========================================
+
+    const titleScreen =
+
+      document.getElementById("titleScreen");
+
+    const settingsScreen =
+
+      document.getElementById("settingsScreen");
+
+    const gameScreen =
+
+      document.getElementById("gameScreen");
+
+    const resultScreen =
+
+      document.getElementById("resultScreen");
+
+    const titleStartButton =
+
+      document.getElementById("titleStartButton");
+
+    const gameStartButton =
+
+      document.getElementById("gameStartButton");
+
+    const backTitleButton =
+
+      document.getElementById("backTitleButton");
+
+    const retryButton =
+
+      document.getElementById("retryButton");
+
+    const resultSettingsButton =
+
+      document.getElementById("resultSettingsButton");
+
+    const humanCountSelect =
+
+      document.getElementById("humanCount");
+
+    const cpuCountSelect =
+
+      document.getElementById("cpuCount");
+
+    const boardSizeSelect =
+
+      document.getElementById("boardSize");
+
+    const deadCountSelect =
+
+      document.getElementById("deadCount");
+
+    const settingError =
+
+      document.getElementById("settingError");
+
+    const board =
+
+      document.getElementById("board");
+
+    const status =
+
+      document.getElementById("status");
+
+    const gameInfo =
+
+      document.getElementById("gameInfo");
+
+    const resultTitle =
+
+      document.getElementById("resultTitle");
+
+    const resultBingo =
+
+      document.getElementById("resultBingo");
+
+    const resultShots =
+
+      document.getElementById("resultShots");
+
+    // =========================================
+
+    // GAME DATA
+
+    // =========================================
+
+    let players = [];
+
+    let cards = [];
+
+    let currentPlayerIndex = 0;
+
+    let boardSize = 3;
+
+    let deadCardCount = 1;
+
+    let gameOver = false;
+
+    let inputLocked = false;
+
+    let cpuTimer = null;
+
+    // =========================================
+
+    // SCREEN
+
+    // =========================================
+
+    function showScreen(screen) {
+
+      [
+
+        titleScreen,
+
+        settingsScreen,
+
+        gameScreen,
+
+        resultScreen
+
+      ].forEach(
+
+        item =>
+
+          item.classList.remove("active")
+
+      );
+
+      screen.classList.add("active");
+
+    }
+
+    // =========================================
+
+    // DEAD COUNT OPTIONS
+
+    // =========================================
+
+    function updateDeadOptions() {
+
+      const size =
+
+        Number(boardSizeSelect.value);
+
+      const totalCards =
+
+        size * size;
+
+      const previousValue =
+
+        Number(deadCountSelect.value) || 1;
+
+      deadCountSelect.innerHTML = "";
+
+      for (
+
+        let i = 1;
+
+        i < totalCards;
+
+        i++
+
+      ) {
+
+        const option =
+
+          document.createElement("option");
+
+        option.value = i;
+
+        option.textContent = i;
+
+        deadCountSelect.appendChild(option);
+
+      }
+
+      deadCountSelect.value =
+
+        Math.min(
+
+          previousValue,
+
+          totalCards - 1
+
+        );
+
+    }
+
+    // =========================================
+
+    // CREATE PLAYERS
+
+    // =========================================
+
+    function createPlayers(
+
+      humanCount,
+
+      cpuCount
+
+    ) {
+
+      players = [];
+
+      let playerNumber = 1;
+
+      for (
+
+        let i = 0;
+
+        i < humanCount;
+
+        i++
+
+      ) {
+
+        players.push({
+
+          number: playerNumber,
+
+          type: "HUMAN"
+
+        });
+
+        playerNumber++;
+
+      }
+
+      for (
+
+        let i = 0;
+
+        i < cpuCount;
+
+        i++
+
+      ) {
+
+        players.push({
+
+          number: playerNumber,
+
+          type: "CPU"
+
+        });
+
+        playerNumber++;
+
+      }
+
+    }
+
+    // =========================================
+
+    // START GAME FROM SETTINGS
+
+    // =========================================
+
+    function startGameFromSettings() {
+
+      const humanCount =
+
+        Number(
+
+          humanCountSelect.value
+
+        );
+
+      const cpuCount =
+
+        Number(
+
+          cpuCountSelect.value
+
+        );
+
+      const totalPlayers =
+
+        humanCount + cpuCount;
+
+      if (
+
+        totalPlayers < 2
+
+        || totalPlayers > 4
+
+      ) {
+
+        settingError.textContent =
+
+          "プレイヤー合計人数は2〜4人にしてください。";
+
+        return;
+
+      }
+
+      settingError.textContent = "";
+
+      boardSize =
+
+        Number(
+
+          boardSizeSelect.value
+
+        );
+
+      deadCardCount =
+
+        Number(
+
+          deadCountSelect.value
+
+        );
+
+      createPlayers(
+
+        humanCount,
+
+        cpuCount
+
+      );
+
+      startGame();
+
+    }
+
+    // =========================================
+
+    // START GAME
+
+    // =========================================
+
+    function startGame() {
+
+      clearTimeout(cpuTimer);
+
+      gameOver = false;
+
+      inputLocked = false;
+
+      currentPlayerIndex = 0;
+
+      createCards();
+
+      createBoard();
+
+      showScreen(gameScreen);
+
+      updateTurn();
+
+    }
+
+    // =========================================
+
+    // CREATE CARDS
+
+    // =========================================
+
+    function createCards() {
+
+      const totalCards =
+
+        boardSize * boardSize;
+
+      cards = [];
+
+      for (
+
+        let i = 0;
+
+        i < deadCardCount;
+
+        i++
+
+      ) {
+
+        cards.push({
+
+          type: "DEAD",
+
+          opened: false
+
+        });
+
+      }
+
+      while (
+
+        cards.length < totalCards
+
+      ) {
+
+        cards.push({
+
+          type: "ALIVE",
+
+          opened: false
+
+        });
+
+      }
+
+      shuffle(cards);
+
+    }
+
+    // =========================================
+
+    // SHUFFLE
+
+    // =========================================
+
+    function shuffle(array) {
+
+      for (
+
+        let i = array.length - 1;
+
+        i > 0;
+
+        i--
+
+      ) {
+
+        const j =
+
+          Math.floor(
+
+            Math.random() * (i + 1)
+
+          );
+
+        [
+
+          array[i],
+
+          array[j]
+
+        ] = [
+
+          array[j],
+
+          array[i]
+
+        ];
+
+      }
+
+    }
+
+    // =========================================
+
+    // CREATE BOARD
+
+    // =========================================
+
+    function createBoard() {
+
+      board.innerHTML = "";
+
+      board.style.gridTemplateColumns =
+
+        `repeat(${boardSize}, 1fr)`;
+
+      cards.forEach(
+
+        (card, index) => {
+
+          const button =
+
+            document.createElement(
+
+              "button"
+
+            );
+
+          button.className = "card";
+
+          button.addEventListener(
+
+            "click",
+
+            () =>
+
+              selectCard(index)
+
+          );
+
+          board.appendChild(button);
+
+        }
+
+      );
+
+      refreshBoard();
+
+    }
+
+    // =========================================
+
+    // SELECT CARD
+
+    // =========================================
+
+    function selectCard(index) {
+
+      if (gameOver) return;
+
+      if (inputLocked) return;
+
+      const player =
+
+        players[currentPlayerIndex];
+
+      if (
+
+        player.type !== "HUMAN"
+
+      ) {
+
+        return;
+
+      }
+
+      openCard(index);
+
+    }
+
+    // =========================================
+
+    // OPEN CARD
+
+    // =========================================
+
+    function openCard(index) {
+
+      if (gameOver) return;
+
+      if (
+
+        cards[index].opened
+
+      ) {
+
+        return;
+
+      }
+
+      cards[index].opened = true;
+
+      refreshBoard();
+
+      if (
+
+        cards[index].type === "DEAD"
+
+      ) {
+
+        finishGame(
+
+          players[currentPlayerIndex]
+
+        );
+
+        return;
+
+      }
+
+      nextTurn();
+
+    }
+
+    // =========================================
+
+    // NEXT TURN
+
+    // =========================================
+
+    function nextTurn() {
+
+      currentPlayerIndex++;
+
+      if (
+
+        currentPlayerIndex
+
+        >= players.length
+
+      ) {
+
+        currentPlayerIndex = 0;
+
+      }
+
+      updateTurn();
+
+    }
+
+    // =========================================
+
+    // UPDATE TURN
+
+    // =========================================
+
+    function updateTurn() {
+
+      if (gameOver) return;
+
+      const player =
+
+        players[currentPlayerIndex];
+
+      if (
+
+        player.type === "CPU"
+
+      ) {
+
+        status.textContent =
+
+          `PLAYER ${player.number} CPU TURN`;
+
+        inputLocked = true;
+
+        refreshBoard();
+
+        cpuTimer =
+
+          setTimeout(
+
+            cpuPlay,
+
+            700
+
+          );
+
+      } else {
+
+        status.textContent =
+
+          `PLAYER ${player.number} TURN`;
+
+        inputLocked = false;
+
+        refreshBoard();
+
+      }
+
+      gameInfo.textContent =
+
+        `${boardSize}×${boardSize} / DEAD ${deadCardCount}`;
+
+    }
+
+    // =========================================
+
+    // CPU
+
+    // =========================================
+
+    function cpuPlay() {
+
+      if (gameOver) return;
+
+      const unopenedIndexes =
+
+        cards
+
+          .map(
+
+            (card, index) =>
+
+              card.opened
+
+                ? null
+
+                : index
+
+          )
+
+          .filter(
+
+            index =>
+
+              index !== null
+
+          );
+
+      if (
+
+        unopenedIndexes.length === 0
+
+      ) {
+
+        return;
+
+      }
+
+      const randomIndex =
+
+        unopenedIndexes[
+
+          Math.floor(
+
+            Math.random()
+
+            * unopenedIndexes.length
+
+          )
+
+        ];
+
+      inputLocked = false;
+
+      openCard(randomIndex);
+
+    }
+
+    // =========================================
+
+    // REFRESH BOARD
+
+    // =========================================
+
+    function refreshBoard() {
+
+      const buttons =
+
+        board.querySelectorAll(
+
+          ".card"
+
+        );
+
+      buttons.forEach(
+
+        (button, index) => {
+
+          const card =
+
+            cards[index];
+
+          button.innerHTML = "";
+
+          const image =
+
+            document.createElement(
+
+              "img"
+
+            );
+
+          if (
+
+            !card.opened
+
+          ) {
+
+            image.src =
+
+              IMAGE_BACK;
+
+            image.alt =
+
+              "CARD BACK";
+
+          } else if (
+
+            card.type === "ALIVE"
+
+          ) {
+
+            image.src =
+
+              IMAGE_ALIVE;
+
+            image.alt =
+
+              "ALIVE";
+
+          } else {
+
+            image.src =
+
+              IMAGE_DEAD;
+
+            image.alt =
+
+              "DEAD";
+
+          }
+
+          button.appendChild(image);
+
+          button.disabled =
+
+            gameOver
+
+            || inputLocked
+
+            || card.opened;
+
+        }
+
+      );
+
+    }
+
+    // =========================================
+
+    // COUNT BINGO
+
+    // =========================================
+
+    function countBingo() {
+
+      const lines = [];
+
+      // 横
+
+      for (
+
+        let row = 0;
+
+        row < boardSize;
+
+        row++
+
+      ) {
+
+        const line = [];
+
+        for (
+
+          let col = 0;
+
+          col < boardSize;
+
+          col++
+
+        ) {
+
+          line.push(
+
+            row * boardSize + col
+
+          );
+
+        }
+
+        lines.push(line);
+
+      }
+
+      // 縦
+
+      for (
+
+        let col = 0;
+
+        col < boardSize;
+
+        col++
+
+      ) {
+
+        const line = [];
+
+        for (
+
+          let row = 0;
+
+          row < boardSize;
+
+          row++
+
+        ) {
+
+          line.push(
+
+            row * boardSize + col
+
+          );
+
+        }
+
+        lines.push(line);
+
+      }
+
+      // 左上 → 右下
+
+      const diagonal1 = [];
+
+      for (
+
+        let i = 0;
+
+        i < boardSize;
+
+        i++
+
+      ) {
+
+        diagonal1.push(
+
+          i * boardSize + i
+
+        );
+
+      }
+
+      lines.push(diagonal1);
+
+      // 右上 → 左下
+
+      const diagonal2 = [];
+
+      for (
+
+        let i = 0;
+
+        i < boardSize;
+
+        i++
+
+      ) {
+
+        diagonal2.push(
+
+          i * boardSize
+
+          + (boardSize - 1 - i)
+
+        );
+
+      }
+
+      lines.push(diagonal2);
+
+      let bingoCount = 0;
+
+      lines.forEach(
+
+        line => {
+
+          const complete =
+
+            line.every(
+
+              index =>
+
+                cards[index].opened
+
+            );
+
+          if (complete) {
+
+            bingoCount++;
+
+          }
+
+        }
+
+      );
+
+      return bingoCount;
+
+    }
+
+    // =========================================
+
+    // FINISH GAME
+
+    // =========================================
+
+    function finishGame(loser) {
+
+      gameOver = true;
+
+      inputLocked = true;
+
+      clearTimeout(cpuTimer);
+
+      refreshBoard();
+
+      const bingo =
+
+        countBingo();
+
+      const shots =
+
+        1 + bingo;
+
+      resultTitle.textContent =
+
+        `PLAYER ${loser.number} LOSE`;
+
+      resultBingo.textContent =
+
+        bingo;
+
+      resultShots.textContent =
+
+        shots;
+
+      showScreen(resultScreen);
+
+    }
+
+    // =========================================
+
+    // BUTTON EVENTS
+
+    // =========================================
+
+    titleStartButton.addEventListener(
+
+      "click",
+
+      () => {
+
+        showScreen(
+
+          settingsScreen
+
+        );
+
+      }
+
+    );
+
+    backTitleButton.addEventListener(
+
+      "click",
+
+      () => {
+
+        showScreen(
+
+          titleScreen
+
+        );
+
+      }
+
+    );
+
+    gameStartButton.addEventListener(
+
+      "click",
+
+      startGameFromSettings
+
+    );
+
+    retryButton.addEventListener(
+
+      "click",
+
+      startGame
+
+    );
+
+    resultSettingsButton.addEventListener(
+
+      "click",
+
+      () => {
+
+        showScreen(
+
+          settingsScreen
+
+        );
+
+      }
+
+    );
+
+    boardSizeSelect.addEventListener(
+
+      "change",
+
+      updateDeadOptions
+
+    );
+
+    humanCountSelect.addEventListener(
+
+      "change",
+
+      () => {
+
+        settingError.textContent = "";
+
+      }
+
+    );
+
+    cpuCountSelect.addEventListener(
+
+      "change",
+
+      () => {
+
+        settingError.textContent = "";
+
+      }
+
+    );
+
+    // =========================================
+
+    // INITIALIZE
+
+    // =========================================
+
+    updateDeadOptions();
+
+  </script>
+
+</body>
+
+</html>
