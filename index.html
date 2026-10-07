@@ -6,7 +6,13 @@
 
   <meta charset="UTF-8">
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta
+
+    name="viewport"
+
+    content="width=device-width, initial-scale=1.0"
+
+  >
 
   <title>DOA BINGO</title>
 
@@ -440,7 +446,13 @@
 
 <body>
 
-  <section id="titleScreen" class="screen active">
+  <section
+
+    id="titleScreen"
+
+    class="screen active"
+
+  >
 
     <div class="title-wrap">
 
@@ -452,7 +464,13 @@
 
       </div>
 
-      <button id="titleStartButton" class="main-button">
+      <button
+
+        id="titleStartButton"
+
+        class="main-button"
+
+      >
 
         START
 
@@ -462,7 +480,13 @@
 
   </section>
 
-  <section id="settingsScreen" class="screen">
+  <section
+
+    id="settingsScreen"
+
+    class="screen"
+
+  >
 
     <div class="container">
 
@@ -546,13 +570,25 @@
 
       <div id="settingError"></div>
 
-      <button id="gameStartButton" class="main-button">
+      <button
+
+        id="gameStartButton"
+
+        class="main-button"
+
+      >
 
         START GAME
 
       </button>
 
-      <button id="backTitleButton" class="secondary-button">
+      <button
+
+        id="backTitleButton"
+
+        class="secondary-button"
+
+      >
 
         TITLE
 
@@ -562,7 +598,13 @@
 
   </section>
 
-  <section id="gameScreen" class="screen">
+  <section
+
+    id="gameScreen"
+
+    class="screen"
+
+  >
 
     <div class="container">
 
@@ -600,7 +642,13 @@
 
   </section>
 
-  <section id="resultScreen" class="screen">
+  <section
+
+    id="resultScreen"
+
+    class="screen"
+
+  >
 
     <div class="result-box">
 
@@ -634,13 +682,25 @@
 
       </div>
 
-      <button id="retryButton" class="main-button">
+      <button
+
+        id="retryButton"
+
+        class="main-button"
+
+      >
 
         PLAY AGAIN
 
       </button>
 
-      <button id="resultSettingsButton" class="secondary-button">
+      <button
+
+        id="resultSettingsButton"
+
+        class="secondary-button"
+
+      >
 
         SETTINGS
 
@@ -694,7 +754,7 @@
 
     const DEAL_ANIMATION_MS = 140;
 
-    const DEAL_GAP_MS = 300;
+    const DEAL_GAP_MS = 150;
 
     const FLIP_DELAY_MS = 350;
 
@@ -1095,8 +1155,6 @@
         `${boardSize}×${boardSize} / DEAD ${deadCardCount}`;
 
       showScreen(gameScreen);
-
-      startBgm();
 
       dealTimer =
 
@@ -1849,6 +1907,8 @@
       "click",
 
       () => {
+
+        startBgm();
 
         showScreen(
 
