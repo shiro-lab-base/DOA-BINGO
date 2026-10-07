@@ -342,6 +342,136 @@
 
     }
 
+    /* =========================
+
+       DEAD EFFECT
+
+    ========================= */
+
+    #deadFxOverlay {
+
+      display: none;
+
+      position: fixed;
+
+      inset: 0;
+
+      z-index: 2000;
+
+      overflow: hidden;
+
+      pointer-events: none;
+
+    }
+
+    #deadFxOverlay.active {
+
+      display: block;
+
+    }
+
+    #deadFxOverlay.running {
+
+      pointer-events: auto;
+
+    }
+
+    #deadFxBlack {
+
+      position: absolute;
+
+      inset: 0;
+
+      z-index: 20;
+
+      background: #000;
+
+      opacity: 0;
+
+      transition: opacity 0.18s linear;
+
+    }
+
+    #deadFxBlack.show {
+
+      opacity: 1;
+
+    }
+
+    #deadFxRed {
+
+      position: absolute;
+
+      inset: 0;
+
+      z-index: 2;
+
+      background: rgba(150, 0, 0, 0.42);
+
+      opacity: 0;
+
+      transition: opacity 0.18s linear;
+
+    }
+
+    #deadFxRed.show {
+
+      opacity: 1;
+
+    }
+
+    .dead-fx-image {
+
+      position: absolute;
+
+      inset: 0;
+
+      width: 100%;
+
+      height: 100%;
+
+      object-fit: contain;
+
+      opacity: 0;
+
+      pointer-events: none;
+
+      user-select: none;
+
+      -webkit-user-drag: none;
+
+    }
+
+    #deadFxSkull1 {
+
+      z-index: 10;
+
+    }
+
+    #deadFxBullet {
+
+      z-index: 30;
+
+    }
+
+    #deadFxBlood {
+
+      z-index: 31;
+
+    }
+
+    #deadFxSkull2 {
+
+      z-index: 5;
+
+    }
+
+    #deadFxLogo {
+
+      z-index: 6;
+
+    }
+
     #deadTapLayer {
 
       display: none;
@@ -350,7 +480,7 @@
 
       inset: 0;
 
-      z-index: 999;
+      z-index: 3000;
 
       background: transparent;
 
@@ -630,16 +760,6 @@
 
     </div>
 
-    <div id="deadTapLayer">
-
-      <div id="deadTapText">
-
-        TAP TO RESULT
-
-      </div>
-
-    </div>
-
   </section>
 
   <section
@@ -710,6 +830,88 @@
 
   </section>
 
+  <!-- DEAD EFFECT -->
+
+  <div id="deadFxOverlay">
+
+    <div id="deadFxRed"></div>
+
+    <img
+
+      id="deadFxSkull1"
+
+      class="dead-fx-image"
+
+      src="images/doa-dokuro-1.PNG"
+
+      alt=""
+
+    >
+
+    <img
+
+      id="deadFxSkull2"
+
+      class="dead-fx-image"
+
+      src="images/doa-dokuro-2.PNG"
+
+      alt=""
+
+    >
+
+    <img
+
+      id="deadFxLogo"
+
+      class="dead-fx-image"
+
+      src="images/doa-d-rogo.PNG"
+
+      alt=""
+
+    >
+
+    <div id="deadFxBlack"></div>
+
+    <img
+
+      id="deadFxBullet"
+
+      class="dead-fx-image"
+
+      src="images/doa-dankon.PNG"
+
+      alt=""
+
+    >
+
+    <img
+
+      id="deadFxBlood"
+
+      class="dead-fx-image"
+
+      src="images/doa-chi.PNG"
+
+      alt=""
+
+    >
+
+  </div>
+
+  <div id="deadTapLayer">
+
+    <div id="deadTapText">
+
+      TAP TO RESULT
+
+    </div>
+
+  </div>
+
+  <!-- AUDIO -->
+
   <audio
 
     id="bgm"
@@ -732,17 +934,55 @@
 
   ></audio>
 
+  <audio
+
+    id="gunClickSound"
+
+    src="audio/doa-gun-click.mp3"
+
+    preload="auto"
+
+  ></audio>
+
+  <audio
+
+    id="gunShotSound"
+
+    src="audio/doa-gun-shot.wav"
+
+    preload="auto"
+
+  ></audio>
+
   <script>
 
-    const IMAGE_BACK = "images/doa-back.PNG";
+    /* =========================
 
-    const IMAGE_ALIVE = "images/doa-alive.PNG";
+       FILES
 
-    const IMAGE_DEAD = "images/doa-dead.PNG";
+    ========================= */
+
+    const IMAGE_BACK =
+
+      "images/doa-back.PNG";
+
+    const IMAGE_ALIVE =
+
+      "images/doa-alive.PNG";
+
+    const IMAGE_DEAD =
+
+      "images/doa-dead.PNG";
 
     const DEAL_SOUND_URL =
 
       "audio/doa-card-placement.wav";
+
+    /* =========================
+
+       GAME TIMING
+
+    ========================= */
 
     const GAME_START_DEAL_DELAY_MS = 400;
 
@@ -752,97 +992,303 @@
 
     const FLIP_DELAY_MS = 350;
 
+    /* =========================
+
+       DEAD EFFECT TIMING
+
+       DEBUG VALUES
+
+    ========================= */
+
+    const DEAD_SKULL_MOVE_MS = 650;
+
+    const DEAD_BLACKOUT_MS = 180;
+
+    const DEAD_CLICK_TO_SHOT_MS = 280;
+
+    const DEAD_SHOT_TO_BULLET_MS = 80;
+
+    const DEAD_BULLET_TO_BLOOD_MS = 100;
+
+    const DEAD_BLACK_HOLD_MS = 320;
+
+    const DEAD_BROKEN_TO_LOGO_MS = 300;
+
+    /* =========================
+
+       ELEMENTS
+
+    ========================= */
+
     const titleScreen =
 
-      document.getElementById("titleScreen");
+      document.getElementById(
+
+        "titleScreen"
+
+      );
 
     const settingsScreen =
 
-      document.getElementById("settingsScreen");
+      document.getElementById(
+
+        "settingsScreen"
+
+      );
 
     const gameScreen =
 
-      document.getElementById("gameScreen");
+      document.getElementById(
+
+        "gameScreen"
+
+      );
 
     const resultScreen =
 
-      document.getElementById("resultScreen");
+      document.getElementById(
+
+        "resultScreen"
+
+      );
 
     const titleStartButton =
 
-      document.getElementById("titleStartButton");
+      document.getElementById(
+
+        "titleStartButton"
+
+      );
 
     const gameStartButton =
 
-      document.getElementById("gameStartButton");
+      document.getElementById(
+
+        "gameStartButton"
+
+      );
 
     const backTitleButton =
 
-      document.getElementById("backTitleButton");
+      document.getElementById(
+
+        "backTitleButton"
+
+      );
 
     const retryButton =
 
-      document.getElementById("retryButton");
+      document.getElementById(
+
+        "retryButton"
+
+      );
 
     const resultSettingsButton =
 
-      document.getElementById("resultSettingsButton");
+      document.getElementById(
+
+        "resultSettingsButton"
+
+      );
 
     const humanCountSelect =
 
-      document.getElementById("humanCount");
+      document.getElementById(
+
+        "humanCount"
+
+      );
 
     const cpuCountSelect =
 
-      document.getElementById("cpuCount");
+      document.getElementById(
+
+        "cpuCount"
+
+      );
 
     const boardSizeSelect =
 
-      document.getElementById("boardSize");
+      document.getElementById(
+
+        "boardSize"
+
+      );
 
     const deadCountSelect =
 
-      document.getElementById("deadCount");
+      document.getElementById(
+
+        "deadCount"
+
+      );
 
     const settingError =
 
-      document.getElementById("settingError");
+      document.getElementById(
+
+        "settingError"
+
+      );
 
     const board =
 
-      document.getElementById("board");
+      document.getElementById(
+
+        "board"
+
+      );
 
     const status =
 
-      document.getElementById("status");
+      document.getElementById(
+
+        "status"
+
+      );
 
     const gameInfo =
 
-      document.getElementById("gameInfo");
+      document.getElementById(
+
+        "gameInfo"
+
+      );
 
     const resultTitle =
 
-      document.getElementById("resultTitle");
+      document.getElementById(
+
+        "resultTitle"
+
+      );
 
     const resultBingo =
 
-      document.getElementById("resultBingo");
+      document.getElementById(
+
+        "resultBingo"
+
+      );
 
     const resultShots =
 
-      document.getElementById("resultShots");
+      document.getElementById(
 
-    const deadTapLayer =
+        "resultShots"
 
-      document.getElementById("deadTapLayer");
+      );
 
     const bgm =
 
-      document.getElementById("bgm");
+      document.getElementById(
+
+        "bgm"
+
+      );
 
     const cardFlickSound =
 
-      document.getElementById("cardFlickSound");
+      document.getElementById(
+
+        "cardFlickSound"
+
+      );
+
+    const gunClickSound =
+
+      document.getElementById(
+
+        "gunClickSound"
+
+      );
+
+    const gunShotSound =
+
+      document.getElementById(
+
+        "gunShotSound"
+
+      );
+
+    const deadFxOverlay =
+
+      document.getElementById(
+
+        "deadFxOverlay"
+
+      );
+
+    const deadFxBlack =
+
+      document.getElementById(
+
+        "deadFxBlack"
+
+      );
+
+    const deadFxRed =
+
+      document.getElementById(
+
+        "deadFxRed"
+
+      );
+
+    const deadFxSkull1 =
+
+      document.getElementById(
+
+        "deadFxSkull1"
+
+      );
+
+    const deadFxSkull2 =
+
+      document.getElementById(
+
+        "deadFxSkull2"
+
+      );
+
+    const deadFxLogo =
+
+      document.getElementById(
+
+        "deadFxLogo"
+
+      );
+
+    const deadFxBullet =
+
+      document.getElementById(
+
+        "deadFxBullet"
+
+      );
+
+    const deadFxBlood =
+
+      document.getElementById(
+
+        "deadFxBlood"
+
+      );
+
+    const deadTapLayer =
+
+      document.getElementById(
+
+        "deadTapLayer"
+
+      );
+
+    /* =========================
+
+       STATE
+
+    ========================= */
 
     let dealAudioContext = null;
 
@@ -872,9 +1318,23 @@
 
     let pendingLoser = null;
 
+    let deadFxRunning = false;
+
+    let deadFxRunId = 0;
+
     bgm.volume = 0.35;
 
     cardFlickSound.volume = 1;
+
+    gunClickSound.volume = 1;
+
+    gunShotSound.volume = 1;
+
+    /* =========================
+
+       AUDIO
+
+    ========================= */
 
     async function loadDealSound() {
 
@@ -926,8 +1386,6 @@
 
         console.error(
 
-          "Deal sound load error:",
-
           error
 
         );
@@ -961,8 +1419,6 @@
         } catch (error) {
 
           console.error(
-
-            "Deal audio resume error:",
 
             error
 
@@ -1008,7 +1464,11 @@
 
     }
 
-    function playSound(sound) {
+    function playSound(
+
+      sound
+
+    ) {
 
       sound.pause();
 
@@ -1028,7 +1488,11 @@
 
       ) {
 
-        playPromise.catch(() => {});
+        playPromise.catch(
+
+          () => {}
+
+        );
 
       }
 
@@ -1050,7 +1514,11 @@
 
       ) {
 
-        playPromise.catch(() => {});
+        playPromise.catch(
+
+          () => {}
+
+        );
 
       }
 
@@ -1062,7 +1530,39 @@
 
     }
 
-    function showScreen(screen) {
+    /* =========================
+
+       GENERAL
+
+    ========================= */
+
+    function wait(
+
+      ms
+
+    ) {
+
+      return new Promise(
+
+        resolve =>
+
+          setTimeout(
+
+            resolve,
+
+            ms
+
+          )
+
+      );
+
+    }
+
+    function showScreen(
+
+      screen
+
+    ) {
 
       [
 
@@ -1078,11 +1578,19 @@
 
         item =>
 
-          item.classList.remove("active")
+          item.classList.remove(
+
+            "active"
+
+          )
 
       );
 
-      screen.classList.add("active");
+      screen.classList.add(
+
+        "active"
+
+      );
 
     }
 
@@ -1166,7 +1674,9 @@
 
     ) {
 
-      players = [];
+      players =
+
+        [];
 
       let playerNumber =
 
@@ -1238,7 +1748,9 @@
 
       const totalPlayers =
 
-        humanCount + cpuCount;
+        humanCount
+
+        + cpuCount;
 
       if (
 
@@ -1288,6 +1800,12 @@
 
     }
 
+    /* =========================
+
+       GAME START
+
+    ========================= */
+
     function startGame() {
 
       clearTimeout(
@@ -1308,6 +1826,8 @@
 
       );
 
+      resetDeadFx();
+
       gameOver =
 
         false;
@@ -1327,16 +1847,6 @@
       currentPlayerIndex =
 
         0;
-
-      deadTapLayer
-
-        .classList
-
-        .remove(
-
-          "active"
-
-        );
 
       createCards();
 
@@ -1426,7 +1936,11 @@
 
     }
 
-    function shuffle(array) {
+    function shuffle(
+
+      array
+
+    ) {
 
       for (
 
@@ -1481,6 +1995,12 @@
         `repeat(${boardSize}, 1fr)`;
 
     }
+
+    /* =========================
+
+       DEAL
+
+    ========================= */
 
     function dealCards() {
 
@@ -1602,11 +2122,29 @@
 
     }
 
-    function selectCard(index) {
+    /* =========================
 
-      if (gameOver) return;
+       CARD OPEN
 
-      if (inputLocked) return;
+    ========================= */
+
+    function selectCard(
+
+      index
+
+    ) {
+
+      if (gameOver) {
+
+        return;
+
+      }
+
+      if (inputLocked) {
+
+        return;
+
+      }
 
       const player =
 
@@ -1618,7 +2156,9 @@
 
       if (
 
-        player.type !== "HUMAN"
+        player.type
+
+        !== "HUMAN"
 
       ) {
 
@@ -1634,11 +2174,23 @@
 
     }
 
-    function openCard(index) {
+    function openCard(
 
-      if (gameOver) return;
+      index
 
-      if (inputLocked) return;
+    ) {
+
+      if (gameOver) {
+
+        return;
+
+      }
+
+      if (inputLocked) {
+
+        return;
+
+      }
 
       if (
 
@@ -1690,7 +2242,9 @@
 
                   currentPlayerIndex
 
-                ]
+                ],
+
+                index
 
               );
 
@@ -1708,9 +2262,469 @@
 
     }
 
+    /* =========================
+
+       DEAD EFFECT
+
+    ========================= */
+
+    function resetDeadFx() {
+
+      deadFxRunId++;
+
+      deadFxRunning =
+
+        false;
+
+      deadFxOverlay.classList.remove(
+
+        "active",
+
+        "running"
+
+      );
+
+      deadFxBlack.classList.remove(
+
+        "show"
+
+      );
+
+      deadFxRed.classList.remove(
+
+        "show"
+
+      );
+
+      deadTapLayer.classList.remove(
+
+        "active"
+
+      );
+
+      [
+
+        deadFxSkull1,
+
+        deadFxSkull2,
+
+        deadFxLogo,
+
+        deadFxBullet,
+
+        deadFxBlood
+
+      ].forEach(
+
+        element => {
+
+          element.style.opacity =
+
+            "0";
+
+          element.style.transform =
+
+            "";
+
+          element.style.transition =
+
+            "";
+
+        }
+
+      );
+
+    }
+
+    function showDeadFinalScene() {
+
+      deadFxBlack.classList.remove(
+
+        "show"
+
+      );
+
+      deadFxSkull1.style.opacity =
+
+        "0";
+
+      deadFxBullet.style.opacity =
+
+        "0";
+
+      deadFxBlood.style.opacity =
+
+        "0";
+
+      deadFxSkull2.style.transition =
+
+        "none";
+
+      deadFxSkull2.style.transform =
+
+        "translate(0, 0) scale(1)";
+
+      deadFxSkull2.style.opacity =
+
+        "1";
+
+      deadFxLogo.style.transition =
+
+        "none";
+
+      deadFxLogo.style.transform =
+
+        "translate(0, 0) scale(1)";
+
+      deadFxLogo.style.opacity =
+
+        "1";
+
+      deadFxRed.classList.add(
+
+        "show"
+
+      );
+
+      deadFxRunning =
+
+        false;
+
+      deadFxOverlay.classList.remove(
+
+        "running"
+
+      );
+
+      deadTapLayer.classList.add(
+
+        "active"
+
+      );
+
+    }
+
+    async function runDeadFx(
+
+      cardIndex
+
+    ) {
+
+      const runId =
+
+        ++deadFxRunId;
+
+      deadFxRunning =
+
+        true;
+
+      deadFxOverlay.classList.add(
+
+        "active",
+
+        "running"
+
+      );
+
+      const cardButton =
+
+        board.querySelector(
+
+          `.card[data-index="${cardIndex}"]`
+
+        );
+
+      const rect =
+
+        cardButton
+
+          .getBoundingClientRect();
+
+      const centerX =
+
+        window.innerWidth / 2;
+
+      const centerY =
+
+        window.innerHeight / 2;
+
+      const cardX =
+
+        rect.left
+
+        + rect.width / 2;
+
+      const cardY =
+
+        rect.top
+
+        + rect.height / 2;
+
+      const offsetX =
+
+        cardX
+
+        - centerX;
+
+      const offsetY =
+
+        cardY
+
+        - centerY;
+
+      deadFxSkull1.style.transition =
+
+        "none";
+
+      deadFxSkull1.style.opacity =
+
+        "1";
+
+      deadFxSkull1.style.transform =
+
+        `translate(${offsetX}px, ${offsetY}px) scale(0.28)`;
+
+      await wait(
+
+        30
+
+      );
+
+      if (
+
+        runId
+
+        !== deadFxRunId
+
+      ) {
+
+        return;
+
+      }
+
+      deadFxSkull1.style.transition =
+
+        `transform ${DEAD_SKULL_MOVE_MS}ms ease-out`;
+
+      deadFxSkull1.style.transform =
+
+        "translate(0, 0) scale(1)";
+
+      await wait(
+
+        DEAD_SKULL_MOVE_MS
+
+      );
+
+      if (
+
+        runId
+
+        !== deadFxRunId
+
+      ) {
+
+        return;
+
+      }
+
+      deadFxBlack.classList.add(
+
+        "show"
+
+      );
+
+      await wait(
+
+        DEAD_BLACKOUT_MS
+
+      );
+
+      if (
+
+        runId
+
+        !== deadFxRunId
+
+      ) {
+
+        return;
+
+      }
+
+      playSound(
+
+        gunClickSound
+
+      );
+
+      await wait(
+
+        DEAD_CLICK_TO_SHOT_MS
+
+      );
+
+      if (
+
+        runId
+
+        !== deadFxRunId
+
+      ) {
+
+        return;
+
+      }
+
+      playSound(
+
+        gunShotSound
+
+      );
+
+      await wait(
+
+        DEAD_SHOT_TO_BULLET_MS
+
+      );
+
+      if (
+
+        runId
+
+        !== deadFxRunId
+
+      ) {
+
+        return;
+
+      }
+
+      deadFxBullet.style.transform =
+
+        "translate(4vw, -3vh)";
+
+      deadFxBullet.style.opacity =
+
+        "1";
+
+      await wait(
+
+        DEAD_BULLET_TO_BLOOD_MS
+
+      );
+
+      if (
+
+        runId
+
+        !== deadFxRunId
+
+      ) {
+
+        return;
+
+      }
+
+      deadFxBlood.style.transform =
+
+        "translate(4vw, -3vh)";
+
+      deadFxBlood.style.opacity =
+
+        "1";
+
+      await wait(
+
+        DEAD_BLACK_HOLD_MS
+
+      );
+
+      if (
+
+        runId
+
+        !== deadFxRunId
+
+      ) {
+
+        return;
+
+      }
+
+      deadFxBlack.classList.remove(
+
+        "show"
+
+      );
+
+      deadFxSkull1.style.opacity =
+
+        "0";
+
+      deadFxBullet.style.opacity =
+
+        "0";
+
+      deadFxBlood.style.opacity =
+
+        "0";
+
+      deadFxSkull2.style.opacity =
+
+        "1";
+
+      await wait(
+
+        DEAD_BROKEN_TO_LOGO_MS
+
+      );
+
+      if (
+
+        runId
+
+        !== deadFxRunId
+
+      ) {
+
+        return;
+
+      }
+
+      deadFxLogo.style.opacity =
+
+        "1";
+
+      deadFxRed.classList.add(
+
+        "show"
+
+      );
+
+      deadFxRunning =
+
+        false;
+
+      deadFxOverlay.classList.remove(
+
+        "running"
+
+      );
+
+      deadTapLayer.classList.add(
+
+        "active"
+
+      );
+
+    }
+
     function prepareDeadResult(
 
-      loser
+      loser,
+
+      cardIndex
 
     ) {
 
@@ -1742,21 +2756,47 @@
 
       gameInfo.textContent =
 
-        "TAP SCREEN TO RESULT";
+        "";
 
       refreshBoard();
 
-      deadTapLayer
+      runDeadFx(
 
-        .classList
+        cardIndex
 
-        .add(
-
-          "active"
-
-        );
+      );
 
     }
+
+    deadFxOverlay.addEventListener(
+
+      "click",
+
+      () => {
+
+        if (
+
+          !deadFxRunning
+
+        ) {
+
+          return;
+
+        }
+
+        deadFxRunId++;
+
+        showDeadFinalScene();
+
+      }
+
+    );
+
+    /* =========================
+
+       TURN
+
+    ========================= */
 
     function nextTurn() {
 
@@ -1782,7 +2822,11 @@
 
     function updateTurn() {
 
-      if (gameOver) return;
+      if (gameOver) {
+
+        return;
+
+      }
 
       const player =
 
@@ -1794,7 +2838,9 @@
 
       if (
 
-        player.type === "CPU"
+        player.type
+
+        === "CPU"
 
       ) {
 
@@ -1840,7 +2886,11 @@
 
     function cpuPlay() {
 
-      if (gameOver) return;
+      if (gameOver) {
+
+        return;
+
+      }
 
       const unopenedIndexes =
 
@@ -1909,6 +2959,12 @@
       );
 
     }
+
+    /* =========================
+
+       BOARD
+
+    ========================= */
 
     function refreshBoard() {
 
@@ -2009,6 +3065,12 @@
       );
 
     }
+
+    /* =========================
+
+       RESULT
+
+    ========================= */
 
     function countBingo() {
 
@@ -2194,7 +3256,11 @@
 
             );
 
-          if (complete) {
+          if (
+
+            complete
+
+          ) {
 
             bingoCount++;
 
@@ -2208,7 +3274,11 @@
 
     }
 
-    function finishGame(loser) {
+    function finishGame(
+
+      loser
+
+    ) {
 
       const bingo =
 
@@ -2216,7 +3286,9 @@
 
       const shots =
 
-        1 + bingo;
+        1
+
+        + bingo;
 
       resultTitle.textContent =
 
@@ -2238,15 +3310,7 @@
 
         null;
 
-      deadTapLayer
-
-        .classList
-
-        .remove(
-
-          "active"
-
-        );
+      resetDeadFx();
 
       showScreen(
 
@@ -2285,6 +3349,12 @@
       }
 
     );
+
+    /* =========================
+
+       BUTTONS
+
+    ========================= */
 
     titleStartButton.addEventListener(
 
