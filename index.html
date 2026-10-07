@@ -162,6 +162,14 @@
 
       background-image: url("images/doa-title.PNG");
 
+      background-size: contain;
+
+      background-position: center;
+
+      background-repeat: no-repeat;
+
+      background-color: #000;
+
     }
 
     #settingsScreen {
@@ -190,17 +198,33 @@
 
     #titleScreen .main-button,
 
-    #titleScreen .secondary-button,
-
-    #settingsScreen .main-button,
-
-    #settingsScreen .secondary-button {
+    #titleScreen .secondary-button {
 
       background: transparent;
 
       color: #fff;
 
       border: 1px solid #fff;
+
+    }
+
+    #settingsScreen .main-button {
+
+      background: #fff;
+
+      color: #000;
+
+      border: 0;
+
+    }
+
+    #settingsScreen .secondary-button {
+
+      background: #1c1c1c;
+
+      color: #fff;
+
+      border: 1px solid #666;
 
     }
 
@@ -381,12 +405,6 @@
       object-fit: cover;
 
     }
-
-    /* =========================
-
-       DEAD EFFECT
-
-    ========================= */
 
     #deadFxOverlay {
 
@@ -864,8 +882,6 @@
 
   </section>
 
-  <!-- DEAD EFFECT -->
-
   <div id="deadFxOverlay">
 
     <div id="deadFxRed"></div>
@@ -943,8 +959,6 @@
     </div>
 
   </div>
-
-  <!-- AUDIO -->
 
   <audio
 
