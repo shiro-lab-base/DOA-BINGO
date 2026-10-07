@@ -56,6 +56,12 @@
 
       padding: 24px 18px;
 
+      background-position: center;
+
+      background-repeat: no-repeat;
+
+      background-size: cover;
+
     }
 
     .screen.active {
@@ -154,6 +160,48 @@
 
       justify-content: center;
 
+      background-image: url("images/doa-title.PNG");
+
+    }
+
+    #settingsScreen {
+
+      background-image: url("images/doa-setting.PNG");
+
+    }
+
+    #gameScreen {
+
+      justify-content: flex-start;
+
+      position: relative;
+
+      background-image: url("images/doa-play-back.PNG");
+
+    }
+
+    #resultScreen {
+
+      justify-content: center;
+
+      background-image: url("images/doa-play-back.PNG");
+
+    }
+
+    #titleScreen .main-button,
+
+    #titleScreen .secondary-button,
+
+    #settingsScreen .main-button,
+
+    #settingsScreen .secondary-button {
+
+      background: transparent;
+
+      color: #fff;
+
+      border: 1px solid #fff;
+
     }
 
     .title-wrap {
@@ -213,14 +261,6 @@
       color: #ff5555;
 
       font-size: 14px;
-
-    }
-
-    #gameScreen {
-
-      justify-content: flex-start;
-
-      position: relative;
 
     }
 
@@ -513,12 +553,6 @@
       font-size: 13px;
 
       letter-spacing: 2px;
-
-    }
-
-    #resultScreen {
-
-      justify-content: center;
 
     }
 
@@ -956,12 +990,6 @@
 
   <script>
 
-    /* =========================
-
-       FILES
-
-    ========================= */
-
     const IMAGE_BACK =
 
       "images/doa-back.PNG";
@@ -978,12 +1006,6 @@
 
       "audio/doa-card-placement.wav";
 
-    /* =========================
-
-       GAME TIMING
-
-    ========================= */
-
     const GAME_START_DEAL_DELAY_MS = 400;
 
     const DEAL_ANIMATION_MS = 140;
@@ -991,14 +1013,6 @@
     const DEAL_GAP_MS = 95;
 
     const FLIP_DELAY_MS = 350;
-
-    /* =========================
-
-       DEAD EFFECT TIMING
-
-       DEBUG VALUES
-
-    ========================= */
 
     const DEAD_SKULL_MOVE_MS = 650;
 
@@ -1013,12 +1027,6 @@
     const DEAD_BLACK_HOLD_MS = 1400;
 
     const DEAD_BROKEN_TO_LOGO_MS = 700;
-
-    /* =========================
-
-       ELEMENTS
-
-    ========================= */
 
     const titleScreen =
 
@@ -1284,12 +1292,6 @@
 
       );
 
-    /* =========================
-
-       STATE
-
-    ========================= */
-
     let dealAudioContext = null;
 
     let dealAudioBuffer = null;
@@ -1329,12 +1331,6 @@
     gunClickSound.volume = 1;
 
     gunShotSound.volume = 1;
-
-    /* =========================
-
-       AUDIO
-
-    ========================= */
 
     async function loadDealSound() {
 
@@ -1529,12 +1525,6 @@
       bgm.pause();
 
     }
-
-    /* =========================
-
-       GENERAL
-
-    ========================= */
 
     function wait(
 
@@ -1800,12 +1790,6 @@
 
     }
 
-    /* =========================
-
-       GAME START
-
-    ========================= */
-
     function startGame() {
 
       clearTimeout(
@@ -1996,12 +1980,6 @@
 
     }
 
-    /* =========================
-
-       DEAL
-
-    ========================= */
-
     function dealCards() {
 
       let index =
@@ -2121,12 +2099,6 @@
       dealNextCard();
 
     }
-
-    /* =========================
-
-       CARD OPEN
-
-    ========================= */
 
     function selectCard(
 
@@ -2261,12 +2233,6 @@
         );
 
     }
-
-    /* =========================
-
-       DEAD EFFECT
-
-    ========================= */
 
     function resetDeadFx() {
 
@@ -2792,12 +2758,6 @@
 
     );
 
-    /* =========================
-
-       TURN
-
-    ========================= */
-
     function nextTurn() {
 
       currentPlayerIndex++;
@@ -2960,12 +2920,6 @@
 
     }
 
-    /* =========================
-
-       BOARD
-
-    ========================= */
-
     function refreshBoard() {
 
       const buttons =
@@ -3065,12 +3019,6 @@
       );
 
     }
-
-    /* =========================
-
-       RESULT
-
-    ========================= */
 
     function countBingo() {
 
@@ -3349,12 +3297,6 @@
       }
 
     );
-
-    /* =========================
-
-       BUTTONS
-
-    ========================= */
 
     titleStartButton.addEventListener(
 
