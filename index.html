@@ -800,6 +800,18 @@
 
       "images/doa-dead.PNG";
 
+    const DEAL_SOUND_LEAD_MS =
+
+      100;
+
+    const DEAL_AFTER_SHOW_MS =
+
+      120;
+
+    const FLIP_DELAY_MS =
+
+      350;
+
     const titleScreen =
 
       document.getElementById(
@@ -1010,6 +1022,8 @@
 
     let dealTimer = null;
 
+    let flipTimer = null;
+
     let awaitingResult = false;
 
     let pendingLoser = null;
@@ -1102,7 +1116,11 @@
 
     }
 
-    function playSound(sound) {
+    function playSound(
+
+      sound
+
+    ) {
 
       sound.pause();
 
@@ -1146,7 +1164,9 @@
 
         cardPlacementSound.volume;
 
-      clone.currentTime = 0;
+      clone.currentTime =
+
+        0;
 
       const playPromise =
 
@@ -1458,6 +1478,12 @@
 
       );
 
+      clearTimeout(
+
+        flipTimer
+
+      );
+
       gameOver =
 
         false;
@@ -1516,7 +1542,9 @@
 
         * boardSize;
 
-      cards = [];
+      cards =
+
+        [];
 
       for (
 
@@ -1622,55 +1650,17 @@
 
     }
 
-    function getDealInterval() {
-
-      const totalCards =
-
-        boardSize
-
-        * boardSize;
-
-      if (
-
-        totalCards <= 9
-
-      ) {
-
-        return 120;
-
-      }
-
-      if (
-
-        totalCards <= 16
-
-      ) {
-
-        return 90;
-
-      }
-
-      return 65;
-
-    }
-
     function dealCards() {
 
       let index =
 
         0;
 
-      const interval =
-
-        getDealInterval();
-
       function dealNextCard() {
 
         if (
 
-          index
-
-          >= cards.length
+          index >= cards.length
 
         ) {
 
@@ -1684,79 +1674,91 @@
 
         }
 
-        const button =
-
-          document.createElement(
-
-            "button"
-
-          );
-
-        button.className =
-
-          "card dealing";
-
-        button.dataset.index =
-
-          index;
-
-        const cardIndex =
-
-          index;
-
-        button.addEventListener(
-
-          "click",
-
-          () =>
-
-            selectCard(
-
-              cardIndex
-
-            )
-
-        );
-
-        const image =
-
-          document.createElement(
-
-            "img"
-
-          );
-
-        image.src =
-
-          IMAGE_BACK;
-
-        image.alt =
-
-          "CARD BACK";
-
-        button.appendChild(
-
-          image
-
-        );
-
-        board.appendChild(
-
-          button
-
-        );
-
         playPlacementSound();
-
-        index++;
 
         dealTimer =
 
           setTimeout(
 
-            dealNextCard,
+            () => {
 
-            interval
+              const button =
+
+                document.createElement(
+
+                  "button"
+
+                );
+
+              button.className =
+
+                "card dealing";
+
+              button.dataset.index =
+
+                index;
+
+              const cardIndex =
+
+                index;
+
+              button.addEventListener(
+
+                "click",
+
+                () =>
+
+                  selectCard(
+
+                    cardIndex
+
+                  )
+
+              );
+
+              const image =
+
+                document.createElement(
+
+                  "img"
+
+                );
+
+              image.src =
+
+                IMAGE_BACK;
+
+              image.alt =
+
+                "CARD BACK";
+
+              button.appendChild(
+
+                image
+
+              );
+
+              board.appendChild(
+
+                button
+
+              );
+
+              index++;
+
+              dealTimer =
+
+                setTimeout(
+
+                  dealNextCard,
+
+                  DEAL_AFTER_SHOW_MS
+
+                );
+
+            },
+
+            DEAL_SOUND_LEAD_MS
 
           );
 
@@ -1838,6 +1840,16 @@
 
       if (
 
+        inputLocked
+
+      ) {
+
+        return;
+
+      }
+
+      if (
+
         cards[index].opened
 
       ) {
@@ -1846,43 +1858,61 @@
 
       }
 
+      inputLocked =
+
+        true;
+
+      refreshBoard();
+
       playSound(
 
         cardFlickSound
 
       );
 
-      cards[index].opened =
+      flipTimer =
 
-        true;
+        setTimeout(
 
-      refreshBoard();
+          () => {
 
-      if (
+            cards[index].opened =
 
-        cards[index].type
+              true;
 
-        === "DEAD"
+            refreshBoard();
 
-      ) {
+            if (
 
-        pauseBgm();
+              cards[index].type
 
-        prepareDeadResult(
+              === "DEAD"
 
-          players[
+            ) {
 
-            currentPlayerIndex
+              pauseBgm();
 
-          ]
+              prepareDeadResult(
+
+                players[
+
+                  currentPlayerIndex
+
+                ]
+
+              );
+
+              return;
+
+            }
+
+            nextTurn();
+
+          },
+
+          FLIP_DELAY_MS
 
         );
-
-        return;
-
-      }
-
-      nextTurn();
 
     }
 
