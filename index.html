@@ -732,16 +732,6 @@
 
   ></audio>
 
-  <audio
-
-    id="cardPlacementSound"
-
-    src="audio/doa-card-placement.wav"
-
-    preload="auto"
-
-  ></audio>
-
   <script>
 
     const IMAGE_BACK = "images/doa-back.PNG";
@@ -749,6 +739,10 @@
     const IMAGE_ALIVE = "images/doa-alive.PNG";
 
     const IMAGE_DEAD = "images/doa-dead.PNG";
+
+    const DEAL_SOUND_URL =
+
+      "audio/doa-card-placement.wav";
 
     const GAME_START_DEAL_DELAY_MS = 400;
 
@@ -850,9 +844,9 @@
 
       document.getElementById("cardFlickSound");
 
-    const cardPlacementSound =
+    let dealAudioContext = null;
 
-      document.getElementById("cardPlacementSound");
+    let dealAudioBuffer = null;
 
     let players = [];
 
@@ -882,7 +876,137 @@
 
     cardFlickSound.volume = 1;
 
-    cardPlacementSound.volume = 1;
+    async function loadDealSound() {
+
+      try {
+
+        const AudioContextClass =
+
+          window.AudioContext
+
+          || window.webkitAudioContext;
+
+        if (!AudioContextClass) {
+
+          return;
+
+        }
+
+        if (!dealAudioContext) {
+
+          dealAudioContext =
+
+            new AudioContextClass();
+
+        }
+
+        const response =
+
+          await fetch(
+
+            DEAL_SOUND_URL
+
+          );
+
+        const arrayBuffer =
+
+          await response.arrayBuffer();
+
+        dealAudioBuffer =
+
+          await dealAudioContext
+
+            .decodeAudioData(
+
+              arrayBuffer
+
+            );
+
+      } catch (error) {
+
+        console.error(
+
+          "Deal sound load error:",
+
+          error
+
+        );
+
+      }
+
+    }
+
+    async function resumeDealAudio() {
+
+      if (!dealAudioContext) {
+
+        await loadDealSound();
+
+      }
+
+      if (
+
+        dealAudioContext
+
+        && dealAudioContext.state
+
+        === "suspended"
+
+      ) {
+
+        try {
+
+          await dealAudioContext.resume();
+
+        } catch (error) {
+
+          console.error(
+
+            "Deal audio resume error:",
+
+            error
+
+          );
+
+        }
+
+      }
+
+    }
+
+    function playDealSound() {
+
+      if (
+
+        !dealAudioContext
+
+        || !dealAudioBuffer
+
+      ) {
+
+        return;
+
+      }
+
+      const source =
+
+        dealAudioContext
+
+          .createBufferSource();
+
+      source.buffer =
+
+        dealAudioBuffer;
+
+      source.connect(
+
+        dealAudioContext.destination
+
+      );
+
+      source.start(0);
+
+    }
 
     function playSound(sound) {
 
@@ -898,7 +1022,9 @@
 
         playPromise
 
-        && typeof playPromise.catch === "function"
+        && typeof playPromise.catch
+
+        === "function"
 
       ) {
 
@@ -918,7 +1044,9 @@
 
         playPromise
 
-        && typeof playPromise.catch === "function"
+        && typeof playPromise.catch
+
+        === "function"
 
       ) {
 
@@ -962,7 +1090,11 @@
 
       const size =
 
-        Number(boardSizeSelect.value);
+        Number(
+
+          boardSizeSelect.value
+
+        );
 
       const totalCards =
 
@@ -970,9 +1102,15 @@
 
       const previousValue =
 
-        Number(deadCountSelect.value) || 1;
+        Number(
 
-      deadCountSelect.innerHTML = "";
+          deadCountSelect.value
+
+        ) || 1;
+
+      deadCountSelect.innerHTML =
+
+        "";
 
       for (
 
@@ -986,13 +1124,25 @@
 
         const option =
 
-          document.createElement("option");
+          document.createElement(
 
-        option.value = i;
+            "option"
 
-        option.textContent = i;
+          );
 
-        deadCountSelect.appendChild(option);
+        option.value =
+
+          i;
+
+        option.textContent =
+
+          i;
+
+        deadCountSelect.appendChild(
+
+          option
+
+        );
 
       }
 
@@ -1018,7 +1168,9 @@
 
       players = [];
 
-      let playerNumber = 1;
+      let playerNumber =
+
+        1;
 
       for (
 
@@ -1070,11 +1222,19 @@
 
       const humanCount =
 
-        Number(humanCountSelect.value);
+        Number(
+
+          humanCountSelect.value
+
+        );
 
       const cpuCount =
 
-        Number(cpuCountSelect.value);
+        Number(
+
+          cpuCountSelect.value
+
+        );
 
       const totalPlayers =
 
@@ -1096,15 +1256,25 @@
 
       }
 
-      settingError.textContent = "";
+      settingError.textContent =
+
+        "";
 
       boardSize =
 
-        Number(boardSizeSelect.value);
+        Number(
+
+          boardSizeSelect.value
+
+        );
 
       deadCardCount =
 
-        Number(deadCountSelect.value);
+        Number(
+
+          deadCountSelect.value
+
+        );
 
       createPlayers(
 
@@ -1120,27 +1290,53 @@
 
     function startGame() {
 
-      clearTimeout(cpuTimer);
+      clearTimeout(
 
-      clearTimeout(dealTimer);
-
-      clearTimeout(flipTimer);
-
-      gameOver = false;
-
-      inputLocked = true;
-
-      awaitingResult = false;
-
-      pendingLoser = null;
-
-      currentPlayerIndex = 0;
-
-      deadTapLayer.classList.remove(
-
-        "active"
+        cpuTimer
 
       );
+
+      clearTimeout(
+
+        dealTimer
+
+      );
+
+      clearTimeout(
+
+        flipTimer
+
+      );
+
+      gameOver =
+
+        false;
+
+      inputLocked =
+
+        true;
+
+      awaitingResult =
+
+        false;
+
+      pendingLoser =
+
+        null;
+
+      currentPlayerIndex =
+
+        0;
+
+      deadTapLayer
+
+        .classList
+
+        .remove(
+
+          "active"
+
+        );
 
       createCards();
 
@@ -1154,7 +1350,11 @@
 
         `${boardSize}×${boardSize} / DEAD ${deadCardCount}`;
 
-      showScreen(gameScreen);
+      showScreen(
+
+        gameScreen
+
+      );
 
       dealTimer =
 
@@ -1172,9 +1372,13 @@
 
       const totalCards =
 
-        boardSize * boardSize;
+        boardSize
 
-      cards = [];
+        * boardSize;
+
+      cards =
+
+        [];
 
       for (
 
@@ -1198,7 +1402,9 @@
 
       while (
 
-        cards.length < totalCards
+        cards.length
+
+        < totalCards
 
       ) {
 
@@ -1212,7 +1418,11 @@
 
       }
 
-      shuffle(cards);
+      shuffle(
+
+        cards
+
+      );
 
     }
 
@@ -1220,7 +1430,9 @@
 
       for (
 
-        let i = array.length - 1;
+        let i =
+
+          array.length - 1;
 
         i > 0;
 
@@ -1232,7 +1444,9 @@
 
           Math.floor(
 
-            Math.random() * (i + 1)
+            Math.random()
+
+            * (i + 1)
 
           );
 
@@ -1256,9 +1470,13 @@
 
     function prepareBoard() {
 
-      board.innerHTML = "";
+      board.innerHTML =
 
-      board.style.gridTemplateColumns =
+        "";
+
+      board.style
+
+        .gridTemplateColumns =
 
         `repeat(${boardSize}, 1fr)`;
 
@@ -1266,17 +1484,23 @@
 
     function dealCards() {
 
-      let index = 0;
+      let index =
+
+        0;
 
       function dealNextCard() {
 
         if (
 
-          index >= cards.length
+          index
+
+          >= cards.length
 
         ) {
 
-          inputLocked = false;
+          inputLocked =
+
+            false;
 
           updateTurn();
 
@@ -1286,7 +1510,11 @@
 
         const button =
 
-          document.createElement("button");
+          document.createElement(
+
+            "button"
+
+          );
 
         button.className =
 
@@ -1306,13 +1534,21 @@
 
           () =>
 
-            selectCard(cardIndex)
+            selectCard(
+
+              cardIndex
+
+            )
 
         );
 
         const image =
 
-          document.createElement("img");
+          document.createElement(
+
+            "img"
+
+          );
 
         image.src =
 
@@ -1322,15 +1558,19 @@
 
           "CARD BACK";
 
-        button.appendChild(image);
+        button.appendChild(
 
-        playSound(
-
-          cardPlacementSound
+          image
 
         );
 
-        board.appendChild(button);
+        playDealSound();
+
+        board.appendChild(
+
+          button
+
+        );
 
         index++;
 
@@ -1370,7 +1610,11 @@
 
       const player =
 
-        players[currentPlayerIndex];
+        players[
+
+          currentPlayerIndex
+
+        ];
 
       if (
 
@@ -1382,7 +1626,11 @@
 
       }
 
-      openCard(index);
+      openCard(
+
+        index
+
+      );
 
     }
 
@@ -1402,7 +1650,9 @@
 
       }
 
-      inputLocked = true;
+      inputLocked =
+
+        true;
 
       refreshBoard();
 
@@ -1426,7 +1676,9 @@
 
             if (
 
-              cards[index].type === "DEAD"
+              cards[index].type
+
+              === "DEAD"
 
             ) {
 
@@ -1434,7 +1686,11 @@
 
               prepareDeadResult(
 
-                players[currentPlayerIndex]
+                players[
+
+                  currentPlayerIndex
+
+                ]
 
               );
 
@@ -1452,17 +1708,33 @@
 
     }
 
-    function prepareDeadResult(loser) {
+    function prepareDeadResult(
 
-      gameOver = true;
+      loser
 
-      inputLocked = true;
+    ) {
 
-      awaitingResult = true;
+      gameOver =
 
-      pendingLoser = loser;
+        true;
 
-      clearTimeout(cpuTimer);
+      inputLocked =
+
+        true;
+
+      awaitingResult =
+
+        true;
+
+      pendingLoser =
+
+        loser;
+
+      clearTimeout(
+
+        cpuTimer
+
+      );
 
       status.textContent =
 
@@ -1474,11 +1746,15 @@
 
       refreshBoard();
 
-      deadTapLayer.classList.add(
+      deadTapLayer
 
-        "active"
+        .classList
 
-      );
+        .add(
+
+          "active"
+
+        );
 
     }
 
@@ -1494,7 +1770,9 @@
 
       ) {
 
-        currentPlayerIndex = 0;
+        currentPlayerIndex =
+
+          0;
 
       }
 
@@ -1508,7 +1786,11 @@
 
       const player =
 
-        players[currentPlayerIndex];
+        players[
+
+          currentPlayerIndex
+
+        ];
 
       if (
 
@@ -1520,7 +1802,9 @@
 
           `PLAYER ${player.number} CPU TURN`;
 
-        inputLocked = true;
+        inputLocked =
+
+          true;
 
         refreshBoard();
 
@@ -1540,7 +1824,9 @@
 
           `PLAYER ${player.number} TURN`;
 
-        inputLocked = false;
+        inputLocked =
+
+          false;
 
         refreshBoard();
 
@@ -1562,7 +1848,13 @@
 
           .map(
 
-            (card, index) =>
+            (
+
+              card,
+
+              index
+
+            ) =>
 
               card.opened
 
@@ -1582,7 +1874,9 @@
 
       if (
 
-        unopenedIndexes.length === 0
+        unopenedIndexes.length
+
+        === 0
 
       ) {
 
@@ -1604,9 +1898,15 @@
 
         ];
 
-      inputLocked = false;
+      inputLocked =
 
-      openCard(randomIndex);
+        false;
+
+      openCard(
+
+        randomIndex
+
+      );
 
     }
 
@@ -1614,7 +1914,11 @@
 
       const buttons =
 
-        board.querySelectorAll(".card");
+        board.querySelectorAll(
+
+          ".card"
+
+        );
 
       buttons.forEach(
 
@@ -1622,17 +1926,27 @@
 
           const index =
 
-            Number(button.dataset.index);
+            Number(
+
+              button.dataset.index
+
+            );
 
           const card =
 
             cards[index];
 
-          button.innerHTML = "";
+          button.innerHTML =
+
+            "";
 
           const image =
 
-            document.createElement("img");
+            document.createElement(
+
+              "img"
+
+            );
 
           if (
 
@@ -1650,7 +1964,9 @@
 
           } else if (
 
-            card.type === "ALIVE"
+            card.type
+
+            === "ALIVE"
 
           ) {
 
@@ -1674,7 +1990,11 @@
 
           }
 
-          button.appendChild(image);
+          button.appendChild(
+
+            image
+
+          );
 
           button.disabled =
 
@@ -1692,7 +2012,9 @@
 
     function countBingo() {
 
-      const lines = [];
+      const lines =
+
+        [];
 
       for (
 
@@ -1704,7 +2026,9 @@
 
       ) {
 
-        const line = [];
+        const line =
+
+          [];
 
         for (
 
@@ -1718,13 +2042,21 @@
 
           line.push(
 
-            row * boardSize + col
+            row
+
+            * boardSize
+
+            + col
 
           );
 
         }
 
-        lines.push(line);
+        lines.push(
+
+          line
+
+        );
 
       }
 
@@ -1738,7 +2070,9 @@
 
       ) {
 
-        const line = [];
+        const line =
+
+          [];
 
         for (
 
@@ -1752,17 +2086,27 @@
 
           line.push(
 
-            row * boardSize + col
+            row
+
+            * boardSize
+
+            + col
 
           );
 
         }
 
-        lines.push(line);
+        lines.push(
+
+          line
+
+        );
 
       }
 
-      const diagonal1 = [];
+      const diagonal1 =
+
+        [];
 
       for (
 
@@ -1776,15 +2120,25 @@
 
         diagonal1.push(
 
-          i * boardSize + i
+          i
+
+          * boardSize
+
+          + i
 
         );
 
       }
 
-      lines.push(diagonal1);
+      lines.push(
 
-      const diagonal2 = [];
+        diagonal1
+
+      );
+
+      const diagonal2 =
+
+        [];
 
       for (
 
@@ -1798,17 +2152,33 @@
 
         diagonal2.push(
 
-          i * boardSize
+          i
 
-          + (boardSize - 1 - i)
+          * boardSize
+
+          + (
+
+            boardSize
+
+            - 1
+
+            - i
+
+          )
 
         );
 
       }
 
-      lines.push(diagonal2);
+      lines.push(
 
-      let bingoCount = 0;
+        diagonal2
+
+      );
+
+      let bingoCount =
+
+        0;
 
       lines.forEach(
 
@@ -1860,17 +2230,29 @@
 
         shots;
 
-      awaitingResult = false;
+      awaitingResult =
 
-      pendingLoser = null;
+        false;
 
-      deadTapLayer.classList.remove(
+      pendingLoser =
 
-        "active"
+        null;
+
+      deadTapLayer
+
+        .classList
+
+        .remove(
+
+          "active"
+
+        );
+
+      showScreen(
+
+        resultScreen
 
       );
-
-      showScreen(resultScreen);
 
       startBgm();
 
@@ -1908,7 +2290,9 @@
 
       "click",
 
-      () => {
+      async () => {
+
+        await resumeDealAudio();
 
         startBgm();
 
@@ -1984,7 +2368,9 @@
 
       () => {
 
-        settingError.textContent = "";
+        settingError.textContent =
+
+          "";
 
       }
 
@@ -1996,13 +2382,17 @@
 
       () => {
 
-        settingError.textContent = "";
+        settingError.textContent =
+
+          "";
 
       }
 
     );
 
     updateDeadOptions();
+
+    loadDealSound();
 
   </script>
 
