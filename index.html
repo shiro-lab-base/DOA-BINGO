@@ -316,6 +316,22 @@
 
     }
 
+    .settings-section-title {
+
+      margin: 22px 0 12px;
+
+      text-align: left;
+
+      font-size: 13px;
+
+      font-weight: bold;
+
+      letter-spacing: 2px;
+
+      color: #555;
+
+    }
+
     .setting-box {
 
       margin-bottom: 18px;
@@ -718,7 +734,6 @@
 
       <h1>DOA BINGO</h1>
 
-
       <button
 
         id="titleStartButton"
@@ -746,6 +761,12 @@
     <div class="container">
 
       <h2>GAME SETTINGS</h2>
+
+      <div class="settings-section-title">
+
+        GAME
+
+      </div>
 
       <div class="setting-box">
 
@@ -795,7 +816,7 @@
 
         <label for="boardSize">
 
-          BOARD SIZE
+          GRID SIZE
 
         </label>
 
@@ -820,6 +841,114 @@
         </label>
 
         <select id="deadCount"></select>
+
+      </div>
+
+      <div class="settings-section-title">
+
+        PENALTY
+
+      </div>
+
+      <div class="setting-box">
+
+        <label for="deadPenalty">
+
+          DEAD
+
+        </label>
+
+        <select id="deadPenalty">
+
+          <option value="0.5">0.5</option>
+
+          <option value="1" selected>1</option>
+
+          <option value="2">2</option>
+
+          <option value="3">3</option>
+
+        </select>
+
+      </div>
+
+      <div class="setting-box">
+
+        <label for="bingoPenalty">
+
+          1 BINGO
+
+        </label>
+
+        <select id="bingoPenalty">
+
+          <option value="0.5">0.5</option>
+
+          <option value="0">0</option>
+
+          <option value="1" selected>1</option>
+
+        </select>
+
+      </div>
+
+      <div class="setting-box">
+
+        <label for="drinkType">
+
+          DRINK
+
+        </label>
+
+        <select id="drinkType">
+
+          <option value="SHOT" selected>SHOT</option>
+
+          <option value="IKKI">IKKI</option>
+
+        </select>
+
+      </div>
+
+      <div class="settings-section-title">
+
+        SOUND
+
+      </div>
+
+      <div class="setting-box">
+
+        <label for="bgmSetting">
+
+          BGM
+
+        </label>
+
+        <select id="bgmSetting">
+
+          <option value="ON" selected>ON</option>
+
+          <option value="OFF">OFF</option>
+
+        </select>
+
+      </div>
+
+      <div class="setting-box">
+
+        <label for="seSetting">
+
+          SE
+
+        </label>
+
+        <select id="seSetting">
+
+          <option value="ON" selected>ON</option>
+
+          <option value="OFF">OFF</option>
+
+        </select>
 
       </div>
 
@@ -905,7 +1034,9 @@
 
       <div class="result-line">
 
-        DEAD：1
+        DEAD：
+
+        <span id="resultDead">1</span>
 
       </div>
 
@@ -915,6 +1046,10 @@
 
         <span id="resultBingo">0</span>
 
+        ×
+
+        <span id="resultBingoPenalty">1</span>
+
       </div>
 
       <div class="total-shots">
@@ -923,7 +1058,7 @@
 
         <span id="resultShots">1</span>
 
-        SHOTS
+        <span id="resultDrinkType">SHOT</span>
 
       </div>
 
@@ -1219,6 +1354,46 @@
 
       );
 
+    const deadPenaltySelect =
+
+      document.getElementById(
+
+        "deadPenalty"
+
+      );
+
+    const bingoPenaltySelect =
+
+      document.getElementById(
+
+        "bingoPenalty"
+
+      );
+
+    const drinkTypeSelect =
+
+      document.getElementById(
+
+        "drinkType"
+
+      );
+
+    const bgmSettingSelect =
+
+      document.getElementById(
+
+        "bgmSetting"
+
+      );
+
+    const seSettingSelect =
+
+      document.getElementById(
+
+        "seSetting"
+
+      );
+
     const settingError =
 
       document.getElementById(
@@ -1259,6 +1434,14 @@
 
       );
 
+    const resultDead =
+
+      document.getElementById(
+
+        "resultDead"
+
+      );
+
     const resultBingo =
 
       document.getElementById(
@@ -1267,11 +1450,27 @@
 
       );
 
+    const resultBingoPenalty =
+
+      document.getElementById(
+
+        "resultBingoPenalty"
+
+      );
+
     const resultShots =
 
       document.getElementById(
 
         "resultShots"
+
+      );
+
+    const resultDrinkType =
+
+      document.getElementById(
+
+        "resultDrinkType"
 
       );
 
@@ -1392,6 +1591,16 @@
     let boardSize = 3;
 
     let deadCardCount = 1;
+
+    let deadPenalty = 1;
+
+    let bingoPenalty = 1;
+
+    let drinkType = "SHOT";
+
+    let bgmEnabled = true;
+
+    let seEnabled = true;
 
     let gameOver = false;
 
@@ -1515,6 +1724,12 @@
 
     function playDealSound() {
 
+      if (!seEnabled) {
+
+        return;
+
+      }
+
       if (
 
         !dealAudioContext
@@ -1553,6 +1768,12 @@
 
     ) {
 
+      if (!seEnabled) {
+
+        return;
+
+      }
+
       sound.pause();
 
       sound.currentTime = 0;
@@ -1582,6 +1803,12 @@
     }
 
     function startBgm() {
+
+      if (!bgmEnabled) {
+
+        return;
+
+      }
 
       const playPromise =
 
@@ -1864,6 +2091,38 @@
           deadCountSelect.value
 
         );
+
+      deadPenalty =
+
+        Number(
+
+          deadPenaltySelect.value
+
+        );
+
+      bingoPenalty =
+
+        Number(
+
+          bingoPenaltySelect.value
+
+        );
+
+      drinkType =
+
+        drinkTypeSelect.value;
+
+      bgmEnabled =
+
+        bgmSettingSelect.value
+
+        === "ON";
+
+      seEnabled =
+
+        seSettingSelect.value
+
+        === "ON";
 
       createPlayers(
 
@@ -3321,21 +3580,39 @@
 
       const shots =
 
-        1
+        deadPenalty
 
-        + bingo;
+        + (
+
+          bingo
+
+          * bingoPenalty
+
+        );
 
       resultTitle.textContent =
 
         `PLAYER ${loser.number} LOSE`;
 
+      resultDead.textContent =
+
+        deadPenalty;
+
       resultBingo.textContent =
 
         bingo;
 
+      resultBingoPenalty.textContent =
+
+        bingoPenalty;
+
       resultShots.textContent =
 
         shots;
+
+      resultDrinkType.textContent =
+
+        drinkType;
 
       awaitingResult =
 
@@ -3484,6 +3761,48 @@
         settingError.textContent =
 
           "";
+
+      }
+
+    );
+
+    bgmSettingSelect.addEventListener(
+
+      "change",
+
+      () => {
+
+        bgmEnabled =
+
+          bgmSettingSelect.value
+
+          === "ON";
+
+        if (bgmEnabled) {
+
+          startBgm();
+
+        } else {
+
+          pauseBgm();
+
+        }
+
+      }
+
+    );
+
+    seSettingSelect.addEventListener(
+
+      "change",
+
+      () => {
+
+        seEnabled =
+
+          seSettingSelect.value
+
+          === "ON";
 
       }
 
