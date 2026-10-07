@@ -144,12 +144,6 @@
 
     }
 
-    /* =========================
-
-       TITLE
-
-    ========================= */
-
     #titleScreen {
 
       justify-content: center;
@@ -165,12 +159,6 @@
       text-align: center;
 
     }
-
-    /* =========================
-
-       SETTINGS
-
-    ========================= */
 
     .setting-box {
 
@@ -221,12 +209,6 @@
       font-size: 14px;
 
     }
-
-    /* =========================
-
-       GAME
-
-    ========================= */
 
     #gameScreen {
 
@@ -326,12 +308,6 @@
 
     }
 
-    /* =========================
-
-       RESULT
-
-    ========================= */
-
     #resultScreen {
 
       justify-content: center;
@@ -392,12 +368,6 @@
 
 <body>
 
-  <!-- =========================
-
-       TITLE
-
-  ========================== -->
-
   <section id="titleScreen" class="screen active">
 
     <div class="title-wrap">
@@ -419,12 +389,6 @@
     </div>
 
   </section>
-
-  <!-- =========================
-
-       SETTINGS
-
-  ========================== -->
 
   <section id="settingsScreen" class="screen">
 
@@ -526,12 +490,6 @@
 
   </section>
 
-  <!-- =========================
-
-       GAME
-
-  ========================== -->
-
   <section id="gameScreen" class="screen">
 
     <div class="container">
@@ -559,12 +517,6 @@
     </div>
 
   </section>
-
-  <!-- =========================
-
-       RESULT
-
-  ========================== -->
 
   <section id="resultScreen" class="screen">
 
@@ -618,29 +570,17 @@
 
   <script>
 
-    // =========================================
-
-    // IMAGE FILES
-
-    // =========================================
-
     const IMAGE_BACK =
 
-      "images/doa-back.png";
+      "images/doa-back.PNG";
 
     const IMAGE_ALIVE =
 
-      "images/doa-alive.png";
+      "images/doa-alive.PNG";
 
     const IMAGE_DEAD =
 
-      "images/doa-dead.png";
-
-    // =========================================
-
-    // HTML
-
-    // =========================================
+      "images/doa-dead.PNG";
 
     const titleScreen =
 
@@ -722,12 +662,6 @@
 
       document.getElementById("resultShots");
 
-    // =========================================
-
-    // GAME DATA
-
-    // =========================================
-
     let players = [];
 
     let cards = [];
@@ -743,12 +677,6 @@
     let inputLocked = false;
 
     let cpuTimer = null;
-
-    // =========================================
-
-    // SCREEN
-
-    // =========================================
 
     function showScreen(screen) {
 
@@ -773,12 +701,6 @@
       screen.classList.add("active");
 
     }
-
-    // =========================================
-
-    // DEAD COUNT OPTIONS
-
-    // =========================================
 
     function updateDeadOptions() {
 
@@ -829,12 +751,6 @@
         );
 
     }
-
-    // =========================================
-
-    // CREATE PLAYERS
-
-    // =========================================
 
     function createPlayers(
 
@@ -893,12 +809,6 @@
       }
 
     }
-
-    // =========================================
-
-    // START GAME FROM SETTINGS
-
-    // =========================================
 
     function startGameFromSettings() {
 
@@ -968,12 +878,6 @@
 
     }
 
-    // =========================================
-
-    // START GAME
-
-    // =========================================
-
     function startGame() {
 
       clearTimeout(cpuTimer);
@@ -993,12 +897,6 @@
       updateTurn();
 
     }
-
-    // =========================================
-
-    // CREATE CARDS
-
-    // =========================================
 
     function createCards() {
 
@@ -1048,12 +946,6 @@
 
     }
 
-    // =========================================
-
-    // SHUFFLE
-
-    // =========================================
-
     function shuffle(array) {
 
       for (
@@ -1091,12 +983,6 @@
       }
 
     }
-
-    // =========================================
-
-    // CREATE BOARD
-
-    // =========================================
 
     function createBoard() {
 
@@ -1140,12 +1026,6 @@
 
     }
 
-    // =========================================
-
-    // SELECT CARD
-
-    // =========================================
-
     function selectCard(index) {
 
       if (gameOver) return;
@@ -1169,12 +1049,6 @@
       openCard(index);
 
     }
-
-    // =========================================
-
-    // OPEN CARD
-
-    // =========================================
 
     function openCard(index) {
 
@@ -1214,12 +1088,6 @@
 
     }
 
-    // =========================================
-
-    // NEXT TURN
-
-    // =========================================
-
     function nextTurn() {
 
       currentPlayerIndex++;
@@ -1239,12 +1107,6 @@
       updateTurn();
 
     }
-
-    // =========================================
-
-    // UPDATE TURN
-
-    // =========================================
 
     function updateTurn() {
 
@@ -1295,12 +1157,6 @@
         `${boardSize}×${boardSize} / DEAD ${deadCardCount}`;
 
     }
-
-    // =========================================
-
-    // CPU
-
-    // =========================================
 
     function cpuPlay() {
 
@@ -1359,12 +1215,6 @@
       openCard(randomIndex);
 
     }
-
-    // =========================================
-
-    // REFRESH BOARD
-
-    // =========================================
 
     function refreshBoard() {
 
@@ -1450,17 +1300,9 @@
 
     }
 
-    // =========================================
-
-    // COUNT BINGO
-
-    // =========================================
-
     function countBingo() {
 
       const lines = [];
-
-      // 横
 
       for (
 
@@ -1496,8 +1338,6 @@
 
       }
 
-      // 縦
-
       for (
 
         let col = 0;
@@ -1532,8 +1372,6 @@
 
       }
 
-      // 左上 → 右下
-
       const diagonal1 = [];
 
       for (
@@ -1555,8 +1393,6 @@
       }
 
       lines.push(diagonal1);
-
-      // 右上 → 左下
 
       const diagonal2 = [];
 
@@ -1612,12 +1448,6 @@
 
     }
 
-    // =========================================
-
-    // FINISH GAME
-
-    // =========================================
-
     function finishGame(loser) {
 
       gameOver = true;
@@ -1651,12 +1481,6 @@
       showScreen(resultScreen);
 
     }
-
-    // =========================================
-
-    // BUTTON EVENTS
-
-    // =========================================
 
     titleStartButton.addEventListener(
 
@@ -1753,12 +1577,6 @@
       }
 
     );
-
-    // =========================================
-
-    // INITIALIZE
-
-    // =========================================
 
     updateDeadOptions();
 
