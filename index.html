@@ -624,6 +624,38 @@
 
   </section>
 
+  <audio
+
+    id="bgm"
+
+    src="audio/doa-bgm.mp3"
+
+    preload="auto"
+
+    loop
+
+  ></audio>
+
+  <audio
+
+    id="cardFlickSound"
+
+    src="audio/doa-card-flick.wav"
+
+    preload="auto"
+
+  ></audio>
+
+  <audio
+
+    id="cardPlacementSound"
+
+    src="audio/doa-card-placement.wav"
+
+    preload="auto"
+
+  ></audio>
+
   <script>
 
     const IMAGE_BACK = "images/doa-back.PNG";
@@ -716,6 +748,18 @@
 
       document.getElementById("deadTapLayer");
 
+    const bgm =
+
+      document.getElementById("bgm");
+
+    const cardFlickSound =
+
+      document.getElementById("cardFlickSound");
+
+    const cardPlacementSound =
+
+      document.getElementById("cardPlacementSound");
+
     let players = [];
 
     let cards = [];
@@ -735,6 +779,72 @@
     let awaitingResult = false;
 
     let pendingLoser = null;
+
+    bgm.volume = 0.35;
+
+    cardFlickSound.volume = 1;
+
+    cardPlacementSound.volume = 1;
+
+    function playSound(sound) {
+
+      sound.currentTime = 0;
+
+      const playPromise =
+
+        sound.play();
+
+      if (
+
+        playPromise
+
+        && typeof playPromise.catch
+
+        === "function"
+
+      ) {
+
+        playPromise.catch(
+
+          () => {}
+
+        );
+
+      }
+
+    }
+
+    function startBgm() {
+
+      const playPromise =
+
+        bgm.play();
+
+      if (
+
+        playPromise
+
+        && typeof playPromise.catch
+
+        === "function"
+
+      ) {
+
+        playPromise.catch(
+
+          () => {}
+
+        );
+
+      }
+
+    }
+
+    function pauseBgm() {
+
+      bgm.pause();
+
+    }
 
     function showScreen(screen) {
 
@@ -962,6 +1072,14 @@
 
       showScreen(gameScreen);
 
+      playSound(
+
+        cardPlacementSound
+
+      );
+
+      startBgm();
+
       updateTurn();
 
     }
@@ -1072,7 +1190,9 @@
 
             );
 
-          button.className = "card";
+          button.className =
+
+            "card";
 
           button.addEventListener(
 
@@ -1134,6 +1254,12 @@
 
       cards[index].opened = true;
 
+      playSound(
+
+        cardFlickSound
+
+      );
+
       refreshBoard();
 
       if (
@@ -1141,6 +1267,8 @@
         cards[index].type === "DEAD"
 
       ) {
+
+        pauseBgm();
 
         prepareDeadResult(
 
@@ -1310,7 +1438,11 @@
 
       inputLocked = false;
 
-      openCard(randomIndex);
+      openCard(
+
+        randomIndex
+
+      );
 
     }
 
@@ -1382,7 +1514,11 @@
 
           }
 
-          button.appendChild(image);
+          button.appendChild(
+
+            image
+
+          );
 
           button.disabled =
 
@@ -1490,7 +1626,11 @@
 
       }
 
-      lines.push(diagonal1);
+      lines.push(
+
+        diagonal1
+
+      );
 
       const diagonal2 = [];
 
@@ -1514,7 +1654,11 @@
 
       }
 
-      lines.push(diagonal2);
+      lines.push(
+
+        diagonal2
+
+      );
 
       let bingoCount = 0;
 
@@ -1578,7 +1722,11 @@
 
       );
 
-      showScreen(resultScreen);
+      showScreen(
+
+        resultScreen
+
+      );
 
     }
 
@@ -1615,6 +1763,8 @@
       "click",
 
       () => {
+
+        startBgm();
 
         showScreen(
 
