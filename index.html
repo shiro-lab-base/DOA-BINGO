@@ -214,6 +214,8 @@
 
       justify-content: flex-start;
 
+      position: relative;
+
     }
 
     .game-header {
@@ -305,6 +307,50 @@
       height: 100%;
 
       object-fit: cover;
+
+    }
+
+    #deadTapLayer {
+
+      display: none;
+
+      position: fixed;
+
+      inset: 0;
+
+      z-index: 999;
+
+      background: transparent;
+
+      cursor: pointer;
+
+    }
+
+    #deadTapLayer.active {
+
+      display: flex;
+
+      align-items: flex-end;
+
+      justify-content: center;
+
+      padding-bottom: 32px;
+
+    }
+
+    #deadTapText {
+
+      padding: 10px 18px;
+
+      border-radius: 20px;
+
+      background: rgba(0, 0, 0, 0.65);
+
+      color: #fff;
+
+      font-size: 13px;
+
+      letter-spacing: 2px;
 
     }
 
@@ -516,6 +562,16 @@
 
     </div>
 
+    <div id="deadTapLayer">
+
+      <div id="deadTapText">
+
+        TAP TO RESULT
+
+      </div>
+
+    </div>
+
   </section>
 
   <section id="resultScreen" class="screen">
@@ -570,17 +626,11 @@
 
   <script>
 
-    const IMAGE_BACK =
+    const IMAGE_BACK = "images/doa-back.PNG";
 
-      "images/doa-back.PNG";
+    const IMAGE_ALIVE = "images/doa-alive.PNG";
 
-    const IMAGE_ALIVE =
-
-      "images/doa-alive.PNG";
-
-    const IMAGE_DEAD =
-
-      "images/doa-dead.PNG";
+    const IMAGE_DEAD = "images/doa-dead.PNG";
 
     const titleScreen =
 
@@ -662,6 +712,10 @@
 
       document.getElementById("resultShots");
 
+    const deadTapLayer =
+
+      document.getElementById("deadTapLayer");
+
     let players = [];
 
     let cards = [];
@@ -677,6 +731,10 @@
     let inputLocked = false;
 
     let cpuTimer = null;
+
+    let awaitingResult = false;
+
+    let pendingLoser = null;
 
     function showScreen(screen) {
 
@@ -886,7 +944,17 @@
 
       inputLocked = false;
 
+      awaitingResult = false;
+
+      pendingLoser = null;
+
       currentPlayerIndex = 0;
+
+      deadTapLayer.classList.remove(
+
+        "active"
+
+      );
 
       createCards();
 
@@ -1074,7 +1142,7 @@
 
       ) {
 
-        finishGame(
+        prepareDeadResult(
 
           players[currentPlayerIndex]
 
@@ -1085,6 +1153,36 @@
       }
 
       nextTurn();
+
+    }
+
+    function prepareDeadResult(loser) {
+
+      gameOver = true;
+
+      inputLocked = true;
+
+      awaitingResult = true;
+
+      pendingLoser = loser;
+
+      clearTimeout(cpuTimer);
+
+      status.textContent =
+
+        `PLAYER ${loser.number} DIED`;
+
+      gameInfo.textContent =
+
+        "TAP SCREEN TO RESULT";
+
+      refreshBoard();
+
+      deadTapLayer.classList.add(
+
+        "active"
+
+      );
 
     }
 
@@ -1450,14 +1548,6 @@
 
     function finishGame(loser) {
 
-      gameOver = true;
-
-      inputLocked = true;
-
-      clearTimeout(cpuTimer);
-
-      refreshBoard();
-
       const bingo =
 
         countBingo();
@@ -1478,9 +1568,47 @@
 
         shots;
 
+      awaitingResult = false;
+
+      pendingLoser = null;
+
+      deadTapLayer.classList.remove(
+
+        "active"
+
+      );
+
       showScreen(resultScreen);
 
     }
+
+    deadTapLayer.addEventListener(
+
+      "click",
+
+      () => {
+
+        if (
+
+          !awaitingResult
+
+          || !pendingLoser
+
+        ) {
+
+          return;
+
+        }
+
+        finishGame(
+
+          pendingLoser
+
+        );
+
+      }
+
+    );
 
     titleStartButton.addEventListener(
 
