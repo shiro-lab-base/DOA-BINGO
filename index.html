@@ -308,58 +308,6 @@
 
     }
 
-    /* DEBUG */
-
-    #debugBox {
-
-      width: 100%;
-
-      margin-top: 20px;
-
-      padding: 12px;
-
-      background: #1b1b1b;
-
-      border: 1px solid #555;
-
-      border-radius: 8px;
-
-      text-align: left;
-
-      font-size: 11px;
-
-      line-height: 1.5;
-
-      word-break: break-all;
-
-    }
-
-    #debugTitle {
-
-      margin-bottom: 8px;
-
-      font-weight: bold;
-
-      color: #fff;
-
-    }
-
-    .debug-success {
-
-      color: #62ff7a;
-
-      margin-bottom: 6px;
-
-    }
-
-    .debug-error {
-
-      color: #ff5f5f;
-
-      margin-bottom: 6px;
-
-    }
-
     #resultScreen {
 
       justify-content: center;
@@ -566,22 +514,6 @@
 
       <div id="board"></div>
 
-      <div id="debugBox">
-
-        <div id="debugTitle">
-
-          IMAGE DEBUG
-
-        </div>
-
-        <div id="debugLog">
-
-          waiting...
-
-        </div>
-
-      </div>
-
     </div>
 
   </section>
@@ -640,15 +572,15 @@
 
     const IMAGE_BACK =
 
-      "https://raw.githubusercontent.com/shiro-lab-base/DOA-BINGO/main/images/doa-back.PNG";
+      "images/doa-back.PNG";
 
     const IMAGE_ALIVE =
 
-      "https://raw.githubusercontent.com/shiro-lab-base/DOA-BINGO/main/images/doa-alive.PNG";
+      "images/doa-alive.PNG";
 
     const IMAGE_DEAD =
 
-      "https://raw.githubusercontent.com/shiro-lab-base/DOA-BINGO/main/images/doa-dead.PNG";
+      "images/doa-dead.PNG";
 
     const titleScreen =
 
@@ -730,10 +662,6 @@
 
       document.getElementById("resultShots");
 
-    const debugLog =
-
-      document.getElementById("debugLog");
-
     let players = [];
 
     let cards = [];
@@ -749,64 +677,6 @@
     let inputLocked = false;
 
     let cpuTimer = null;
-
-    function logDebug(
-
-      type,
-
-      message
-
-    ) {
-
-      if (
-
-        debugLog.textContent ===
-
-        "waiting..."
-
-      ) {
-
-        debugLog.innerHTML = "";
-
-      }
-
-      const line =
-
-        document.createElement(
-
-          "div"
-
-        );
-
-      if (
-
-        type === "success"
-
-      ) {
-
-        line.className =
-
-          "debug-success";
-
-        line.textContent =
-
-          "SUCCESS : " + message;
-
-      } else {
-
-        line.className =
-
-          "debug-error";
-
-        line.textContent =
-
-          "ERROR : " + message;
-
-      }
-
-      debugLog.appendChild(line);
-
-    }
 
     function showScreen(screen) {
 
@@ -1017,10 +887,6 @@
       inputLocked = false;
 
       currentPlayerIndex = 0;
-
-      debugLog.innerHTML =
-
-        "waiting...";
 
       createCards();
 
@@ -1378,15 +1244,13 @@
 
             );
 
-          let imageURL = "";
-
           if (
 
             !card.opened
 
           ) {
 
-            imageURL =
+            image.src =
 
               IMAGE_BACK;
 
@@ -1400,7 +1264,7 @@
 
           ) {
 
-            imageURL =
+            image.src =
 
               IMAGE_ALIVE;
 
@@ -1410,7 +1274,7 @@
 
           } else {
 
-            imageURL =
+            image.src =
 
               IMAGE_DEAD;
 
@@ -1419,38 +1283,6 @@
               "DEAD";
 
           }
-
-          image.onload =
-
-            () => {
-
-              logDebug(
-
-                "success",
-
-                image.src
-
-              );
-
-            };
-
-          image.onerror =
-
-            () => {
-
-              logDebug(
-
-                "error",
-
-                image.src
-
-              );
-
-            };
-
-          image.src =
-
-            imageURL;
 
           button.appendChild(image);
 
