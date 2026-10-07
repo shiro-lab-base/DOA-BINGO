@@ -6,13 +6,7 @@
 
   <meta charset="UTF-8">
 
-  <meta
-
-    name="viewport"
-
-    content="width=device-width, initial-scale=1.0"
-
-  >
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>DOA BINGO</title>
 
@@ -446,13 +440,7 @@
 
 <body>
 
-  <section
-
-    id="titleScreen"
-
-    class="screen active"
-
-  >
+  <section id="titleScreen" class="screen active">
 
     <div class="title-wrap">
 
@@ -464,13 +452,7 @@
 
       </div>
 
-      <button
-
-        id="titleStartButton"
-
-        class="main-button"
-
-      >
+      <button id="titleStartButton" class="main-button">
 
         START
 
@@ -480,13 +462,7 @@
 
   </section>
 
-  <section
-
-    id="settingsScreen"
-
-    class="screen"
-
-  >
+  <section id="settingsScreen" class="screen">
 
     <div class="container">
 
@@ -502,29 +478,13 @@
 
         <select id="humanCount">
 
-          <option value="1" selected>
+          <option value="1" selected>1</option>
 
-            1
+          <option value="2">2</option>
 
-          </option>
+          <option value="3">3</option>
 
-          <option value="2">
-
-            2
-
-          </option>
-
-          <option value="3">
-
-            3
-
-          </option>
-
-          <option value="4">
-
-            4
-
-          </option>
+          <option value="4">4</option>
 
         </select>
 
@@ -540,29 +500,13 @@
 
         <select id="cpuCount">
 
-          <option value="0">
+          <option value="0">0</option>
 
-            0
+          <option value="1" selected>1</option>
 
-          </option>
+          <option value="2">2</option>
 
-          <option value="1" selected>
-
-            1
-
-          </option>
-
-          <option value="2">
-
-            2
-
-          </option>
-
-          <option value="3">
-
-            3
-
-          </option>
+          <option value="3">3</option>
 
         </select>
 
@@ -578,23 +522,11 @@
 
         <select id="boardSize">
 
-          <option value="3" selected>
+          <option value="3" selected>3 × 3</option>
 
-            3 × 3
+          <option value="4">4 × 4</option>
 
-          </option>
-
-          <option value="4">
-
-            4 × 4
-
-          </option>
-
-          <option value="5">
-
-            5 × 5
-
-          </option>
+          <option value="5">5 × 5</option>
 
         </select>
 
@@ -614,25 +546,13 @@
 
       <div id="settingError"></div>
 
-      <button
-
-        id="gameStartButton"
-
-        class="main-button"
-
-      >
+      <button id="gameStartButton" class="main-button">
 
         START GAME
 
       </button>
 
-      <button
-
-        id="backTitleButton"
-
-        class="secondary-button"
-
-      >
+      <button id="backTitleButton" class="secondary-button">
 
         TITLE
 
@@ -642,13 +562,7 @@
 
   </section>
 
-  <section
-
-    id="gameScreen"
-
-    class="screen"
-
-  >
+  <section id="gameScreen" class="screen">
 
     <div class="container">
 
@@ -686,13 +600,7 @@
 
   </section>
 
-  <section
-
-    id="resultScreen"
-
-    class="screen"
-
-  >
+  <section id="resultScreen" class="screen">
 
     <div class="result-box">
 
@@ -726,25 +634,13 @@
 
       </div>
 
-      <button
-
-        id="retryButton"
-
-        class="main-button"
-
-      >
+      <button id="retryButton" class="main-button">
 
         PLAY AGAIN
 
       </button>
 
-      <button
-
-        id="resultSettingsButton"
-
-        class="secondary-button"
-
-      >
+      <button id="resultSettingsButton" class="secondary-button">
 
         SETTINGS
 
@@ -788,221 +684,115 @@
 
   <script>
 
-    const IMAGE_BACK =
+    const IMAGE_BACK = "images/doa-back.PNG";
 
-      "images/doa-back.PNG";
+    const IMAGE_ALIVE = "images/doa-alive.PNG";
 
-    const IMAGE_ALIVE =
+    const IMAGE_DEAD = "images/doa-dead.PNG";
 
-      "images/doa-alive.PNG";
+    const GAME_START_DEAL_DELAY_MS = 400;
 
-    const IMAGE_DEAD =
+    const DEAL_ANIMATION_MS = 140;
 
-      "images/doa-dead.PNG";
+    const DEAL_GAP_MS = 300;
 
-    const DEAL_SOUND_LEAD_MS =
-
-      100;
-
-    const DEAL_AFTER_SHOW_MS =
-
-      120;
-
-    const FLIP_DELAY_MS =
-
-      350;
+    const FLIP_DELAY_MS = 350;
 
     const titleScreen =
 
-      document.getElementById(
-
-        "titleScreen"
-
-      );
+      document.getElementById("titleScreen");
 
     const settingsScreen =
 
-      document.getElementById(
-
-        "settingsScreen"
-
-      );
+      document.getElementById("settingsScreen");
 
     const gameScreen =
 
-      document.getElementById(
-
-        "gameScreen"
-
-      );
+      document.getElementById("gameScreen");
 
     const resultScreen =
 
-      document.getElementById(
-
-        "resultScreen"
-
-      );
+      document.getElementById("resultScreen");
 
     const titleStartButton =
 
-      document.getElementById(
-
-        "titleStartButton"
-
-      );
+      document.getElementById("titleStartButton");
 
     const gameStartButton =
 
-      document.getElementById(
-
-        "gameStartButton"
-
-      );
+      document.getElementById("gameStartButton");
 
     const backTitleButton =
 
-      document.getElementById(
-
-        "backTitleButton"
-
-      );
+      document.getElementById("backTitleButton");
 
     const retryButton =
 
-      document.getElementById(
-
-        "retryButton"
-
-      );
+      document.getElementById("retryButton");
 
     const resultSettingsButton =
 
-      document.getElementById(
-
-        "resultSettingsButton"
-
-      );
+      document.getElementById("resultSettingsButton");
 
     const humanCountSelect =
 
-      document.getElementById(
-
-        "humanCount"
-
-      );
+      document.getElementById("humanCount");
 
     const cpuCountSelect =
 
-      document.getElementById(
-
-        "cpuCount"
-
-      );
+      document.getElementById("cpuCount");
 
     const boardSizeSelect =
 
-      document.getElementById(
-
-        "boardSize"
-
-      );
+      document.getElementById("boardSize");
 
     const deadCountSelect =
 
-      document.getElementById(
-
-        "deadCount"
-
-      );
+      document.getElementById("deadCount");
 
     const settingError =
 
-      document.getElementById(
-
-        "settingError"
-
-      );
+      document.getElementById("settingError");
 
     const board =
 
-      document.getElementById(
-
-        "board"
-
-      );
+      document.getElementById("board");
 
     const status =
 
-      document.getElementById(
-
-        "status"
-
-      );
+      document.getElementById("status");
 
     const gameInfo =
 
-      document.getElementById(
-
-        "gameInfo"
-
-      );
+      document.getElementById("gameInfo");
 
     const resultTitle =
 
-      document.getElementById(
-
-        "resultTitle"
-
-      );
+      document.getElementById("resultTitle");
 
     const resultBingo =
 
-      document.getElementById(
-
-        "resultBingo"
-
-      );
+      document.getElementById("resultBingo");
 
     const resultShots =
 
-      document.getElementById(
-
-        "resultShots"
-
-      );
+      document.getElementById("resultShots");
 
     const deadTapLayer =
 
-      document.getElementById(
-
-        "deadTapLayer"
-
-      );
+      document.getElementById("deadTapLayer");
 
     const bgm =
 
-      document.getElementById(
-
-        "bgm"
-
-      );
+      document.getElementById("bgm");
 
     const cardFlickSound =
 
-      document.getElementById(
-
-        "cardFlickSound"
-
-      );
+      document.getElementById("cardFlickSound");
 
     const cardPlacementSound =
 
-      document.getElementById(
-
-        "cardPlacementSound"
-
-      );
+      document.getElementById("cardPlacementSound");
 
     let players = [];
 
@@ -1028,99 +818,13 @@
 
     let pendingLoser = null;
 
-    let audioPrepared = false;
-
     bgm.volume = 0.35;
 
     cardFlickSound.volume = 1;
 
     cardPlacementSound.volume = 1;
 
-    function prepareAudio() {
-
-      if (audioPrepared) {
-
-        return;
-
-      }
-
-      audioPrepared = true;
-
-      [
-
-        cardFlickSound,
-
-        cardPlacementSound
-
-      ].forEach(
-
-        sound => {
-
-          sound.muted = true;
-
-          sound.currentTime = 0;
-
-          const playPromise =
-
-            sound.play();
-
-          if (
-
-            playPromise
-
-            && typeof playPromise.then
-
-            === "function"
-
-          ) {
-
-            playPromise
-
-              .then(
-
-                () => {
-
-                  sound.pause();
-
-                  sound.currentTime = 0;
-
-                  sound.muted = false;
-
-                }
-
-              )
-
-              .catch(
-
-                () => {
-
-                  sound.muted = false;
-
-                }
-
-              );
-
-          } else {
-
-            sound.pause();
-
-            sound.currentTime = 0;
-
-            sound.muted = false;
-
-          }
-
-        }
-
-      );
-
-    }
-
-    function playSound(
-
-      sound
-
-    ) {
+    function playSound(sound) {
 
       sound.pause();
 
@@ -1134,59 +838,11 @@
 
         playPromise
 
-        && typeof playPromise.catch
-
-        === "function"
+        && typeof playPromise.catch === "function"
 
       ) {
 
-        playPromise.catch(
-
-          () => {}
-
-        );
-
-      }
-
-    }
-
-    function playPlacementSound() {
-
-      const clone =
-
-        cardPlacementSound.cloneNode(
-
-          true
-
-        );
-
-      clone.volume =
-
-        cardPlacementSound.volume;
-
-      clone.currentTime =
-
-        0;
-
-      const playPromise =
-
-        clone.play();
-
-      if (
-
-        playPromise
-
-        && typeof playPromise.catch
-
-        === "function"
-
-      ) {
-
-        playPromise.catch(
-
-          () => {}
-
-        );
+        playPromise.catch(() => {});
 
       }
 
@@ -1202,17 +858,11 @@
 
         playPromise
 
-        && typeof playPromise.catch
-
-        === "function"
+        && typeof playPromise.catch === "function"
 
       ) {
 
-        playPromise.catch(
-
-          () => {}
-
-        );
+        playPromise.catch(() => {});
 
       }
 
@@ -1224,11 +874,7 @@
 
     }
 
-    function showScreen(
-
-      screen
-
-    ) {
+    function showScreen(screen) {
 
       [
 
@@ -1244,19 +890,11 @@
 
         item =>
 
-          item.classList.remove(
-
-            "active"
-
-          )
+          item.classList.remove("active")
 
       );
 
-      screen.classList.add(
-
-        "active"
-
-      );
+      screen.classList.add("active");
 
     }
 
@@ -1264,11 +902,7 @@
 
       const size =
 
-        Number(
-
-          boardSizeSelect.value
-
-        );
+        Number(boardSizeSelect.value);
 
       const totalCards =
 
@@ -1276,15 +910,9 @@
 
       const previousValue =
 
-        Number(
+        Number(deadCountSelect.value) || 1;
 
-          deadCountSelect.value
-
-        ) || 1;
-
-      deadCountSelect.innerHTML =
-
-        "";
+      deadCountSelect.innerHTML = "";
 
       for (
 
@@ -1298,25 +926,13 @@
 
         const option =
 
-          document.createElement(
+          document.createElement("option");
 
-            "option"
+        option.value = i;
 
-          );
+        option.textContent = i;
 
-        option.value =
-
-          i;
-
-        option.textContent =
-
-          i;
-
-        deadCountSelect.appendChild(
-
-          option
-
-        );
+        deadCountSelect.appendChild(option);
 
       }
 
@@ -1342,9 +958,7 @@
 
       players = [];
 
-      let playerNumber =
-
-        1;
+      let playerNumber = 1;
 
       for (
 
@@ -1396,25 +1010,15 @@
 
       const humanCount =
 
-        Number(
-
-          humanCountSelect.value
-
-        );
+        Number(humanCountSelect.value);
 
       const cpuCount =
 
-        Number(
-
-          cpuCountSelect.value
-
-        );
+        Number(cpuCountSelect.value);
 
       const totalPlayers =
 
-        humanCount
-
-        + cpuCount;
+        humanCount + cpuCount;
 
       if (
 
@@ -1432,25 +1036,15 @@
 
       }
 
-      settingError.textContent =
-
-        "";
+      settingError.textContent = "";
 
       boardSize =
 
-        Number(
-
-          boardSizeSelect.value
-
-        );
+        Number(boardSizeSelect.value);
 
       deadCardCount =
 
-        Number(
-
-          deadCountSelect.value
-
-        );
+        Number(deadCountSelect.value);
 
       createPlayers(
 
@@ -1466,43 +1060,21 @@
 
     function startGame() {
 
-      clearTimeout(
+      clearTimeout(cpuTimer);
 
-        cpuTimer
+      clearTimeout(dealTimer);
 
-      );
+      clearTimeout(flipTimer);
 
-      clearTimeout(
+      gameOver = false;
 
-        dealTimer
+      inputLocked = true;
 
-      );
+      awaitingResult = false;
 
-      clearTimeout(
+      pendingLoser = null;
 
-        flipTimer
-
-      );
-
-      gameOver =
-
-        false;
-
-      inputLocked =
-
-        true;
-
-      awaitingResult =
-
-        false;
-
-      pendingLoser =
-
-        null;
-
-      currentPlayerIndex =
-
-        0;
+      currentPlayerIndex = 0;
 
       deadTapLayer.classList.remove(
 
@@ -1522,15 +1094,19 @@
 
         `${boardSize}×${boardSize} / DEAD ${deadCardCount}`;
 
-      showScreen(
-
-        gameScreen
-
-      );
+      showScreen(gameScreen);
 
       startBgm();
 
-      dealCards();
+      dealTimer =
+
+        setTimeout(
+
+          dealCards,
+
+          GAME_START_DEAL_DELAY_MS
+
+        );
 
     }
 
@@ -1538,13 +1114,9 @@
 
       const totalCards =
 
-        boardSize
+        boardSize * boardSize;
 
-        * boardSize;
-
-      cards =
-
-        [];
+      cards = [];
 
       for (
 
@@ -1568,9 +1140,7 @@
 
       while (
 
-        cards.length
-
-        < totalCards
+        cards.length < totalCards
 
       ) {
 
@@ -1584,25 +1154,15 @@
 
       }
 
-      shuffle(
-
-        cards
-
-      );
+      shuffle(cards);
 
     }
 
-    function shuffle(
-
-      array
-
-    ) {
+    function shuffle(array) {
 
       for (
 
-        let i =
-
-          array.length - 1;
+        let i = array.length - 1;
 
         i > 0;
 
@@ -1614,9 +1174,7 @@
 
           Math.floor(
 
-            Math.random()
-
-            * (i + 1)
+            Math.random() * (i + 1)
 
           );
 
@@ -1640,9 +1198,7 @@
 
     function prepareBoard() {
 
-      board.innerHTML =
-
-        "";
+      board.innerHTML = "";
 
       board.style.gridTemplateColumns =
 
@@ -1652,9 +1208,7 @@
 
     function dealCards() {
 
-      let index =
-
-        0;
+      let index = 0;
 
       function dealNextCard() {
 
@@ -1664,9 +1218,7 @@
 
         ) {
 
-          inputLocked =
-
-            false;
+          inputLocked = false;
 
           updateTurn();
 
@@ -1674,7 +1226,55 @@
 
         }
 
-        playPlacementSound();
+        const button =
+
+          document.createElement("button");
+
+        button.className =
+
+          "card dealing";
+
+        button.dataset.index =
+
+          index;
+
+        const cardIndex =
+
+          index;
+
+        button.addEventListener(
+
+          "click",
+
+          () =>
+
+            selectCard(cardIndex)
+
+        );
+
+        const image =
+
+          document.createElement("img");
+
+        image.src =
+
+          IMAGE_BACK;
+
+        image.alt =
+
+          "CARD BACK";
+
+        button.appendChild(image);
+
+        playSound(
+
+          cardPlacementSound
+
+        );
+
+        board.appendChild(button);
+
+        index++;
 
         dealTimer =
 
@@ -1682,83 +1282,19 @@
 
             () => {
 
-              const button =
-
-                document.createElement(
-
-                  "button"
-
-                );
-
-              button.className =
-
-                "card dealing";
-
-              button.dataset.index =
-
-                index;
-
-              const cardIndex =
-
-                index;
-
-              button.addEventListener(
-
-                "click",
-
-                () =>
-
-                  selectCard(
-
-                    cardIndex
-
-                  )
-
-              );
-
-              const image =
-
-                document.createElement(
-
-                  "img"
-
-                );
-
-              image.src =
-
-                IMAGE_BACK;
-
-              image.alt =
-
-                "CARD BACK";
-
-              button.appendChild(
-
-                image
-
-              );
-
-              board.appendChild(
-
-                button
-
-              );
-
-              index++;
-
               dealTimer =
 
                 setTimeout(
 
                   dealNextCard,
 
-                  DEAL_AFTER_SHOW_MS
+                  DEAL_GAP_MS
 
                 );
 
             },
 
-            DEAL_SOUND_LEAD_MS
+            DEAL_ANIMATION_MS
 
           );
 
@@ -1768,45 +1304,19 @@
 
     }
 
-    function selectCard(
+    function selectCard(index) {
 
-      index
+      if (gameOver) return;
 
-    ) {
-
-      if (
-
-        gameOver
-
-      ) {
-
-        return;
-
-      }
-
-      if (
-
-        inputLocked
-
-      ) {
-
-        return;
-
-      }
+      if (inputLocked) return;
 
       const player =
 
-        players[
-
-          currentPlayerIndex
-
-        ];
+        players[currentPlayerIndex];
 
       if (
 
-        player.type
-
-        !== "HUMAN"
+        player.type !== "HUMAN"
 
       ) {
 
@@ -1814,39 +1324,15 @@
 
       }
 
-      openCard(
-
-        index
-
-      );
+      openCard(index);
 
     }
 
-    function openCard(
+    function openCard(index) {
 
-      index
+      if (gameOver) return;
 
-    ) {
-
-      if (
-
-        gameOver
-
-      ) {
-
-        return;
-
-      }
-
-      if (
-
-        inputLocked
-
-      ) {
-
-        return;
-
-      }
+      if (inputLocked) return;
 
       if (
 
@@ -1858,9 +1344,7 @@
 
       }
 
-      inputLocked =
-
-        true;
+      inputLocked = true;
 
       refreshBoard();
 
@@ -1884,9 +1368,7 @@
 
             if (
 
-              cards[index].type
-
-              === "DEAD"
+              cards[index].type === "DEAD"
 
             ) {
 
@@ -1894,11 +1376,7 @@
 
               prepareDeadResult(
 
-                players[
-
-                  currentPlayerIndex
-
-                ]
+                players[currentPlayerIndex]
 
               );
 
@@ -1916,33 +1394,17 @@
 
     }
 
-    function prepareDeadResult(
+    function prepareDeadResult(loser) {
 
-      loser
+      gameOver = true;
 
-    ) {
+      inputLocked = true;
 
-      gameOver =
+      awaitingResult = true;
 
-        true;
+      pendingLoser = loser;
 
-      inputLocked =
-
-        true;
-
-      awaitingResult =
-
-        true;
-
-      pendingLoser =
-
-        loser;
-
-      clearTimeout(
-
-        cpuTimer
-
-      );
+      clearTimeout(cpuTimer);
 
       status.textContent =
 
@@ -1974,9 +1436,7 @@
 
       ) {
 
-        currentPlayerIndex =
-
-          0;
+        currentPlayerIndex = 0;
 
       }
 
@@ -1986,29 +1446,15 @@
 
     function updateTurn() {
 
-      if (
-
-        gameOver
-
-      ) {
-
-        return;
-
-      }
+      if (gameOver) return;
 
       const player =
 
-        players[
-
-          currentPlayerIndex
-
-        ];
+        players[currentPlayerIndex];
 
       if (
 
-        player.type
-
-        === "CPU"
+        player.type === "CPU"
 
       ) {
 
@@ -2016,9 +1462,7 @@
 
           `PLAYER ${player.number} CPU TURN`;
 
-        inputLocked =
-
-          true;
+        inputLocked = true;
 
         refreshBoard();
 
@@ -2038,9 +1482,7 @@
 
           `PLAYER ${player.number} TURN`;
 
-        inputLocked =
-
-          false;
+        inputLocked = false;
 
         refreshBoard();
 
@@ -2054,15 +1496,7 @@
 
     function cpuPlay() {
 
-      if (
-
-        gameOver
-
-      ) {
-
-        return;
-
-      }
+      if (gameOver) return;
 
       const unopenedIndexes =
 
@@ -2070,13 +1504,7 @@
 
           .map(
 
-            (
-
-              card,
-
-              index
-
-            ) =>
+            (card, index) =>
 
               card.opened
 
@@ -2096,9 +1524,7 @@
 
       if (
 
-        unopenedIndexes.length
-
-        === 0
+        unopenedIndexes.length === 0
 
       ) {
 
@@ -2120,15 +1546,9 @@
 
         ];
 
-      inputLocked =
+      inputLocked = false;
 
-        false;
-
-      openCard(
-
-        randomIndex
-
-      );
+      openCard(randomIndex);
 
     }
 
@@ -2136,11 +1556,7 @@
 
       const buttons =
 
-        board.querySelectorAll(
-
-          ".card"
-
-        );
+        board.querySelectorAll(".card");
 
       buttons.forEach(
 
@@ -2148,27 +1564,17 @@
 
           const index =
 
-            Number(
-
-              button.dataset.index
-
-            );
+            Number(button.dataset.index);
 
           const card =
 
             cards[index];
 
-          button.innerHTML =
-
-            "";
+          button.innerHTML = "";
 
           const image =
 
-            document.createElement(
-
-              "img"
-
-            );
+            document.createElement("img");
 
           if (
 
@@ -2186,9 +1592,7 @@
 
           } else if (
 
-            card.type
-
-            === "ALIVE"
+            card.type === "ALIVE"
 
           ) {
 
@@ -2212,11 +1616,7 @@
 
           }
 
-          button.appendChild(
-
-            image
-
-          );
+          button.appendChild(image);
 
           button.disabled =
 
@@ -2234,9 +1634,7 @@
 
     function countBingo() {
 
-      const lines =
-
-        [];
+      const lines = [];
 
       for (
 
@@ -2248,9 +1646,7 @@
 
       ) {
 
-        const line =
-
-          [];
+        const line = [];
 
         for (
 
@@ -2264,21 +1660,13 @@
 
           line.push(
 
-            row
-
-            * boardSize
-
-            + col
+            row * boardSize + col
 
           );
 
         }
 
-        lines.push(
-
-          line
-
-        );
+        lines.push(line);
 
       }
 
@@ -2292,9 +1680,7 @@
 
       ) {
 
-        const line =
-
-          [];
+        const line = [];
 
         for (
 
@@ -2308,27 +1694,17 @@
 
           line.push(
 
-            row
-
-            * boardSize
-
-            + col
+            row * boardSize + col
 
           );
 
         }
 
-        lines.push(
-
-          line
-
-        );
+        lines.push(line);
 
       }
 
-      const diagonal1 =
-
-        [];
+      const diagonal1 = [];
 
       for (
 
@@ -2342,25 +1718,15 @@
 
         diagonal1.push(
 
-          i
-
-          * boardSize
-
-          + i
+          i * boardSize + i
 
         );
 
       }
 
-      lines.push(
+      lines.push(diagonal1);
 
-        diagonal1
-
-      );
-
-      const diagonal2 =
-
-        [];
+      const diagonal2 = [];
 
       for (
 
@@ -2374,33 +1740,17 @@
 
         diagonal2.push(
 
-          i
+          i * boardSize
 
-          * boardSize
-
-          + (
-
-            boardSize
-
-            - 1
-
-            - i
-
-          )
+          + (boardSize - 1 - i)
 
         );
 
       }
 
-      lines.push(
+      lines.push(diagonal2);
 
-        diagonal2
-
-      );
-
-      let bingoCount =
-
-        0;
+      let bingoCount = 0;
 
       lines.forEach(
 
@@ -2416,11 +1766,7 @@
 
             );
 
-          if (
-
-            complete
-
-          ) {
+          if (complete) {
 
             bingoCount++;
 
@@ -2434,11 +1780,7 @@
 
     }
 
-    function finishGame(
-
-      loser
-
-    ) {
+    function finishGame(loser) {
 
       const bingo =
 
@@ -2446,9 +1788,7 @@
 
       const shots =
 
-        1
-
-        + bingo;
+        1 + bingo;
 
       resultTitle.textContent =
 
@@ -2462,13 +1802,9 @@
 
         shots;
 
-      awaitingResult =
+      awaitingResult = false;
 
-        false;
-
-      pendingLoser =
-
-        null;
+      pendingLoser = null;
 
       deadTapLayer.classList.remove(
 
@@ -2476,11 +1812,7 @@
 
       );
 
-      showScreen(
-
-        resultScreen
-
-      );
+      showScreen(resultScreen);
 
     }
 
@@ -2517,10 +1849,6 @@
       "click",
 
       () => {
-
-        prepareAudio();
-
-        startBgm();
 
         showScreen(
 
@@ -2594,9 +1922,7 @@
 
       () => {
 
-        settingError.textContent =
-
-          "";
+        settingError.textContent = "";
 
       }
 
@@ -2608,9 +1934,7 @@
 
       () => {
 
-        settingError.textContent =
-
-          "";
+        settingError.textContent = "";
 
       }
 
