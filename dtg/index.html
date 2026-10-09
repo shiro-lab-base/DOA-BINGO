@@ -435,8 +435,8 @@
     filter 0.2s ease;
 
   transform-style: preserve-3d;
-}
 
+}
 
     .game-card img {
 
@@ -2258,7 +2258,15 @@ button.appendChild(
 
     }
 
-    function renderGameCards() {
+    
+  playerCards.style.setProperty(
+
+    "--card-count",
+
+    totalCards
+
+  );
+function renderGameCards() {
 
   cpuCards.innerHTML =
 
@@ -2283,7 +2291,6 @@ button.appendChild(
     totalCards
 
   );
-
       cpuDeck.forEach(
 
         (
