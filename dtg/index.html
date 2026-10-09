@@ -1078,34 +1078,23 @@
 
       .card-row {
 
-        gap: 5px;
+  display: grid;
 
-        min-height: 110px;
+  grid-template-columns:
 
-      }
-　　　　.game-card {
+    repeat(var(--card-count), minmax(0, 1fr));
 
-  width: calc(
+  gap: 5px;
 
-    (
+  width: 100%;
 
-      100vw
+}
 
-      - 52px
+.game-card {
 
-      - (
+  width: 100%;
 
-        (var(--card-count) - 1)
-
-        * 5px
-
-      )
-
-    )
-
-    / var(--card-count)
-
-  );
+  max-width: 110px;
 
 }
       .dice-zone {
