@@ -1640,7 +1640,7 @@
 
           <div id="centerDice">
 
-            ?
+            ⚀
 
           </div>
 
@@ -2896,64 +2896,104 @@ function renderGameCards() {
       ) + 1;
 
     }
+   function diceFaceChar(
 
+  value
+
+) {
+
+  const faces = [
+
+    "",
+
+    "⚀",
+
+    "⚁",
+
+    "⚂",
+
+    "⚃",
+
+    "⚄",
+
+    "⚅"
+
+  ];
+
+  return faces[value]
+
+    || "⚀";
+
+}
     async function animateDice(
+
+  finalValue
+
+) {
+
+  centerDice
+
+    .classList
+
+    .add(
+
+      "rolling"
+
+    );
+
+  const start =
+
+    Date.now();
+
+  while (
+
+    Date.now()
+
+    - start
+
+    < 700
+
+  ) {
+
+    const tempValue =
+
+      randomDice();
+
+    centerDice.textContent =
+
+      diceFaceChar(
+
+        tempValue
+
+      );
+
+    await wait(
+
+      70
+
+    );
+
+  }
+
+  centerDice
+
+    .classList
+
+    .remove(
+
+      "rolling"
+
+    );
+
+  centerDice.textContent =
+
+    diceFaceChar(
 
       finalValue
 
-    ) {
+    );
 
-      centerDice
-
-        .classList
-
-        .add(
-
-          "rolling"
-
-        );
-
-      const start =
-
-        Date.now();
-
-      while (
-
-        Date.now()
-
-        - start
-
-        < 700
-
-      ) {
-
-        centerDice.textContent =
-
-          randomDice();
-
-        await wait(
-
-          70
-
-        );
-
-      }
-
-      centerDice
-
-        .classList
-
-        .remove(
-
-          "rolling"
-
-        );
-
-      centerDice.textContent =
-
-        finalValue;
-
-    }
+}
 
     async function rollRound() {
 
@@ -3015,7 +3055,7 @@ function renderGameCards() {
 
         centerDice.textContent =
 
-          "?";
+          "⚀";
 
         const roll =
 
