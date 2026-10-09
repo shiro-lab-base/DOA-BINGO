@@ -1085,31 +1085,25 @@
       }
 　　　　.game-card {
 
-  width: min(
+  width: calc(
 
-    76px,
+    (
 
-    calc(
+      100vw
 
-      (
+      - 52px
 
-        100vw
+      - (
 
-        - 52px
+        (var(--card-count) - 1)
 
-        - (
-
-          (var(--card-count) - 1)
-
-          * 5px
-
-        )
+        * 5px
 
       )
 
-      / var(--card-count)
-
     )
+
+    / var(--card-count)
 
   );
 
