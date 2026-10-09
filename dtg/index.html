@@ -1083,7 +1083,37 @@
         min-height: 110px;
 
       }
+　　　　.game-card {
 
+  width: min(
+
+    76px,
+
+    calc(
+
+      (
+
+        100vw
+
+        - 52px
+
+        - (
+
+          (var(--card-count) - 1)
+
+          * 5px
+
+        )
+
+      )
+
+      / var(--card-count)
+
+    )
+
+  );
+
+}
       .dice-zone {
 
         gap: 8px;
