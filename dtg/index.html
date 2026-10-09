@@ -2883,9 +2883,7 @@ function renderGameCards() {
 
         "-";
 
-      centerDice.textContent =
-
-        "⚀";
+      renderDiceFace(1);
 
       rollButton.disabled =
 
@@ -2995,13 +2993,7 @@ function renderGameCards() {
 
       randomDice();
 
-    centerDice.textContent =
-
-      diceFaceChar(
-
-        tempValue
-
-      );
+    renderDiceFace(tempValue);
 
     await wait(
 
@@ -3021,14 +3013,7 @@ function renderGameCards() {
 
     );
 
-  centerDice.textContent =
-
-    diceFaceChar(
-
-      finalValue
-
-    );
-
+  renderDiceFace(finalValue);
 }
 
     async function rollRound() {
@@ -3089,9 +3074,7 @@ function renderGameCards() {
 
             : `YOU ROLL ${i}/2`;
 
-        centerDice.textContent =
-
-          "⚀";
+       renderDiceFace(1); 
 
         const roll =
 
@@ -3151,9 +3134,7 @@ function renderGameCards() {
 
             : `CPU ROLL ${i}/2`;
 
-        centerDice.textContent =
-
-          "?";
+       renderDiceFace(1); 
 
         const roll =
 
