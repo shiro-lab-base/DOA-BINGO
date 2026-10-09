@@ -2010,41 +2010,67 @@
 
           i;
 
-        if (
+        const image =
 
-          blindMode
+  document.createElement(
 
-        ) {
+    "img"
 
-          button.textContent =
+  );
 
-            "BACK";
+if (
 
-        } else if (
+  blindMode
 
-          i
+) {
 
-          === selectedDeadIndex
+  image.src =
 
-        ) {
+    IMAGE_BACK;
 
-          button.textContent =
+  image.alt =
 
-            "DEAD";
+    "BACK";
 
-          button.classList.add(
+} else if (
 
-            "selected"
+  i
 
-          );
+  === selectedDeadIndex
 
-        } else {
+) {
 
-          button.textContent =
+  image.src =
 
-            "ALIVE";
+    IMAGE_DEAD;
 
-        }
+  image.alt =
+
+    "DEAD";
+
+  button.classList.add(
+
+    "selected"
+
+  );
+
+} else {
+
+  image.src =
+
+    IMAGE_ALIVE;
+
+  image.alt =
+
+    "ALIVE";
+
+}
+
+button.appendChild(
+
+  image
+
+);
 
         button.addEventListener(
 
