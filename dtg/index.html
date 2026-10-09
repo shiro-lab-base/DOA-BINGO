@@ -580,6 +580,8 @@
 
     #centerDice {
 
+      position: relative;
+      
       display: flex;
 
       align-items: center;
@@ -610,6 +612,32 @@
 
     }
 
+    #centerDice .pip {
+
+  position: absolute;
+
+  width: 17%;
+
+  height: 17%;
+
+  border-radius: 50%;
+
+  background: #111;
+
+  transform: translate(-50%, -50%);
+
+}
+
+#centerDice .pip.red {
+
+  width: 23%;
+
+  height: 23%;
+
+  background: #c00000;
+
+}
+    
     #centerDice.rolling {
 
       animation: diceRoll 0.16s linear infinite;
@@ -1638,11 +1666,7 @@
 
         <div class="center-dice-area">
 
-          <div id="centerDice">
-
-            ⚀
-
-          </div>
+          <div id="centerDice"></div>
 
           <button id="rollButton">
 
@@ -2896,35 +2920,47 @@ function renderGameCards() {
       ) + 1;
 
     }
-   function diceFaceChar(
+    
+   function renderDiceFace(value) {
 
-  value
+  const positions = {
 
-) {
+    1: [[50, 50]],
 
-  const faces = [
+    2: [[25, 25], [75, 75]],
 
-    "",
+    3: [[25, 25], [50, 50], [75, 75]],
 
-    "⚀",
+    4: [[25, 25], [75, 25], [25, 75], [75, 75]],
 
-    "⚁",
+    5: [[25, 25], [75, 25], [50, 50], [25, 75], [75, 75]],
 
-    "⚂",
+    6: [[25, 22], [75, 22], [25, 50], [75, 50], [25, 78], [75, 78]]
 
-    "⚃",
+  };
 
-    "⚄",
+  centerDice.innerHTML = "";
 
-    "⚅"
+  const dots = positions[value] || positions[1];
 
-  ];
+  dots.forEach(([x, y]) => {
 
-  return faces[value]
+    const pip = document.createElement("span");
 
-    || "⚀";
+    pip.className =
+
+      value === 1 ? "pip red" : "pip";
+
+    pip.style.left = `${x}%`;
+
+    pip.style.top = `${y}%`;
+
+    centerDice.appendChild(pip);
+
+  });
 
 }
+    
     async function animateDice(
 
   finalValue
