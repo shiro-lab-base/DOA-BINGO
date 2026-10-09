@@ -2006,25 +2006,13 @@
 
           i;
 
-        const image =
-
-          document.createElement(
-
-            "img"
-
-          );
-
         if (
 
           blindMode
 
         ) {
 
-          image.src =
-
-            IMAGE_BACK;
-
-          image.alt =
+          button.textContent =
 
             "BACK";
 
@@ -2036,11 +2024,7 @@
 
         ) {
 
-          image.src =
-
-            IMAGE_DEAD;
-
-          image.alt =
+          button.textContent =
 
             "DEAD";
 
@@ -2052,21 +2036,11 @@
 
         } else {
 
-          image.src =
-
-            IMAGE_ALIVE;
-
-          image.alt =
+          button.textContent =
 
             "ALIVE";
 
         }
-
-        button.appendChild(
-
-          image
-
-        );
 
         button.addEventListener(
 
