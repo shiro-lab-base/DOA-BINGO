@@ -1,0 +1,3881 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+
+    name="viewport"
+
+    content="width=device-width, initial-scale=1.0"
+
+  >
+
+  <title>DOA TARGET GUESS</title>
+
+  <style>
+
+    * {
+
+      box-sizing: border-box;
+
+    }
+
+    body {
+
+      margin: 0;
+
+      min-height: 100vh;
+
+      background: #111;
+
+      color: #fff;
+
+      font-family: Arial, sans-serif;
+
+      overflow-x: hidden;
+
+    }
+
+    button,
+
+    select {
+
+      font: inherit;
+
+    }
+
+    button {
+
+      cursor: pointer;
+
+    }
+
+    .screen {
+
+      display: none;
+
+      width: 100%;
+
+      min-height: 100vh;
+
+      padding: 18px;
+
+      background-image: url("images/doa-play-back.PNG");
+
+      background-size: cover;
+
+      background-position: center;
+
+      background-repeat: no-repeat;
+
+    }
+
+    .screen.active {
+
+      display: flex;
+
+      flex-direction: column;
+
+      align-items: center;
+
+    }
+
+    .container {
+
+      width: 100%;
+
+      max-width: 1000px;
+
+      margin: auto;
+
+      text-align: center;
+
+    }
+
+    h1,
+
+    h2 {
+
+      margin: 0;
+
+      letter-spacing: 3px;
+
+    }
+
+    .main-button {
+
+      width: 100%;
+
+      min-height: 52px;
+
+      margin-top: 18px;
+
+      border: 0;
+
+      border-radius: 8px;
+
+      background: #fff;
+
+      color: #000;
+
+      font-weight: bold;
+
+    }
+
+    .secondary-button {
+
+      width: 100%;
+
+      min-height: 48px;
+
+      margin-top: 12px;
+
+      border: 1px solid #777;
+
+      border-radius: 8px;
+
+      background: rgba(0, 0, 0, 0.65);
+
+      color: #fff;
+
+      font-weight: bold;
+
+    }
+
+    .setting-box {
+
+      margin-top: 28px;
+
+      text-align: left;
+
+    }
+
+    .setting-box label {
+
+      display: block;
+
+      margin-bottom: 8px;
+
+      color: #fff;
+
+      font-weight: bold;
+
+      text-shadow: 0 1px 3px #000;
+
+    }
+
+    .setting-box select {
+
+      width: 100%;
+
+      height: 50px;
+
+      padding: 0 12px;
+
+      border: 1px solid #666;
+
+      border-radius: 8px;
+
+      background: #1c1c1c;
+
+      color: #fff;
+
+    }
+
+    #setupScreen {
+
+      justify-content: center;
+
+    }
+
+    #setupCards {
+
+      --setup-count: 5;
+
+      display: flex;
+
+      flex-wrap: nowrap;
+
+      justify-content: center;
+
+      align-items: flex-end;
+
+      gap: 8px;
+
+      width: 100%;
+
+      margin-top: 28px;
+
+      overflow-x: auto;
+
+      padding: 8px 0 16px;
+
+    }
+
+    .setup-card {
+
+      flex: 0 0 auto;
+
+      width: min(
+
+        90px,
+
+        calc(
+
+          (
+
+            100vw
+
+            - 52px
+
+            - (
+
+              (var(--setup-count) - 1)
+
+              * 8px
+
+            )
+
+          )
+
+          / var(--setup-count)
+
+        )
+
+      );
+
+      min-width: 34px;
+
+      aspect-ratio: 63 / 88;
+
+      padding: 0;
+
+      border: 2px solid transparent;
+
+      border-radius: 8px;
+
+      overflow: hidden;
+
+      background: transparent;
+
+      transition:
+
+        transform 0.18s ease,
+
+        border-color 0.18s ease;
+
+    }
+
+    .setup-card.selected {
+
+      border-color: #d00000;
+
+      transform: translateY(-7px);
+
+    }
+
+    .setup-card img {
+
+      display: block;
+
+      width: 100%;
+
+      height: 100%;
+
+      object-fit: cover;
+
+    }
+
+    .setup-actions {
+
+      display: grid;
+
+      grid-template-columns: 1fr 1fr;
+
+      gap: 10px;
+
+      margin-top: 10px;
+
+    }
+
+    .setup-actions button {
+
+      min-height: 48px;
+
+      border: 1px solid #777;
+
+      border-radius: 8px;
+
+      background: rgba(0, 0, 0, 0.72);
+
+      color: #fff;
+
+      font-weight: bold;
+
+    }
+
+    #blindStatus {
+
+      min-height: 24px;
+
+      margin-top: 8px;
+
+      color: #ddd;
+
+      font-size: 13px;
+
+      letter-spacing: 1px;
+
+    }
+
+    #gameScreen {
+
+      position: relative;
+
+      justify-content: center;
+
+      overflow: hidden;
+
+    }
+
+    .game-wrap {
+
+      width: 100%;
+
+      max-width: 1180px;
+
+      position: relative;
+
+      z-index: 3;
+
+    }
+
+    .player-label {
+
+      margin: 4px 0 8px;
+
+      font-size: 15px;
+
+      font-weight: bold;
+
+      letter-spacing: 2px;
+
+      text-shadow: 0 1px 4px #000;
+
+    }
+
+    .card-row {
+
+      display: flex;
+
+      justify-content: center;
+
+      gap: 8px;
+
+      width: 100%;
+
+      min-height: 130px;
+
+      perspective: 900px;
+
+    }
+
+    .game-card {
+
+      width: clamp(56px, 9vw, 110px);
+
+      aspect-ratio: 63 / 88;
+
+      padding: 0;
+
+      border: 0;
+
+      border-radius: 8px;
+
+      overflow: hidden;
+
+      background: transparent;
+
+      transition:
+
+        transform 0.38s ease,
+
+        opacity 0.38s ease,
+
+        filter 0.2s ease;
+
+      transform-style: preserve-3d;
+
+    }
+
+    .game-card img {
+
+      display: block;
+
+      width: 100%;
+
+      height: 100%;
+
+      object-fit: cover;
+
+    }
+
+    .game-card.selectable {
+
+      outline: 2px solid rgba(255, 255, 255, 0.8);
+
+      animation: cardPulse 0.8s ease-in-out infinite alternate;
+
+    }
+
+    @keyframes cardPulse {
+
+      from {
+
+        filter: brightness(1);
+
+      }
+
+      to {
+
+        filter: brightness(1.45);
+
+      }
+
+    }
+
+    .cpu-card.opened {
+
+      transform:
+
+        perspective(700px)
+
+        rotateX(58deg)
+
+        translateY(20px);
+
+      transform-origin: bottom center;
+
+    }
+
+    .player-card.opened {
+
+      transform:
+
+        perspective(800px)
+
+        translateY(-16px)
+
+        rotateX(32deg);
+
+      transform-origin: bottom center;
+
+    }
+
+    .dice-zone {
+
+      display: grid;
+
+      grid-template-columns: 1fr auto 1fr;
+
+      align-items: center;
+
+      gap: 18px;
+
+      margin: 18px auto;
+
+      width: 100%;
+
+      max-width: 760px;
+
+      min-height: 150px;
+
+    }
+
+    .roll-result {
+
+      display: flex;
+
+      flex-direction: column;
+
+      justify-content: center;
+
+      min-height: 92px;
+
+      padding: 12px;
+
+      border: 1px solid rgba(255, 255, 255, 0.45);
+
+      border-radius: 10px;
+
+      background: rgba(0, 0, 0, 0.55);
+
+    }
+
+    .roll-label {
+
+      font-size: 12px;
+
+      letter-spacing: 2px;
+
+      color: #bbb;
+
+    }
+
+    .roll-number {
+
+      margin-top: 5px;
+
+      font-size: 42px;
+
+      font-weight: bold;
+
+    }
+
+    .center-dice-area {
+
+      display: flex;
+
+      flex-direction: column;
+
+      align-items: center;
+
+      min-width: 140px;
+
+    }
+
+    #centerDice {
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      width: 92px;
+
+      height: 92px;
+
+      border: 3px solid #ddd;
+
+      border-radius: 18px;
+
+      background: #f7f3e8;
+
+      color: #111;
+
+      font-size: 52px;
+
+      font-weight: bold;
+
+      box-shadow:
+
+        0 6px 14px rgba(0, 0, 0, 0.45),
+
+        inset 0 0 12px rgba(0, 0, 0, 0.15);
+
+    }
+
+    #centerDice.rolling {
+
+      animation: diceRoll 0.16s linear infinite;
+
+    }
+
+    @keyframes diceRoll {
+
+      0% {
+
+        transform: rotate(0deg) translateY(0);
+
+      }
+
+      25% {
+
+        transform: rotate(90deg) translateY(-8px);
+
+      }
+
+      50% {
+
+        transform: rotate(180deg) translateY(0);
+
+      }
+
+      75% {
+
+        transform: rotate(270deg) translateY(-5px);
+
+      }
+
+      100% {
+
+        transform: rotate(360deg) translateY(0);
+
+      }
+
+    }
+
+    #rollButton {
+
+      width: 140px;
+
+      min-height: 44px;
+
+      margin-top: 10px;
+
+      border: 1px solid #fff;
+
+      border-radius: 8px;
+
+      background: rgba(0, 0, 0, 0.7);
+
+      color: #fff;
+
+      font-weight: bold;
+
+    }
+
+    #rollButton:disabled {
+
+      opacity: 0.35;
+
+      cursor: default;
+
+    }
+
+    #status {
+
+      min-height: 32px;
+
+      margin-top: 8px;
+
+      font-size: 19px;
+
+      font-weight: bold;
+
+      letter-spacing: 1px;
+
+      text-shadow: 0 1px 4px #000;
+
+    }
+
+    #dangerOverlay {
+
+      position: absolute;
+
+      inset: 0;
+
+      z-index: 1;
+
+      background: rgba(150, 0, 0, 0);
+
+      pointer-events: none;
+
+      transition: background 0.4s ease;
+
+    }
+
+    #dangerOverlay.active {
+
+      background: rgba(150, 0, 0, 0.20);
+
+    }
+
+    #ecgLayer {
+
+      display: none;
+
+      position: absolute;
+
+      left: 0;
+
+      right: 0;
+
+      top: 50%;
+
+      z-index: 2;
+
+      height: 80px;
+
+      overflow: hidden;
+
+      pointer-events: none;
+
+      transform: translateY(-50%);
+
+    }
+
+    #ecgLayer.active {
+
+      display: block;
+
+    }
+
+    .ecg-line {
+
+      position: absolute;
+
+      top: 50%;
+
+      left: 0;
+
+      width: 200%;
+
+      height: 2px;
+
+      background: #e00000;
+
+      box-shadow:
+
+        0 0 6px #e00000;
+
+      animation:
+
+        ecgMove 1.2s linear infinite;
+
+    }
+
+    .ecg-line::before {
+
+      content: "";
+
+      position: absolute;
+
+      left: 35%;
+
+      top: -26px;
+
+      width: 70px;
+
+      height: 52px;
+
+      clip-path:
+
+        polygon(
+
+          0 50%,
+
+          20% 50%,
+
+          28% 30%,
+
+          38% 75%,
+
+          48% 5%,
+
+          58% 92%,
+
+          68% 50%,
+
+          100% 50%
+
+        );
+
+      background: #e00000;
+
+    }
+
+    @keyframes ecgMove {
+
+      from {
+
+        transform: translateX(0);
+
+      }
+
+      to {
+
+        transform: translateX(-50%);
+
+      }
+
+    }
+
+    #deadFxOverlay {
+
+      display: none;
+
+      position: fixed;
+
+      inset: 0;
+
+      z-index: 5000;
+
+      overflow: hidden;
+
+      pointer-events: none;
+
+    }
+
+    #deadFxOverlay.active {
+
+      display: block;
+
+    }
+
+    #deadFxRed {
+
+      position: absolute;
+
+      inset: 0;
+
+      z-index: 1;
+
+      background: rgba(150, 0, 0, 0.42);
+
+      opacity: 0;
+
+      transition:
+
+        opacity 0.35s linear;
+
+    }
+
+    #deadFxRed.show {
+
+      opacity: 1;
+
+    }
+
+    #deadFxCard {
+
+      position: fixed;
+
+      z-index: 2;
+
+      object-fit: cover;
+
+      border-radius: 8px;
+
+      transition:
+
+        left 0.7s ease-out,
+
+        top 0.7s ease-out,
+
+        width 0.7s ease-out,
+
+        height 0.7s ease-out,
+
+        transform 0.7s ease-out;
+
+    }
+
+    #deadFxBullet {
+
+      position: fixed;
+
+      z-index: 3;
+
+      width: 120px;
+
+      height: 120px;
+
+      object-fit: contain;
+
+      opacity: 0;
+
+      transform:
+
+        translate(-50%, -50%)
+
+        scale(0.7);
+
+      transition:
+
+        opacity 0.08s linear,
+
+        transform 0.12s ease-out;
+
+    }
+
+    #deadFxBullet.show {
+
+      opacity: 1;
+
+      transform:
+
+        translate(-50%, -50%)
+
+        scale(1);
+
+    }
+
+    #deadFxResultText {
+
+      position: fixed;
+
+      left: 50%;
+
+      top: 50%;
+
+      z-index: 4;
+
+      transform:
+
+        translate(-50%, -50%)
+
+        scale(0.8);
+
+      opacity: 0;
+
+      font-size: clamp(64px, 13vw, 150px);
+
+      font-weight: 900;
+
+      letter-spacing: 8px;
+
+      color: #fff;
+
+      -webkit-text-stroke: 2px #000;
+
+      text-shadow:
+
+        0 0 3px #000,
+
+        0 0 10px rgba(0, 0, 0, 0.9);
+
+      transition:
+
+        opacity 0.22s ease,
+
+        transform 0.22s ease;
+
+    }
+
+    #deadFxResultText.show {
+
+      opacity: 1;
+
+      transform:
+
+        translate(-50%, -50%)
+
+        scale(1);
+
+    }
+
+    #deadFxResultText.lose {
+
+      color: #d00000;
+
+    }
+
+    #deadFxResultText.win {
+
+      color: #fff;
+
+    }
+
+    #resultScreen {
+
+      justify-content: center;
+
+    }
+
+    .result-box {
+
+      width: 100%;
+
+      max-width: 430px;
+
+      padding: 28px 22px;
+
+      border: 1px solid #555;
+
+      border-radius: 12px;
+
+      background: rgba(20, 20, 20, 0.94);
+
+    }
+
+    #resultTitle {
+
+      font-size: 34px;
+
+      font-weight: bold;
+
+      color: #d00000;
+
+    }
+
+    #resultPenalty {
+
+      margin-top: 24px;
+
+      font-size: 38px;
+
+      font-weight: bold;
+
+    }
+
+    #resultDetail {
+
+      margin-top: 14px;
+
+      color: #ccc;
+
+      line-height: 1.7;
+
+    }
+
+    .landscape-note {
+
+      display: none;
+
+      margin-bottom: 10px;
+
+      color: #ddd;
+
+      font-size: 12px;
+
+      letter-spacing: 1px;
+
+    }
+
+    @media (orientation: portrait) {
+
+      .landscape-note {
+
+        display: block;
+
+      }
+
+      .card-row {
+
+        gap: 5px;
+
+        min-height: 110px;
+
+      }
+
+      .game-card {
+
+        width: clamp(40px, 12vw, 76px);
+
+      }
+
+      .dice-zone {
+
+        gap: 8px;
+
+        margin: 10px auto;
+
+      }
+
+      .center-dice-area {
+
+        min-width: 100px;
+
+      }
+
+      #centerDice {
+
+        width: 72px;
+
+        height: 72px;
+
+        font-size: 40px;
+
+      }
+
+      #rollButton {
+
+        width: 100px;
+
+        font-size: 13px;
+
+      }
+
+      .roll-number {
+
+        font-size: 32px;
+
+      }
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+  <section
+
+    id="settingsScreen"
+
+    class="screen active"
+
+  >
+
+    <div class="container">
+
+      <h1>DOA TARGET GUESS</h1>
+
+      <div class="setting-box">
+
+        <label for="aliveCount">
+
+          ALIVE CARDS
+
+        </label>
+
+        <select id="aliveCount">
+
+          <option value="1">1</option>
+
+          <option value="2">2</option>
+
+          <option value="3">3</option>
+
+          <option value="4" selected>4</option>
+
+          <option value="5">5</option>
+
+          <option value="6">6</option>
+
+          <option value="7">7</option>
+
+        </select>
+
+      </div>
+
+      <div class="setting-box">
+
+        <label for="diceMode">
+
+          DICE MODE
+
+        </label>
+
+        <select id="diceMode">
+
+          <option value="1" selected>1 ROLL</option>
+
+          <option value="2">2 ROLL</option>
+
+        </select>
+
+      </div>
+
+      <button
+
+        id="setupStartButton"
+
+        class="main-button"
+
+      >
+
+        SET DEAD
+
+      </button>
+
+    </div>
+
+  </section>
+
+  <section
+
+    id="setupScreen"
+
+    class="screen"
+
+  >
+
+    <div class="container">
+
+      <h2>SET YOUR DEAD</h2>
+
+      <div id="setupCards"></div>
+
+      <div class="setup-actions">
+
+        <button id="randomButton">
+
+          RANDOM
+
+        </button>
+
+        <button id="blindRandomButton">
+
+          BLIND RANDOM
+
+        </button>
+
+      </div>
+
+      <div id="blindStatus"></div>
+
+      <button
+
+        id="confirmSetupButton"
+
+        class="main-button"
+
+      >
+
+        SET
+
+      </button>
+
+      <button
+
+        id="setupBackButton"
+
+        class="secondary-button"
+
+      >
+
+        SETTINGS
+
+      </button>
+
+    </div>
+
+  </section>
+
+  <section
+
+    id="gameScreen"
+
+    class="screen"
+
+  >
+
+    <div id="dangerOverlay"></div>
+
+    <div id="ecgLayer">
+
+      <div class="ecg-line"></div>
+
+    </div>
+
+    <div class="game-wrap">
+
+      <div class="landscape-note">
+
+        LANDSCAPE MODE RECOMMENDED
+
+      </div>
+
+      <div class="player-label">
+
+        CPU
+
+      </div>
+
+      <div
+
+        id="cpuCards"
+
+        class="card-row"
+
+      ></div>
+
+      <div class="dice-zone">
+
+        <div class="roll-result">
+
+          <div class="roll-label">
+
+            YOU
+
+          </div>
+
+          <div
+
+            id="playerRollDisplay"
+
+            class="roll-number"
+
+          >
+
+            -
+
+          </div>
+
+        </div>
+
+        <div class="center-dice-area">
+
+          <div id="centerDice">
+
+            ?
+
+          </div>
+
+          <button id="rollButton">
+
+            ROLL
+
+          </button>
+
+        </div>
+
+        <div class="roll-result">
+
+          <div class="roll-label">
+
+            CPU
+
+          </div>
+
+          <div
+
+            id="cpuRollDisplay"
+
+            class="roll-number"
+
+          >
+
+            -
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <div id="status">
+
+        ROLL THE DICE
+
+      </div>
+
+      <div class="player-label">
+
+        YOU
+
+      </div>
+
+      <div
+
+        id="playerCards"
+
+        class="card-row"
+
+      ></div>
+
+    </div>
+
+  </section>
+
+  <section
+
+    id="resultScreen"
+
+    class="screen"
+
+  >
+
+    <div class="result-box">
+
+      <div id="resultTitle">
+
+        YOU WIN
+
+      </div>
+
+      <div id="resultPenalty">
+
+        1 SHOT
+
+      </div>
+
+      <div id="resultDetail"></div>
+
+      <button
+
+        id="retryButton"
+
+        class="main-button"
+
+      >
+
+        PLAY AGAIN
+
+      </button>
+
+      <button
+
+        id="settingsButton"
+
+        class="secondary-button"
+
+      >
+
+        SETTINGS
+
+      </button>
+
+    </div>
+
+  </section>
+
+  <div id="deadFxOverlay">
+
+    <div id="deadFxRed"></div>
+
+    <img
+
+      id="deadFxCard"
+
+      src="images/doa-dead.PNG"
+
+      alt="DEAD"
+
+    >
+
+    <img
+
+      id="deadFxBullet"
+
+      src="images/doa-dankon.PNG"
+
+      alt="BULLET HOLE"
+
+    >
+
+    <div id="deadFxResultText">
+
+      DEAD
+
+    </div>
+
+  </div>
+
+  <audio
+
+    id="bgm"
+
+    src="audio/doa-bgm.mp3"
+
+    preload="auto"
+
+    loop
+
+  ></audio>
+
+  <audio
+
+    id="cardSound"
+
+    src="audio/doa-card-flick.wav"
+
+    preload="auto"
+
+  ></audio>
+
+  <audio
+
+    id="gunClickSound"
+
+    src="audio/doa-gun-click.mp3"
+
+    preload="auto"
+
+  ></audio>
+
+  <audio
+
+    id="gunShotSound"
+
+    src="audio/doa-gun-shot.wav"
+
+    preload="auto"
+
+  ></audio>
+
+  <script>
+
+    const IMAGE_BACK =
+
+      "images/doa-back.PNG";
+
+    const IMAGE_ALIVE =
+
+      "images/doa-alive.PNG";
+
+    const IMAGE_DEAD =
+
+      "images/doa-dead.PNG";
+
+    const settingsScreen =
+
+      document.getElementById(
+
+        "settingsScreen"
+
+      );
+
+    const setupScreen =
+
+      document.getElementById(
+
+        "setupScreen"
+
+      );
+
+    const gameScreen =
+
+      document.getElementById(
+
+        "gameScreen"
+
+      );
+
+    const resultScreen =
+
+      document.getElementById(
+
+        "resultScreen"
+
+      );
+
+    const aliveCountSelect =
+
+      document.getElementById(
+
+        "aliveCount"
+
+      );
+
+    const diceModeSelect =
+
+      document.getElementById(
+
+        "diceMode"
+
+      );
+
+    const setupStartButton =
+
+      document.getElementById(
+
+        "setupStartButton"
+
+      );
+
+    const setupCards =
+
+      document.getElementById(
+
+        "setupCards"
+
+      );
+
+    const randomButton =
+
+      document.getElementById(
+
+        "randomButton"
+
+      );
+
+    const blindRandomButton =
+
+      document.getElementById(
+
+        "blindRandomButton"
+
+      );
+
+    const blindStatus =
+
+      document.getElementById(
+
+        "blindStatus"
+
+      );
+
+    const confirmSetupButton =
+
+      document.getElementById(
+
+        "confirmSetupButton"
+
+      );
+
+    const setupBackButton =
+
+      document.getElementById(
+
+        "setupBackButton"
+
+      );
+
+    const cpuCards =
+
+      document.getElementById(
+
+        "cpuCards"
+
+      );
+
+    const playerCards =
+
+      document.getElementById(
+
+        "playerCards"
+
+      );
+
+    const centerDice =
+
+      document.getElementById(
+
+        "centerDice"
+
+      );
+
+    const rollButton =
+
+      document.getElementById(
+
+        "rollButton"
+
+      );
+
+    const playerRollDisplay =
+
+      document.getElementById(
+
+        "playerRollDisplay"
+
+      );
+
+    const cpuRollDisplay =
+
+      document.getElementById(
+
+        "cpuRollDisplay"
+
+      );
+
+    const status =
+
+      document.getElementById(
+
+        "status"
+
+      );
+
+    const dangerOverlay =
+
+      document.getElementById(
+
+        "dangerOverlay"
+
+      );
+
+    const ecgLayer =
+
+      document.getElementById(
+
+        "ecgLayer"
+
+      );
+
+    const deadFxOverlay =
+
+      document.getElementById(
+
+        "deadFxOverlay"
+
+      );
+
+    const deadFxRed =
+
+      document.getElementById(
+
+        "deadFxRed"
+
+      );
+
+    const deadFxCard =
+
+      document.getElementById(
+
+        "deadFxCard"
+
+      );
+
+    const deadFxBullet =
+
+      document.getElementById(
+
+        "deadFxBullet"
+
+      );
+
+    const deadFxResultText =
+
+      document.getElementById(
+
+        "deadFxResultText"
+
+      );
+
+    const resultTitle =
+
+      document.getElementById(
+
+        "resultTitle"
+
+      );
+
+    const resultPenalty =
+
+      document.getElementById(
+
+        "resultPenalty"
+
+      );
+
+    const resultDetail =
+
+      document.getElementById(
+
+        "resultDetail"
+
+      );
+
+    const retryButton =
+
+      document.getElementById(
+
+        "retryButton"
+
+      );
+
+    const settingsButton =
+
+      document.getElementById(
+
+        "settingsButton"
+
+      );
+
+    const bgm =
+
+      document.getElementById(
+
+        "bgm"
+
+      );
+
+    const cardSound =
+
+      document.getElementById(
+
+        "cardSound"
+
+      );
+
+    const gunClickSound =
+
+      document.getElementById(
+
+        "gunClickSound"
+
+      );
+
+    const gunShotSound =
+
+      document.getElementById(
+
+        "gunShotSound"
+
+      );
+
+    let aliveCount = 4;
+
+    let totalCards = 5;
+
+    let diceRollCount = 1;
+
+    let selectedDeadIndex = 0;
+
+    let blindMode = false;
+
+    let playerDeck = [];
+
+    let cpuDeck = [];
+
+    let playerRoll = 0;
+
+    let cpuRoll = 0;
+
+    let rolling = false;
+
+    let playerOpenedCount = 0;
+
+    let cpuOpenedCount = 0;
+
+    let dangerMode = false;
+
+    let gameOver = false;
+
+    bgm.volume = 0.35;
+
+    cardSound.volume = 1;
+
+    gunClickSound.volume = 1;
+
+    gunShotSound.volume = 1;
+
+    function showScreen(
+
+      screen
+
+    ) {
+
+      [
+
+        settingsScreen,
+
+        setupScreen,
+
+        gameScreen,
+
+        resultScreen
+
+      ].forEach(
+
+        item =>
+
+          item.classList.remove(
+
+            "active"
+
+          )
+
+      );
+
+      screen.classList.add(
+
+        "active"
+
+      );
+
+    }
+
+    function wait(
+
+      ms
+
+    ) {
+
+      return new Promise(
+
+        resolve =>
+
+          setTimeout(
+
+            resolve,
+
+            ms
+
+          )
+
+      );
+
+    }
+
+    function playSound(
+
+      sound
+
+    ) {
+
+      sound.pause();
+
+      sound.currentTime = 0;
+
+      const promise =
+
+        sound.play();
+
+      if (
+
+        promise
+
+        && typeof promise.catch
+
+        === "function"
+
+      ) {
+
+        promise.catch(
+
+          () => {}
+
+        );
+
+      }
+
+    }
+
+    function startBgm() {
+
+      const promise =
+
+        bgm.play();
+
+      if (
+
+        promise
+
+        && typeof promise.catch
+
+        === "function"
+
+      ) {
+
+        promise.catch(
+
+          () => {}
+
+        );
+
+      }
+
+    }
+
+    function stopBgm() {
+
+      bgm.pause();
+
+    }
+
+    function randomDeadIndex() {
+
+      return Math.floor(
+
+        Math.random()
+
+        * totalCards
+
+      );
+
+    }
+
+    function renderSetupCards() {
+
+      setupCards.innerHTML =
+
+        "";
+
+      setupCards.style.setProperty(
+
+        "--setup-count",
+
+        totalCards
+
+      );
+
+      for (
+
+        let i = 0;
+
+        i < totalCards;
+
+        i++
+
+      ) {
+
+        const button =
+
+          document.createElement(
+
+            "button"
+
+          );
+
+        button.className =
+
+          "setup-card";
+
+        button.dataset.index =
+
+          i;
+
+        const image =
+
+          document.createElement(
+
+            "img"
+
+          );
+
+        if (
+
+          blindMode
+
+        ) {
+
+          image.src =
+
+            IMAGE_BACK;
+
+          image.alt =
+
+            "BACK";
+
+        } else if (
+
+          i
+
+          === selectedDeadIndex
+
+        ) {
+
+          image.src =
+
+            IMAGE_DEAD;
+
+          image.alt =
+
+            "DEAD";
+
+          button.classList.add(
+
+            "selected"
+
+          );
+
+        } else {
+
+          image.src =
+
+            IMAGE_ALIVE;
+
+          image.alt =
+
+            "ALIVE";
+
+        }
+
+        button.appendChild(
+
+          image
+
+        );
+
+        button.addEventListener(
+
+          "click",
+
+          () => {
+
+            blindMode =
+
+              false;
+
+            selectedDeadIndex =
+
+              i;
+
+            blindStatus.textContent =
+
+              "";
+
+            renderSetupCards();
+
+          }
+
+        );
+
+        setupCards.appendChild(
+
+          button
+
+        );
+
+      }
+
+    }
+
+    function buildSetupCards() {
+
+      blindMode =
+
+        false;
+
+      selectedDeadIndex =
+
+        randomDeadIndex();
+
+      blindStatus.textContent =
+
+        "";
+
+      renderSetupCards();
+
+    }
+
+    function setVisibleRandom() {
+
+      blindMode =
+
+        false;
+
+      selectedDeadIndex =
+
+        randomDeadIndex();
+
+      blindStatus.textContent =
+
+        "";
+
+      renderSetupCards();
+
+    }
+
+    function setBlindRandom() {
+
+      blindMode =
+
+        true;
+
+      selectedDeadIndex =
+
+        randomDeadIndex();
+
+      blindStatus.textContent =
+
+        "DEAD LOCATION HIDDEN";
+
+      renderSetupCards();
+
+    }
+
+    function buildDecks() {
+
+      playerDeck =
+
+        [];
+
+      cpuDeck =
+
+        [];
+
+      for (
+
+        let i = 0;
+
+        i < totalCards;
+
+        i++
+
+      ) {
+
+        playerDeck.push({
+
+          type:
+
+            i
+
+            === selectedDeadIndex
+
+              ? "DEAD"
+
+              : "ALIVE",
+
+          opened: false
+
+        });
+
+      }
+
+      const cpuDeadIndex =
+
+        randomDeadIndex();
+
+      for (
+
+        let i = 0;
+
+        i < totalCards;
+
+        i++
+
+      ) {
+
+        cpuDeck.push({
+
+          type:
+
+            i
+
+            === cpuDeadIndex
+
+              ? "DEAD"
+
+              : "ALIVE",
+
+          opened: false
+
+        });
+
+      }
+
+    }
+
+    function renderGameCards() {
+
+      cpuCards.innerHTML =
+
+        "";
+
+      playerCards.innerHTML =
+
+        "";
+
+      cpuDeck.forEach(
+
+        (
+
+          card,
+
+          index
+
+        ) => {
+
+          const button =
+
+            document.createElement(
+
+              "button"
+
+            );
+
+          button.className =
+
+            "game-card cpu-card";
+
+          button.dataset.index =
+
+            index;
+
+          const image =
+
+            document.createElement(
+
+              "img"
+
+            );
+
+          if (
+
+            card.opened
+
+          ) {
+
+            if (
+
+              card.type
+
+              === "DEAD"
+
+            ) {
+
+              image.src =
+
+                IMAGE_DEAD;
+
+              image.alt =
+
+                "DEAD";
+
+            } else {
+
+              image.src =
+
+                IMAGE_ALIVE;
+
+              image.alt =
+
+                "ALIVE";
+
+            }
+
+          } else {
+
+            image.src =
+
+              IMAGE_BACK;
+
+            image.alt =
+
+              "BACK";
+
+          }
+
+          button.appendChild(
+
+            image
+
+          );
+
+          if (
+
+            card.opened
+
+          ) {
+
+            button.classList.add(
+
+              "opened"
+
+            );
+
+          }
+
+          cpuCards.appendChild(
+
+            button
+
+          );
+
+        }
+
+      );
+
+      playerDeck.forEach(
+
+        (
+
+          card,
+
+          index
+
+        ) => {
+
+          const button =
+
+            document.createElement(
+
+              "button"
+
+            );
+
+          button.className =
+
+            "game-card player-card";
+
+          button.dataset.index =
+
+            index;
+
+          const image =
+
+            document.createElement(
+
+              "img"
+
+            );
+
+          if (
+
+            blindMode
+
+            && !card.opened
+
+          ) {
+
+            image.src =
+
+              IMAGE_BACK;
+
+            image.alt =
+
+              "BACK";
+
+          } else if (
+
+            card.type
+
+            === "DEAD"
+
+          ) {
+
+            image.src =
+
+              IMAGE_DEAD;
+
+            image.alt =
+
+              "DEAD";
+
+          } else {
+
+            image.src =
+
+              IMAGE_ALIVE;
+
+            image.alt =
+
+              "ALIVE";
+
+          }
+
+          button.appendChild(
+
+            image
+
+          );
+
+          if (
+
+            card.opened
+
+          ) {
+
+            button.classList.add(
+
+              "opened"
+
+            );
+
+          }
+
+          playerCards.appendChild(
+
+            button
+
+          );
+
+        }
+
+      );
+
+    }
+
+    function prepareGame() {
+
+      gameOver =
+
+        false;
+
+      rolling =
+
+        false;
+
+      playerOpenedCount =
+
+        0;
+
+      cpuOpenedCount =
+
+        0;
+
+      dangerMode =
+
+        false;
+
+      dangerOverlay
+
+        .classList
+
+        .remove(
+
+          "active"
+
+        );
+
+      ecgLayer
+
+        .classList
+
+        .remove(
+
+          "active"
+
+        );
+
+      playerRollDisplay.textContent =
+
+        "-";
+
+      cpuRollDisplay.textContent =
+
+        "-";
+
+      centerDice.textContent =
+
+        "?";
+
+      rollButton.disabled =
+
+        false;
+
+      status.textContent =
+
+        "ROLL THE DICE";
+
+      buildDecks();
+
+      renderGameCards();
+
+      showScreen(
+
+        gameScreen
+
+      );
+
+      startBgm();
+
+    }
+
+    function randomDice() {
+
+      return Math.floor(
+
+        Math.random()
+
+        * 6
+
+      ) + 1;
+
+    }
+
+    async function animateDice(
+
+      finalValue
+
+    ) {
+
+      centerDice
+
+        .classList
+
+        .add(
+
+          "rolling"
+
+        );
+
+      const start =
+
+        Date.now();
+
+      while (
+
+        Date.now()
+
+        - start
+
+        < 700
+
+      ) {
+
+        centerDice.textContent =
+
+          randomDice();
+
+        await wait(
+
+          70
+
+        );
+
+      }
+
+      centerDice
+
+        .classList
+
+        .remove(
+
+          "rolling"
+
+        );
+
+      centerDice.textContent =
+
+        finalValue;
+
+    }
+
+    async function rollRound() {
+
+      if (
+
+        rolling
+
+        || gameOver
+
+      ) {
+
+        return;
+
+      }
+
+      rolling =
+
+        true;
+
+      rollButton.disabled =
+
+        true;
+
+      clearCpuSelection();
+
+      playerRollDisplay.textContent =
+
+        "-";
+
+      cpuRollDisplay.textContent =
+
+        "-";
+
+      playerRoll =
+
+        0;
+
+      cpuRoll =
+
+        0;
+
+      for (
+
+        let i = 1;
+
+        i <= diceRollCount;
+
+        i++
+
+      ) {
+
+        status.textContent =
+
+          diceRollCount === 1
+
+            ? "YOU ROLL"
+
+            : `YOU ROLL ${i}/2`;
+
+        centerDice.textContent =
+
+          "?";
+
+        const roll =
+
+          randomDice();
+
+        await animateDice(
+
+          roll
+
+        );
+
+        playerRoll +=
+
+          roll;
+
+        playerRollDisplay.textContent =
+
+          playerRoll;
+
+        if (
+
+          i < diceRollCount
+
+        ) {
+
+          await wait(
+
+            550
+
+          );
+
+        }
+
+      }
+
+      await wait(
+
+        600
+
+      );
+
+      for (
+
+        let i = 1;
+
+        i <= diceRollCount;
+
+        i++
+
+      ) {
+
+        status.textContent =
+
+          diceRollCount === 1
+
+            ? "CPU ROLL"
+
+            : `CPU ROLL ${i}/2`;
+
+        centerDice.textContent =
+
+          "?";
+
+        const roll =
+
+          randomDice();
+
+        await animateDice(
+
+          roll
+
+        );
+
+        cpuRoll +=
+
+          roll;
+
+        cpuRollDisplay.textContent =
+
+          cpuRoll;
+
+        if (
+
+          i < diceRollCount
+
+        ) {
+
+          await wait(
+
+            550
+
+          );
+
+        }
+
+      }
+
+      await wait(
+
+        500
+
+      );
+
+      if (
+
+        playerRoll
+
+        === cpuRoll
+
+      ) {
+
+        status.textContent =
+
+          "DRAW - ROLL AGAIN";
+
+        rolling =
+
+          false;
+
+        rollButton.disabled =
+
+          false;
+
+        return;
+
+      }
+
+      if (
+
+        playerRoll
+
+        > cpuRoll
+
+      ) {
+
+        status.textContent =
+
+          "CHOOSE CPU CARD";
+
+        rolling =
+
+          false;
+
+        enableCpuSelection();
+
+        return;
+
+      }
+
+      status.textContent =
+
+        "CPU CHOOSES";
+
+      if (
+
+        dangerMode
+
+      ) {
+
+        stopDangerMode();
+
+      }
+
+      await wait(
+
+        650
+
+      );
+
+      cpuChoosePlayerCard();
+
+      rolling =
+
+        false;
+
+    }
+
+    function enableCpuSelection() {
+
+      const buttons =
+
+        cpuCards.querySelectorAll(
+
+          ".game-card"
+
+        );
+
+      buttons.forEach(
+
+        button => {
+
+          const index =
+
+            Number(
+
+              button.dataset.index
+
+            );
+
+          if (
+
+            cpuDeck[index].opened
+
+          ) {
+
+            return;
+
+          }
+
+          button.classList.add(
+
+            "selectable"
+
+          );
+
+          button.addEventListener(
+
+            "click",
+
+            handleCpuCardClick,
+
+            {
+
+              once: true
+
+            }
+
+          );
+
+        }
+
+      );
+
+    }
+
+    function clearCpuSelection() {
+
+      const buttons =
+
+        cpuCards.querySelectorAll(
+
+          ".game-card"
+
+        );
+
+      buttons.forEach(
+
+        button => {
+
+          button.classList.remove(
+
+            "selectable"
+
+          );
+
+          button.removeEventListener(
+
+            "click",
+
+            handleCpuCardClick
+
+          );
+
+        }
+
+      );
+
+    }
+
+    function handleCpuCardClick(
+
+      event
+
+    ) {
+
+      if (
+
+        gameOver
+
+      ) {
+
+        return;
+
+      }
+
+      const button =
+
+        event.currentTarget;
+
+      const index =
+
+        Number(
+
+          button.dataset.index
+
+        );
+
+      clearCpuSelection();
+
+      openCpuCard(
+
+        index
+
+      );
+
+    }
+
+    async function openCpuCard(
+
+      index
+
+    ) {
+
+      cpuDeck[index].opened =
+
+        true;
+
+      cpuOpenedCount++;
+
+      playSound(
+
+        cardSound
+
+      );
+
+      renderGameCards();
+
+      await wait(
+
+        420
+
+      );
+
+      if (
+
+        cpuDeck[index].type
+
+        === "DEAD"
+
+      ) {
+
+        const cardElement =
+
+          cpuCards.querySelector(
+
+            `.game-card[data-index="${index}"]`
+
+          );
+
+        await startDeadEffect(
+
+          cardElement,
+
+          "PLAYER"
+
+        );
+
+        return;
+
+      }
+
+      status.textContent =
+
+        "ALIVE";
+
+      await wait(
+
+        500
+
+      );
+
+      status.textContent =
+
+        "ROLL THE DICE";
+
+      rollButton.disabled =
+
+        false;
+
+    }
+
+    async function cpuChoosePlayerCard() {
+
+      const unopened =
+
+        playerDeck
+
+          .map(
+
+            (
+
+              card,
+
+              index
+
+            ) =>
+
+              card.opened
+
+                ? null
+
+                : index
+
+          )
+
+          .filter(
+
+            index =>
+
+              index !== null
+
+          );
+
+      if (
+
+        unopened.length
+
+        === 0
+
+      ) {
+
+        return;
+
+      }
+
+      const index =
+
+        unopened[
+
+          Math.floor(
+
+            Math.random()
+
+            * unopened.length
+
+          )
+
+        ];
+
+      playerDeck[index].opened =
+
+        true;
+
+      playerOpenedCount++;
+
+      playSound(
+
+        cardSound
+
+      );
+
+      renderGameCards();
+
+      await wait(
+
+        420
+
+      );
+
+      if (
+
+        playerDeck[index].type
+
+        === "DEAD"
+
+      ) {
+
+        const cardElement =
+
+          playerCards.querySelector(
+
+            `.game-card[data-index="${index}"]`
+
+          );
+
+        await startDeadEffect(
+
+          cardElement,
+
+          "CPU"
+
+        );
+
+        return;
+
+      }
+
+      const remaining =
+
+        playerDeck.filter(
+
+          card =>
+
+            !card.opened
+
+        ).length;
+
+      if (
+
+        remaining
+
+        === 1
+
+      ) {
+
+        startDangerMode();
+
+      }
+
+      status.textContent =
+
+        "ALIVE";
+
+      await wait(
+
+        500
+
+      );
+
+      status.textContent =
+
+        "ROLL THE DICE";
+
+      rollButton.disabled =
+
+        false;
+
+    }
+
+    function startDangerMode() {
+
+      if (
+
+        dangerMode
+
+      ) {
+
+        return;
+
+      }
+
+      dangerMode =
+
+        true;
+
+      stopBgm();
+
+      dangerOverlay
+
+        .classList
+
+        .add(
+
+          "active"
+
+        );
+
+      ecgLayer
+
+        .classList
+
+        .add(
+
+          "active"
+
+        );
+
+    }
+
+    function stopDangerMode() {
+
+      dangerMode =
+
+        false;
+
+      dangerOverlay
+
+        .classList
+
+        .remove(
+
+          "active"
+
+        );
+
+      ecgLayer
+
+        .classList
+
+        .remove(
+
+          "active"
+
+        );
+
+      if (
+
+        !gameOver
+
+      ) {
+
+        startBgm();
+
+      }
+
+    }
+
+    function resetDeadEffect() {
+
+      deadFxOverlay
+
+        .classList
+
+        .remove(
+
+          "active"
+
+        );
+
+      deadFxRed
+
+        .classList
+
+        .remove(
+
+          "show"
+
+        );
+
+      deadFxBullet
+
+        .classList
+
+        .remove(
+
+          "show"
+
+        );
+
+      deadFxResultText
+
+        .classList
+
+        .remove(
+
+          "show",
+
+          "lose",
+
+          "win"
+
+        );
+
+      deadFxCard.style.transition =
+
+        "none";
+
+      deadFxCard.style.left =
+
+        "";
+
+      deadFxCard.style.top =
+
+        "";
+
+      deadFxCard.style.width =
+
+        "";
+
+      deadFxCard.style.height =
+
+        "";
+
+      deadFxCard.style.transform =
+
+        "";
+
+      deadFxBullet.style.left =
+
+        "";
+
+      deadFxBullet.style.top =
+
+        "";
+
+    }
+
+    async function startDeadEffect(
+
+      cardElement,
+
+      winner
+
+    ) {
+
+      gameOver =
+
+        true;
+
+      rollButton.disabled =
+
+        true;
+
+      clearCpuSelection();
+
+      stopBgm();
+
+      dangerMode =
+
+        false;
+
+      dangerOverlay
+
+        .classList
+
+        .remove(
+
+          "active"
+
+        );
+
+      ecgLayer
+
+        .classList
+
+        .remove(
+
+          "active"
+
+        );
+
+      resetDeadEffect();
+
+      const rect =
+
+        cardElement
+
+          .getBoundingClientRect();
+
+      deadFxOverlay
+
+        .classList
+
+        .add(
+
+          "active"
+
+        );
+
+      deadFxCard.style.left =
+
+        `${rect.left}px`;
+
+      deadFxCard.style.top =
+
+        `${rect.top}px`;
+
+      deadFxCard.style.width =
+
+        `${rect.width}px`;
+
+      deadFxCard.style.height =
+
+        `${rect.height}px`;
+
+      deadFxCard.style.transform =
+
+        "translate(0, 0)";
+
+      await wait(
+
+        40
+
+      );
+
+      const targetWidth =
+
+        Math.min(
+
+          window.innerWidth * 0.30,
+
+          280
+
+        );
+
+      const targetHeight =
+
+        targetWidth
+
+        * 88
+
+        / 63;
+
+      const targetLeft =
+
+        (
+
+          window.innerWidth
+
+          - targetWidth
+
+        )
+
+        / 2;
+
+      const targetTop =
+
+        (
+
+          window.innerHeight
+
+          * 0.42
+
+        )
+
+        - (
+
+          targetHeight
+
+          / 2
+
+        );
+
+      deadFxCard.style.transition =
+
+        "left 700ms ease-out, top 700ms ease-out, width 700ms ease-out, height 700ms ease-out";
+
+      deadFxCard.style.left =
+
+        `${targetLeft}px`;
+
+      deadFxCard.style.top =
+
+        `${targetTop}px`;
+
+      deadFxCard.style.width =
+
+        `${targetWidth}px`;
+
+      deadFxCard.style.height =
+
+        `${targetHeight}px`;
+
+      await wait(
+
+        760
+
+      );
+
+      playSound(
+
+        gunClickSound
+
+      );
+
+      await wait(
+
+        1000
+
+      );
+
+      deadFxBullet.style.left =
+
+        `${window.innerWidth / 2}px`;
+
+      deadFxBullet.style.top =
+
+        `${targetTop + targetHeight / 2}px`;
+
+      playSound(
+
+        gunShotSound
+
+      );
+
+      deadFxBullet
+
+        .classList
+
+        .add(
+
+          "show"
+
+        );
+
+      await wait(
+
+        350
+
+      );
+
+      if (
+
+        winner
+
+        === "CPU"
+
+      ) {
+
+        deadFxRed
+
+          .classList
+
+          .add(
+
+            "show"
+
+          );
+
+        deadFxResultText.textContent =
+
+          "DEAD";
+
+        deadFxResultText
+
+          .classList
+
+          .add(
+
+            "lose",
+
+            "show"
+
+          );
+
+      } else {
+
+        deadFxResultText.textContent =
+
+          "WIN";
+
+        deadFxResultText
+
+          .classList
+
+          .add(
+
+            "win",
+
+            "show"
+
+          );
+
+      }
+
+      await wait(
+
+        1400
+
+      );
+
+      resetDeadEffect();
+
+      finishGame(
+
+        winner
+
+      );
+
+    }
+
+    function finishGame(
+
+      winner
+
+    ) {
+
+      let loser;
+
+      let openedBonus;
+
+      if (
+
+        winner
+
+        === "PLAYER"
+
+      ) {
+
+        loser =
+
+          "CPU";
+
+        openedBonus =
+
+          playerOpenedCount;
+
+      } else {
+
+        loser =
+
+          "YOU";
+
+        openedBonus =
+
+          cpuOpenedCount;
+
+      }
+
+      const penalty =
+
+        1
+
+        + openedBonus;
+
+      resultTitle.textContent =
+
+        winner
+
+        === "PLAYER"
+
+          ? "YOU WIN"
+
+          : "YOU LOSE";
+
+      resultTitle.style.color =
+
+        winner
+
+        === "PLAYER"
+
+          ? "#fff"
+
+          : "#d00000";
+
+      resultPenalty.textContent =
+
+        `${penalty} SHOT${
+
+          penalty === 1
+
+            ? ""
+
+            : "S"
+
+        }`;
+
+      resultDetail.innerHTML =
+
+        `DEAD：1<br>`
+
+        + `OPENED：${openedBonus}<br>`
+
+        + `LOSER：${loser}`;
+
+      showScreen(
+
+        resultScreen
+
+      );
+
+    }
+
+    diceModeSelect
+
+      .addEventListener(
+
+        "change",
+
+        () => {
+
+          diceRollCount =
+
+            Number(
+
+              diceModeSelect.value
+
+            );
+
+        }
+
+      );
+
+    setupStartButton
+
+      .addEventListener(
+
+        "click",
+
+        () => {
+
+          aliveCount =
+
+            Number(
+
+              aliveCountSelect.value
+
+            );
+
+          totalCards =
+
+            aliveCount
+
+            + 1;
+
+          buildSetupCards();
+
+          showScreen(
+
+            setupScreen
+
+          );
+
+        }
+
+      );
+
+    randomButton
+
+      .addEventListener(
+
+        "click",
+
+        setVisibleRandom
+
+      );
+
+    blindRandomButton
+
+      .addEventListener(
+
+        "click",
+
+        setBlindRandom
+
+      );
+
+    confirmSetupButton
+
+      .addEventListener(
+
+        "click",
+
+        prepareGame
+
+      );
+
+    setupBackButton
+
+      .addEventListener(
+
+        "click",
+
+        () => {
+
+          showScreen(
+
+            settingsScreen
+
+          );
+
+        }
+
+      );
+
+    rollButton
+
+      .addEventListener(
+
+        "click",
+
+        rollRound
+
+      );
+
+    retryButton
+
+      .addEventListener(
+
+        "click",
+
+        () => {
+
+          resetDeadEffect();
+
+          buildSetupCards();
+
+          showScreen(
+
+            setupScreen
+
+          );
+
+        }
+
+      );
+
+    settingsButton
+
+      .addEventListener(
+
+        "click",
+
+        () => {
+
+          stopBgm();
+
+          resetDeadEffect();
+
+          showScreen(
+
+            settingsScreen
+
+          );
+
+        }
+
+      );
+
+  </script>
+
+</body>
+
+</html>
