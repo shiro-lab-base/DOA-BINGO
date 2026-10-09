@@ -386,31 +386,57 @@
 
     .game-card {
 
-      width: clamp(56px, 9vw, 110px);
+  width: min(
 
-      aspect-ratio: 63 / 88;
+    110px,
 
-      padding: 0;
+    calc(
 
-      border: 0;
+      (
 
-      border-radius: 8px;
+        100vw
 
-      overflow: hidden;
+        - 52px
 
-      background: transparent;
+        - (
 
-      transition:
+          (var(--card-count) - 1)
 
-        transform 0.38s ease,
+          * 8px
 
-        opacity 0.38s ease,
+        )
 
-        filter 0.2s ease;
+      )
 
-      transform-style: preserve-3d;
+      / var(--card-count)
 
-    }
+    )
+
+  );
+
+  aspect-ratio: 63 / 88;
+
+  padding: 0;
+
+  border: 0;
+
+  border-radius: 8px;
+
+  overflow: hidden;
+
+  background: transparent;
+
+  transition:
+
+    transform 0.38s ease,
+
+    opacity 0.38s ease,
+
+    filter 0.2s ease;
+
+  transform-style: preserve-3d;
+}
+
 
     .game-card img {
 
@@ -2234,13 +2260,29 @@ button.appendChild(
 
     function renderGameCards() {
 
-      cpuCards.innerHTML =
+  cpuCards.innerHTML =
 
-        "";
+    "";
 
-      playerCards.innerHTML =
+  playerCards.innerHTML =
 
-        "";
+    "";
+
+  cpuCards.style.setProperty(
+
+    "--card-count",
+
+    totalCards
+
+  );
+
+  playerCards.style.setProperty(
+
+    "--card-count",
+
+    totalCards
+
+  );
 
       cpuDeck.forEach(
 
