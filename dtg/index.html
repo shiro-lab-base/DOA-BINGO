@@ -1070,27 +1070,103 @@
 
     @media (orientation: portrait) {
 
-      .landscape-note {
+  .landscape-note {
 
-        display: block;
+    display: block;
 
-      }
-    }
-     @media (orientation: landscape) {
+  }
+
+  .card-row {
+
+    display: grid;
+
+    grid-template-columns:
+
+      repeat(
+
+        var(--card-count),
+
+        minmax(0, 1fr)
+
+      );
+
+    gap: 5px;
+
+    width: 100%;
+
+    min-height: 110px;
+
+  }
+
+  .game-card {
+
+    width: 100%;
+
+    max-width: 110px;
+
+    height: auto;
+
+    justify-self: center;
+
+  }
+
+  .dice-zone {
+
+    gap: 8px;
+
+    margin: 10px auto;
+
+  }
+
+  .center-dice-area {
+
+    min-width: 100px;
+
+  }
+
+  #centerDice {
+
+    width: 72px;
+
+    height: 72px;
+
+    font-size: 40px;
+
+  }
+
+  #rollButton {
+
+    width: 100px;
+
+    font-size: 13px;
+
+  }
+
+  .roll-number {
+
+    font-size: 32px;
+
+  }
+
+}
+
+@media (orientation: landscape) {
 
   #gameScreen {
 
-    height: 100dvh;
+    height: 100svh;
 
     min-height: 0;
 
     padding:
 
-      clamp(4px, 1.2dvh, 14px)
+      max(6px, env(safe-area-inset-top))
 
-      clamp(8px, 1.8vw, 22px);
+      clamp(8px, 1.8vw, 22px)
 
-    justify-content: flex-start;
+      max(6px, env(safe-area-inset-bottom));
+
+    justify-content: center;
 
     overflow: hidden;
 
@@ -1100,9 +1176,9 @@
 
     width: 100%;
 
-    height: 100%;
+    height: auto;
 
-    max-height: none;
+    max-height: 100%;
 
   }
 
@@ -1110,43 +1186,61 @@
 
     margin:
 
-      clamp(1px, 0.4dvh, 5px)
+      clamp(1px, 0.4svh, 5px)
 
       0;
 
     font-size:
 
-      clamp(11px, 2dvh, 15px);
+      clamp(11px, 2svh, 15px);
 
   }
 
   .card-row {
 
-    min-height: 0;
+    display: grid;
+
+    grid-template-columns:
+
+      repeat(
+
+        var(--card-count),
+
+        minmax(0, 1fr)
+
+      );
+
+    align-items: center;
 
     gap:
 
       clamp(4px, 0.8vw, 10px);
 
+    width: 100%;
+
+    min-height: 0;
+
   }
 
   .game-card {
 
-    height:
+    width: 100%;
+
+    max-width:
 
       clamp(
 
-        78px,
+        70px,
 
-        21dvh,
+        9vw,
 
-        190px
+        110px
 
       );
 
-    width: auto;
+    height: auto;
 
-    max-width: none;
+    justify-self: center;
 
   }
 
@@ -1156,7 +1250,7 @@
 
     margin:
 
-      clamp(3px, 0.8dvh, 10px)
+      clamp(3px, 0.8svh, 10px)
 
       auto;
 
@@ -1174,7 +1268,7 @@
 
         58px,
 
-        15dvh,
+        15svh,
 
         105px
 
@@ -1182,7 +1276,7 @@
 
     padding:
 
-      clamp(5px, 1dvh, 12px);
+      clamp(5px, 1svh, 12px);
 
   }
 
@@ -1194,7 +1288,7 @@
 
         25px,
 
-        7dvh,
+        7svh,
 
         42px
 
@@ -1226,7 +1320,7 @@
 
         58px,
 
-        14dvh,
+        14svh,
 
         92px
 
@@ -1238,7 +1332,7 @@
 
         58px,
 
-        14dvh,
+        14svh,
 
         92px
 
@@ -1250,7 +1344,7 @@
 
         30px,
 
-        8dvh,
+        8svh,
 
         52px
 
@@ -1278,7 +1372,7 @@
 
         30px,
 
-        7dvh,
+        7svh,
 
         44px
 
@@ -1290,7 +1384,7 @@
 
         3px,
 
-        0.8dvh,
+        0.8svh,
 
         10px
 
@@ -1306,7 +1400,7 @@
 
         18px,
 
-        4dvh,
+        4svh,
 
         32px
 
@@ -1318,7 +1412,7 @@
 
         1px,
 
-        0.5dvh,
+        0.5svh,
 
         6px
 
@@ -1330,7 +1424,7 @@
 
         13px,
 
-        3.4dvh,
+        3.4svh,
 
         19px
 
@@ -1339,66 +1433,6 @@
   }
 
 }
-      .card-row {
-
-  display: grid;
-
-  grid-template-columns:
-
-    repeat(var(--card-count), minmax(0, 1fr));
-
-  gap: 5px;
-
-  width: 100%;
-
-}
-
-.game-card {
-
-  width: 100%;
-
-  max-width: 110px;
-
-}
-      .dice-zone {
-
-        gap: 8px;
-
-        margin: 10px auto;
-
-      }
-
-      .center-dice-area {
-
-        min-width: 100px;
-
-      }
-
-      #centerDice {
-
-        width: 72px;
-
-        height: 72px;
-
-        font-size: 40px;
-
-      }
-
-      #rollButton {
-
-        width: 100px;
-
-        font-size: 13px;
-
-      }
-
-      .roll-number {
-
-        font-size: 32px;
-
-      }
-
-    }
 
   </style>
 
