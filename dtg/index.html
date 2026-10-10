@@ -998,11 +998,11 @@
 
       z-index: 3;
 
-      width: 120px;
+      width: min(46vw, 42svh, 260px);
 
-      height: 120px;
+height: min(46vw, 42svh, 260px);
 
-      object-fit: contain;
+object-fit: contain;
 
       opacity: 0;
 
@@ -1102,19 +1102,57 @@
 
 /* DEAD / WIN RESULT LOGOS */
 
+#deadFxResultText {
+
+  width: 100vw;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  pointer-events: none;
+
+}
+
 #deadFxResultText img {
 
   display: block;
 
-  width: min(82vw, 540px);
+  width: 90vw;
 
-  max-height: 32svh;
+  max-height: 44svh;
 
   height: auto;
 
   object-fit: contain;
 
   filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.8));
+
+}
+
+#deadFxResultText.lose img {
+
+  width: 96vw;
+
+}
+
+@media (orientation: landscape) {
+
+  #deadFxResultText img {
+
+    width: 80vw;
+
+    max-height: 60svh;
+
+  }
+
+  #deadFxResultText.lose img {
+
+    width: 90vw;
+
+  }
 
 }
     
@@ -3944,90 +3982,47 @@ if (remainingAlive === 1) {
 
       );
 
-      
-
-const isPortrait =
+      const isPortrait =
 
   window.innerHeight > window.innerWidth;
 
-const targetWidth = isPortrait
+const targetWidth = Math.min(
 
-  ? Math.min(
+  window.innerWidth * (isPortrait ? 0.68 : 0.30),
 
-      window.innerWidth * 0.68,
+  isPortrait ? 340 : 280,
 
-      340,
+  window.innerHeight * (isPortrait ? 0.68 : 0.78) * 63 / 88
 
-      window.innerHeight * 0.68 * 63 / 88
+);
 
-    )
+const targetHeight =
 
-  : Math.min(
+  targetWidth * 88 / 63;
 
-      window.innerWidth * 0.30,
+const targetCenterY =
 
-      280
-
-    );
-      
-
-      const targetHeight =
-
-        targetWidth
-
-        * 88
-
-        / 63;
-
-      const targetLeft =
-
-        (
-
-          window.innerWidth
-
-          - targetWidth
-
-        )
-
-        / 2;
-
-      const targetTop =
-
-        (
-
-          window.innerHeight
-
-          * 0.42
-
-        )
-
-        - (
-
-          targetHeight
-
-          / 2
-
-        );
+  isPortrait ? "42%" : "50%";
 
       deadFxCard.style.transition =
 
-        "left 700ms ease-out, top 700ms ease-out, width 700ms ease-out, height 700ms ease-out";
+  "left 700ms ease-out, top 700ms ease-out, width 700ms ease-out, height 700ms ease-out, transform 700ms ease-out";
 
-      deadFxCard.style.left =
+deadFxCard.style.left = "50%";
 
-        `${targetLeft}px`;
+deadFxCard.style.top = targetCenterY;
 
-      deadFxCard.style.top =
+deadFxCard.style.width =
 
-        `${targetTop}px`;
+  `${targetWidth}px`;
 
-      deadFxCard.style.width =
+deadFxCard.style.height =
 
-        `${targetWidth}px`;
+  `${targetHeight}px`;
 
-      deadFxCard.style.height =
+deadFxCard.style.transform =
 
-        `${targetHeight}px`;
+  "translate(-50%, -50%)";
 
       await wait(
 
@@ -4047,13 +4042,9 @@ const targetWidth = isPortrait
 
       );
 
-      deadFxBullet.style.left =
+      deadFxBullet.style.left = "50%";
 
-        `${window.innerWidth / 2}px`;
-
-      deadFxBullet.style.top =
-
-        `${targetTop + targetHeight / 2}px`;
+deadFxBullet.style.top = targetCenterY;
 
       playSound(
 
