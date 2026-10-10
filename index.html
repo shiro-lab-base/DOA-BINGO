@@ -406,16 +406,60 @@
 
     #status {
 
-      min-height: 38px;
+  min-height: 38px;
 
-      margin-top: 12px;
+  margin-top: 12px;
 
-      font-size: 20px;
+  font-size: clamp(28px, 7vw, 46px);
 
-      font-weight: bold;
+  font-weight: 900;
 
-    }
+  letter-spacing: 2px;
 
+  color: #fff;
+
+  text-shadow:
+
+    0 2px 5px #000,
+
+    0 0 12px rgba(0, 0, 0, 0.8);
+
+}
+
+#status.turn-pop {
+
+  animation: turnPop 0.45s ease-out;
+
+}
+
+@keyframes turnPop {
+
+  0% {
+
+    transform: scale(0.85);
+
+    opacity: 0.5;
+
+  }
+
+  55% {
+
+    transform: scale(1.13);
+
+    opacity: 1;
+
+  }
+
+  100% {
+
+    transform: scale(1);
+
+    opacity: 1;
+
+  }
+
+}
+    
     #gameInfo {
 
       color: #888;
@@ -784,13 +828,21 @@
 
         <select id="humanCount">
 
-          <option value="1" selected>1</option>
+  <option value="1" selected>1</option>
 
-          <option value="2">2</option>
+  <option value="2">2</option>
 
-          <option value="3">3</option>
+  <option value="3">3</option>
 
-          <option value="4">4</option>
+  <option value="4">4</option>
+
+  <option value="5">5</option>
+
+  <option value="6">6</option>
+
+  <option value="7">7</option>
+
+  <option value="8">8</option>
 
         </select>
 
@@ -2064,19 +2116,19 @@
 
       if (
 
-        totalPlayers < 2
+  totalPlayers < 1
 
-        || totalPlayers > 4
+  || totalPlayers > 8
 
-      ) {
+) {
 
-        settingError.textContent =
+  settingError.textContent =
 
-          "プレイヤー合計人数は2〜4人にしてください。";
+    "プレイヤー合計人数は1〜8人にしてください。";
 
-        return;
+  return;
 
-      }
+}
 
       settingError.textContent =
 
@@ -3139,7 +3191,12 @@
         return;
 
       }
+      status.classList.remove("turn-pop");
 
+void status.offsetWidth;
+
+status.classList.add("turn-pop");
+      
       const player =
 
         players[
