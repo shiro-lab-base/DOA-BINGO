@@ -1098,6 +1098,26 @@
 
     }
 
+    
+
+/* DEAD / WIN RESULT LOGOS */
+
+#deadFxResultText img {
+
+  display: block;
+
+  width: min(82vw, 540px);
+
+  max-height: 32svh;
+
+  height: auto;
+
+  object-fit: contain;
+
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.8));
+
+}
+    
     #resultScreen {
 
       justify-content: center;
@@ -3756,6 +3776,8 @@ if (remainingAlive === 1) {
 
     function resetDeadEffect() {
 
+      deadFxOverlay.style.pointerEvents = "none";
+      
       deadFxOverlay
 
         .classList
@@ -3922,15 +3944,32 @@ if (remainingAlive === 1) {
 
       );
 
-      const targetWidth =
+      
 
-        Math.min(
+const isPortrait =
 
-          window.innerWidth * 0.30,
+  window.innerHeight > window.innerWidth;
 
-          280
+const targetWidth = isPortrait
 
-        );
+  ? Math.min(
+
+      window.innerWidth * 0.68,
+
+      340,
+
+      window.innerHeight * 0.68 * 63 / 88
+
+    )
+
+  : Math.min(
+
+      window.innerWidth * 0.30,
+
+      280
+
+    );
+      
 
       const targetHeight =
 
@@ -4038,73 +4077,45 @@ if (remainingAlive === 1) {
 
       );
 
-      if (
+      if (winner === "CPU") {
 
-        winner
+  deadFxRed.classList.add("show");
 
-        === "CPU"
+  deadFxResultText.innerHTML =
 
-      ) {
+    '<img src="../images/doa-d-rogo.PNG" alt="DEAD">';
 
-        deadFxRed
+  deadFxResultText.classList.add("lose", "show");
 
-          .classList
+} else {
 
-          .add(
+  deadFxResultText.innerHTML =
 
-            "show"
+    '<img src="../images/doa-w-rogo.PNG" alt="WIN">';
 
-          );
+  deadFxResultText.classList.add("win", "show");
 
-        deadFxResultText.textContent =
+}
+      
+      await new Promise(resolve => {
 
-          "DEAD";
+  deadFxOverlay.style.pointerEvents = "auto";
 
-        deadFxResultText
+  deadFxOverlay.addEventListener(
 
-          .classList
+    "click",
 
-          .add(
+    resolve,
 
-            "lose",
+    { once: true }
 
-            "show"
+  );
 
-          );
+});
 
-      } else {
+resetDeadEffect();
 
-        deadFxResultText.textContent =
-
-          "WIN";
-
-        deadFxResultText
-
-          .classList
-
-          .add(
-
-            "win",
-
-            "show"
-
-          );
-
-      }
-
-      await wait(
-
-        1400
-
-      );
-
-      resetDeadEffect();
-
-      finishGame(
-
-        winner
-
-      );
+finishGame(winner);
 
     }
 
