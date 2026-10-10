@@ -1599,33 +1599,55 @@ object-fit: contain;
 
   .dice-zone {
 
-    width: min(68vw, 520px);
+    width: fit-content;
 
     max-width: 100%;
 
-    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    grid-template-columns: auto auto auto;
 
     gap: clamp(8px, 1.5vw, 16px);
 
   }
 
+  .roll-result {
+
+    width: 110px;
+
+  }
+
 }
-  
+
 /* DTG PORTRAIT DICE UI */
 
 @media (orientation: portrait) {
 
   .dice-zone {
 
-    width: 88%;
+    width: fit-content;
 
-    max-width: 420px;
+    max-width: 100%;
 
-    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    grid-template-columns: auto auto auto;
 
     gap: 8px;
 
   }
+
+  .roll-result {
+
+    width: 74px;
+
+    padding: 8px;
+
+  }
+
+}
+
+/* DTG DICE RESULT NUMBER ALIGN */
+
+.roll-number {
+
+  text-align: center;
 
 }
   
