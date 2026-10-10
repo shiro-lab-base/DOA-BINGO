@@ -3990,31 +3990,37 @@ if (remainingAlive === 1) {
 
       const viewport = window.visualViewport;
 
-const viewWidth = viewport
+const isPortrait =
 
-  ? viewport.width
+  window.innerHeight > window.innerWidth;
 
-  : window.innerWidth;
+const overlayRect =
 
-const viewHeight = viewport
+  deadFxOverlay.getBoundingClientRect();
 
-  ? viewport.height
+const viewWidth = isPortrait
 
-  : window.innerHeight;
+  ? (viewport ? viewport.width : window.innerWidth)
 
-const viewLeft = viewport
+  : overlayRect.width;
 
-  ? viewport.offsetLeft
+const viewHeight = isPortrait
 
-  : 0;
+  ? (viewport ? viewport.height : window.innerHeight)
 
-const viewTop = viewport
+  : overlayRect.height;
 
-  ? viewport.offsetTop
+const viewLeft = isPortrait
 
-  : 0;
+  ? (viewport ? viewport.offsetLeft : 0)
 
-const isPortrait = viewHeight > viewWidth;
+  : overlayRect.left;
+
+const viewTop = isPortrait
+
+  ? (viewport ? viewport.offsetTop : 0)
+
+  : overlayRect.top;
 
 const targetWidth = Math.min(
 
