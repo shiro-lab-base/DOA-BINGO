@@ -3029,27 +3029,9 @@ function renderGameCards() {
 
       renderGameCards();
 
-      
+      showScreen(gameScreen);
 
-showScreen(gameScreen);
-
-if (
-
-  playerDeck.filter(
-
-    card => !card.opened && card.type === "ALIVE"
-
-  ).length === 1
-
-) {
-
-  startDangerMode();
-
-} else {
-
-  startBgm();
-
-}
+startBgm();
 
     }
 
@@ -3706,15 +3688,19 @@ if (
 
       }
 
-      
+      const remainingCards = playerDeck.filter(
 
-const remainingAlive = playerDeck.filter(
+  card => !card.opened
 
-  card => !card.opened && card.type === "ALIVE"
+);
 
-).length;
+if (
 
-if (remainingAlive === 1) {
+  remainingCards.length === 1 &&
+
+  remainingCards[0].type === "DEAD"
+
+) {
 
   startDangerMode();
 
@@ -3899,7 +3885,81 @@ if (remainingAlive === 1) {
         "";
 
     }
+    
+     function updateDeadFxLayout(animate = false) {
 
+  if (!deadFxOverlay.classList.contains("active")) {
+
+    return;
+
+  }
+
+  const viewWidth = deadFxOverlay.clientWidth;
+
+  const viewHeight = deadFxOverlay.clientHeight;
+
+  const isPortrait = viewHeight > viewWidth;
+
+  const targetWidth = Math.min(
+
+    viewWidth * (isPortrait ? 0.68 : 0.90),
+
+    viewHeight * (isPortrait ? 0.70 : 0.85) * 63 / 88
+
+  );
+
+  const targetHeight = targetWidth * 88 / 63;
+
+  const targetLeft = (viewWidth - targetWidth) / 2;
+
+  const margin = viewHeight * 0.04;
+
+  const preferredTop =
+
+    viewHeight * (isPortrait ? 0.42 : 0.50)
+
+    - targetHeight / 2;
+
+  const targetTop = Math.max(
+
+    margin,
+
+    Math.min(
+
+      preferredTop,
+
+      viewHeight - targetHeight - margin
+
+    )
+
+  );
+
+  deadFxCard.style.transition = animate
+
+    ? "left 700ms ease-out, top 700ms ease-out, width 700ms ease-out, height 700ms ease-out, transform 700ms ease-out"
+
+    : "none";
+
+  deadFxCard.style.left = `${targetLeft}px`;
+
+  deadFxCard.style.top = `${targetTop}px`;
+
+  deadFxCard.style.width = `${targetWidth}px`;
+
+  deadFxCard.style.height = `${targetHeight}px`;
+
+  deadFxCard.style.transform = "translate(0, 0)";
+
+  deadFxBullet.style.left =
+
+    `${targetLeft + targetWidth / 2}px`;
+
+  deadFxBullet.style.top =
+
+    `${targetTop + targetHeight / 2}px`;
+
+}
+    
     async function startDeadEffect(
 
       cardElement,
@@ -3990,60 +4050,6 @@ deadFxCard.style.top =
 
       );
 
-      const viewWidth = deadFxOverlay.clientWidth;
-
-const viewHeight = deadFxOverlay.clientHeight;
-
-const isPortrait = viewHeight > viewWidth;
-
-const targetWidth = Math.min(
-
-  viewWidth * (isPortrait ? 0.68 : 0.90),
-
-  viewHeight * (isPortrait ? 0.70 : 0.85) * 63 / 88
-
-);
-
-const targetHeight = targetWidth * 88 / 63;
-
-const targetLeft = (viewWidth - targetWidth) / 2;
-
-const margin = viewHeight * 0.04;
-
-const preferredTop =
-
-  viewHeight * (isPortrait ? 0.42 : 0.50)
-
-  - targetHeight / 2;
-
-const targetTop = Math.max(
-
-  margin,
-
-  Math.min(
-
-    preferredTop,
-
-    viewHeight - targetHeight - margin
-
-  )
-
-);
-
-deadFxCard.style.transition =
-
-  "left 700ms ease-out, top 700ms ease-out, width 700ms ease-out, height 700ms ease-out, transform 700ms ease-out";
-
-deadFxCard.style.left = `${targetLeft}px`;
-
-deadFxCard.style.top = `${targetTop}px`;
-
-deadFxCard.style.width = `${targetWidth}px`;
-
-deadFxCard.style.height = `${targetHeight}px`;
-
-deadFxCard.style.transform = "translate(0, 0)";
-
       await wait(
 
         760
@@ -4062,15 +4068,7 @@ deadFxCard.style.transform = "translate(0, 0)";
 
       );
 
-      deadFxBullet.style.left =
-
-  `${targetLeft + targetWidth / 2}px`;
-
-deadFxBullet.style.top =
-
-  `${targetTop + targetHeight / 2}px`;
-
-      playSound(
+     playSound(
 
         gunShotSound
 
@@ -4133,7 +4131,57 @@ resetDeadEffect();
 finishGame(winner);
 
     }
+    
+    function syncDeadFxAfterRotation() {
 
+  if (!deadFxOverlay.classList.contains("active")) {
+
+    return;
+
+  }
+
+  requestAnimationFrame(() => {
+
+    updateDeadFxLayout(false);
+
+    setTimeout(() => {
+
+      updateDeadFxLayout(false);
+
+    }, 200);
+
+  });
+
+}
+
+window.addEventListener(
+
+  "resize",
+
+  syncDeadFxAfterRotation
+
+);
+
+window.addEventListener(
+
+  "orientationchange",
+
+  syncDeadFxAfterRotation
+
+);
+
+if (window.visualViewport) {
+
+  window.visualViewport.addEventListener(
+
+    "resize",
+
+    syncDeadFxAfterRotation
+
+  );
+
+}
+    
     function finishGame(
 
       winner
