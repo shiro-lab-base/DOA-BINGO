@@ -1592,8 +1592,42 @@ object-fit: contain;
 
   }
 
-}
+/* DTG LANDSCAPE DICE UI */
 
+@media (orientation: landscape) {
+
+  .dice-zone {
+
+    width: min(68vw, 520px);
+
+    max-width: 100%;
+
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+
+    gap: clamp(8px, 1.5vw, 16px);
+
+  }
+
+}
+  
+/* DTG PORTRAIT DICE UI */
+
+@media (orientation: portrait) {
+
+  .dice-zone {
+
+    width: 88%;
+
+    max-width: 420px;
+
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+
+    gap: 8px;
+
+  }
+
+}
+  
   </style>
 
 </head>
