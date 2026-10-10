@@ -970,7 +970,7 @@
 
     #deadFxCard {
 
-      position: fixed;
+      position: absolute;
 
       z-index: 2;
 
@@ -994,7 +994,7 @@
 
     #deadFxBullet {
 
-      position: fixed;
+      position: absolute;
 
       z-index: 3;
 
@@ -1034,7 +1034,7 @@ object-fit: contain;
 
     #deadFxResultText {
 
-      position: fixed;
+      position: absolute;
 
       left: 50%;
 
@@ -3962,13 +3962,15 @@ if (remainingAlive === 1) {
 
         );
 
-      deadFxCard.style.left =
+      const overlayBounds = deadFxOverlay.getBoundingClientRect();
 
-        `${rect.left}px`;
+deadFxCard.style.left =
 
-      deadFxCard.style.top =
+  `${rect.left - overlayBounds.left}px`;
 
-        `${rect.top}px`;
+deadFxCard.style.top =
+
+  `${rect.top - overlayBounds.top}px`;
 
       deadFxCard.style.width =
 
@@ -3988,39 +3990,11 @@ if (remainingAlive === 1) {
 
       );
 
-      const viewport = window.visualViewport;
+      const viewWidth = deadFxOverlay.clientWidth;
 
-const isPortrait =
+const viewHeight = deadFxOverlay.clientHeight;
 
-  window.innerHeight > window.innerWidth;
-
-const overlayRect =
-
-  deadFxOverlay.getBoundingClientRect();
-
-const viewWidth = isPortrait
-
-  ? (viewport ? viewport.width : window.innerWidth)
-
-  : overlayRect.width;
-
-const viewHeight = isPortrait
-
-  ? (viewport ? viewport.height : window.innerHeight)
-
-  : overlayRect.height;
-
-const viewLeft = isPortrait
-
-  ? (viewport ? viewport.offsetLeft : 0)
-
-  : overlayRect.left;
-
-const viewTop = isPortrait
-
-  ? (viewport ? viewport.offsetTop : 0)
-
-  : overlayRect.top;
+const isPortrait = viewHeight > viewWidth;
 
 const targetWidth = Math.min(
 
@@ -4032,29 +4006,25 @@ const targetWidth = Math.min(
 
 const targetHeight = targetWidth * 88 / 63;
 
-const targetLeft =
-
-  viewLeft + (viewWidth - targetWidth) / 2;
-
-const preferredTop =
-
-  viewTop
-
-  + viewHeight * (isPortrait ? 0.42 : 0.50)
-
-  - targetHeight / 2;
+const targetLeft = (viewWidth - targetWidth) / 2;
 
 const margin = viewHeight * 0.04;
 
+const preferredTop =
+
+  viewHeight * (isPortrait ? 0.42 : 0.50)
+
+  - targetHeight / 2;
+
 const targetTop = Math.max(
 
-  viewTop + margin,
+  margin,
 
   Math.min(
 
     preferredTop,
 
-    viewTop + viewHeight - targetHeight - margin
+    viewHeight - targetHeight - margin
 
   )
 
