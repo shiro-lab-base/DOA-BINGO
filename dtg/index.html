@@ -2965,13 +2965,27 @@ function renderGameCards() {
 
       renderGameCards();
 
-      showScreen(
+      
 
-        gameScreen
+showScreen(gameScreen);
 
-      );
+if (
 
-      startBgm();
+  playerDeck.filter(
+
+    card => !card.opened && card.type === "ALIVE"
+
+  ).length === 1
+
+) {
+
+  startDangerMode();
+
+} else {
+
+  startBgm();
+
+}
 
     }
 
@@ -3628,27 +3642,19 @@ function renderGameCards() {
 
       }
 
-      const remaining =
+      
 
-        playerDeck.filter(
+const remainingAlive = playerDeck.filter(
 
-          card =>
+  card => !card.opened && card.type === "ALIVE"
 
-            !card.opened
+).length;
 
-        ).length;
+if (remainingAlive === 1) {
 
-      if (
+  startDangerMode();
 
-        remaining
-
-        === 1
-
-      ) {
-
-        startDangerMode();
-
-      }
+}
 
       status.textContent =
 
