@@ -998,9 +998,9 @@
 
       z-index: 3;
 
-      width: min(46vw, 42svh, 260px);
+      width: 140vmax;
 
-height: min(46vw, 42svh, 260px);
+height: 140vmax;
 
 object-fit: contain;
 
@@ -1134,7 +1134,11 @@ object-fit: contain;
 
 #deadFxResultText.lose img {
 
-  width: 96vw;
+  flex: 0 0 auto;
+
+  width: 130vw;
+
+  max-height: 80svh;
 
 }
 
@@ -1150,9 +1154,11 @@ object-fit: contain;
 
   #deadFxResultText.lose img {
 
-    width: 90vw;
+  width: 120vw;
 
-  }
+  max-height: 85svh;
+
+}
 
 }
     
@@ -3982,47 +3988,85 @@ if (remainingAlive === 1) {
 
       );
 
-      const isPortrait =
+      const viewport = window.visualViewport;
 
-  window.innerHeight > window.innerWidth;
+const viewWidth = viewport
+
+  ? viewport.width
+
+  : window.innerWidth;
+
+const viewHeight = viewport
+
+  ? viewport.height
+
+  : window.innerHeight;
+
+const viewLeft = viewport
+
+  ? viewport.offsetLeft
+
+  : 0;
+
+const viewTop = viewport
+
+  ? viewport.offsetTop
+
+  : 0;
+
+const isPortrait = viewHeight > viewWidth;
 
 const targetWidth = Math.min(
 
-  window.innerWidth * (isPortrait ? 0.68 : 0.30),
+  viewWidth * (isPortrait ? 0.68 : 0.90),
 
-  isPortrait ? 340 : 280,
-
-  window.innerHeight * (isPortrait ? 0.68 : 0.78) * 63 / 88
+  viewHeight * (isPortrait ? 0.70 : 0.85) * 63 / 88
 
 );
 
-const targetHeight =
+const targetHeight = targetWidth * 88 / 63;
 
-  targetWidth * 88 / 63;
+const targetLeft =
 
-const targetCenterY =
+  viewLeft + (viewWidth - targetWidth) / 2;
 
-  isPortrait ? "42%" : "50%";
+const preferredTop =
 
-      deadFxCard.style.transition =
+  viewTop
+
+  + viewHeight * (isPortrait ? 0.42 : 0.50)
+
+  - targetHeight / 2;
+
+const margin = viewHeight * 0.04;
+
+const targetTop = Math.max(
+
+  viewTop + margin,
+
+  Math.min(
+
+    preferredTop,
+
+    viewTop + viewHeight - targetHeight - margin
+
+  )
+
+);
+
+deadFxCard.style.transition =
 
   "left 700ms ease-out, top 700ms ease-out, width 700ms ease-out, height 700ms ease-out, transform 700ms ease-out";
 
-deadFxCard.style.left = "50%";
+deadFxCard.style.left = `${targetLeft}px`;
 
-deadFxCard.style.top = targetCenterY;
+deadFxCard.style.top = `${targetTop}px`;
 
-deadFxCard.style.width =
+deadFxCard.style.width = `${targetWidth}px`;
 
-  `${targetWidth}px`;
+deadFxCard.style.height = `${targetHeight}px`;
 
-deadFxCard.style.height =
-
-  `${targetHeight}px`;
-
-deadFxCard.style.transform =
-
-  "translate(-50%, -50%)";
+deadFxCard.style.transform = "translate(0, 0)";
 
       await wait(
 
@@ -4042,9 +4086,13 @@ deadFxCard.style.transform =
 
       );
 
-      deadFxBullet.style.left = "50%";
+      deadFxBullet.style.left =
 
-deadFxBullet.style.top = targetCenterY;
+  `${targetLeft + targetWidth / 2}px`;
+
+deadFxBullet.style.top =
+
+  `${targetTop + targetHeight / 2}px`;
 
       playSound(
 
