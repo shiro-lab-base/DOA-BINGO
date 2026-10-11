@@ -906,6 +906,30 @@
 
     }
 
+/* DTG HEARTBEAT ECG PULSE */
+
+.ecg-line::before {
+
+  transform-origin: center;
+
+  transition: transform 0.12s ease-out;
+
+}
+
+#ecgLayer.beat-small .ecg-line::before {
+
+  transform: scaleY(1.35);
+
+}
+
+#ecgLayer.beat-large .ecg-line::before {
+
+  transform: scaleY(2.2);
+
+  filter: drop-shadow(0 0 8px #ff3030);
+
+}
+    
     @keyframes ecgMove {
 
       from {
@@ -2039,6 +2063,30 @@ object-fit: contain;
 
   ></audio>
 
+  
+
+<audio
+
+  id="heartbeatSound"
+
+  src="../audio/doa-heartbeat.wav"
+
+  preload="auto"
+
+  loop
+
+></audio>
+
+<audio
+
+  id="heartMonitorSound"
+
+  src="../audio/doa-heart-monitor.wav"
+
+  preload="auto"
+
+></audio>
+  
   <script>
 
     const IMAGE_BACK =
@@ -2340,7 +2388,15 @@ object-fit: contain;
         "gunShotSound"
 
       );
+   
+    const heartbeatSound =
 
+  document.getElementById("heartbeatSound");
+
+const heartMonitorSound =
+
+  document.getElementById("heartMonitorSound");
+    
     let aliveCount = 4;
 
     let totalCards = 5;
@@ -3025,6 +3081,7 @@ function renderGameCards() {
 
     function prepareGame() {
 
+      stopDangerAudio();
       gameOver =
 
         false;
@@ -3784,84 +3841,224 @@ if (
 
     }
 
-    function startDangerMode() {
+/* DTG HEARTBEAT TIMING */
 
-      if (
+const heartbeatTimes = [
 
-        dangerMode
+  0.48, 0.87, 1.87, 2.28,
 
-      ) {
+  3.34, 3.73, 4.86, 5.20,
 
-        return;
+  6.38, 6.81, 7.90, 8.34,
 
-      }
+  9.60, 9.99, 11.24, 11.62,
 
-      dangerMode =
+  12.87, 13.21, 14.43, 14.83,
 
-        true;
+  16.05, 16.55, 17.76, 18.18,
 
-      stopBgm();
+  19.34, 19.68, 20.89, 21.28,
 
-      dangerOverlay
+  22.49, 22.82, 24.05, 24.41,
 
-        .classList
+  25.69, 26.11, 27.36, 27.78,
 
-        .add(
+  28.93, 29.31, 30.53, 30.96,
 
-          "active"
+  32.12, 32.48, 33.71, 34.09,
 
-        );
+  35.21, 35.64, 36.81, 37.19,
 
-      ecgLayer
+  38.38, 38.78, 39.85, 40.29,
 
-        .classList
+  41.34, 41.72, 42.86, 43.27,
 
-        .add(
+  44.33, 44.71
 
-          "active"
+];
 
-        );
+function pulseEcg(strong) {
+
+  ecgLayer.classList.remove(
+
+    "beat-small",
+
+    "beat-large"
+
+  );
+
+  void ecgLayer.offsetWidth;
+
+  ecgLayer.classList.add(
+
+    strong ? "beat-large" : "beat-small"
+
+  );
+
+  clearTimeout(ecgPulseTimer);
+
+  ecgPulseTimer = setTimeout(() => {
+
+    ecgLayer.classList.remove(
+
+      "beat-small",
+
+      "beat-large"
+
+    );
+
+  }, 180);
+
+}
+
+function syncHeartbeat() {
+
+  if (!dangerMode || gameOver) {
+
+    return;
+
+  }
+
+  const time = heartbeatSound.currentTime;
+
+  if (time < previousHeartbeatTime - 0.5) {
+
+    heartbeatIndex = 0;
+
+  }
+
+  previousHeartbeatTime = time;
+
+  while (
+
+    heartbeatIndex < heartbeatTimes.length &&
+
+    time >= heartbeatTimes[heartbeatIndex]
+
+  ) {
+
+    const beatTime =
+
+      heartbeatTimes[heartbeatIndex];
+
+    if (time - beatTime < 0.12) {
+
+      pulseEcg(heartbeatIndex % 2 === 1);
 
     }
 
-    function stopDangerMode() {
+    heartbeatIndex++;
 
-      dangerMode =
+  }
 
-        false;
+  heartbeatFrame =
 
-      dangerOverlay
+    requestAnimationFrame(syncHeartbeat);
 
-        .classList
+}
 
-        .remove(
+function startDangerAudio() {
 
-          "active"
+  stopDangerAudio();
 
-        );
+  heartbeatIndex = 0;
 
-      ecgLayer
+  previousHeartbeatTime = 0;
 
-        .classList
+  heartbeatSound.currentTime = 0;
 
-        .remove(
+  const promise = heartbeatSound.play();
 
-          "active"
+  if (promise && typeof promise.catch === "function") {
 
-        );
+    promise.catch(() => {});
 
-      if (
+  }
 
-        !gameOver
+  heartbeatFrame =
 
-      ) {
+    requestAnimationFrame(syncHeartbeat);
 
-        startBgm();
+  playSound(heartMonitorSound);
 
-      }
+  heartMonitorTimer = setInterval(() => {
+
+    if (dangerMode && !gameOver) {
+
+      playSound(heartMonitorSound);
 
     }
 
+  }, 1000);
+
+}
+
+function stopDangerAudio() {
+
+  clearInterval(heartMonitorTimer);
+
+  cancelAnimationFrame(heartbeatFrame);
+
+  clearTimeout(ecgPulseTimer);
+
+  heartMonitorTimer = null;
+
+  heartbeatFrame = null;
+
+  ecgPulseTimer = null;
+
+  heartbeatSound.pause();
+
+  heartMonitorSound.pause();
+
+  ecgLayer.classList.remove(
+
+    "beat-small",
+
+    "beat-large"
+
+  );
+
+}
+    
+  function startDangerMode() {
+
+  if (dangerMode) {
+
+    return;
+
+  }
+
+  dangerMode = true;
+
+  stopBgm();
+
+  dangerOverlay.classList.add("active");
+
+  ecgLayer.classList.add("active");
+
+  startDangerAudio();
+
+}
+
+  function stopDangerMode() {
+
+  dangerMode = false;
+
+  stopDangerAudio();
+
+  dangerOverlay.classList.remove("active");
+
+  ecgLayer.classList.remove("active");
+
+  if (!gameOver) {
+
+    startBgm();
+
+  }
+
+}
+    
     function resetDeadEffect() {
 
       deadFxOverlay.style.pointerEvents = "none";
@@ -4037,6 +4234,7 @@ if (
       clearCpuSelection();
 
       stopBgm();
+      stopDangerAudio();
 
       dangerMode =
 
