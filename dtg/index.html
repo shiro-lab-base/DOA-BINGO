@@ -812,137 +812,137 @@
 
     }
 
-    #ecgLayer {
+/* DTG ECG LAYER */
 
-      display: none;
+#ecgLayer {
 
-      position: absolute;
+  display: none;
 
-      left: 0;
+  position: absolute;
 
-      right: 0;
+  left: 0;
 
-      top: 50%;
+  right: 0;
 
-      z-index: 4;
+  top: 50%;
 
-      height: 600px;
+  z-index: 4;
 
-      overflow: hidden;
+  height: min(600px, 100%);
 
-      pointer-events: none;
+  overflow: hidden;
 
-      transform: translateY(-50%);
+  pointer-events: none;
 
-    }
+  transform: translateY(-50%);
 
-    #ecgLayer.active {
+}
 
-      display: block;
+#ecgLayer.active {
 
-    }
+  display: block;
 
-    .ecg-line {
+}
 
-      position: absolute;
+/* 通常の小さな波 */
 
-      top: 50%;
+.ecg-track {
 
-      left: 0;
+  position: absolute;
 
-      width: 200%;
+  left: 0;
 
-      height: 2px;
+  top: 50%;
 
-      background: #e00000;
+  width: calc(100% + 80px);
 
-      box-shadow:
+  height: 90px;
 
-        0 0 6px #e00000;
+  overflow: visible;
 
-      animation:
+  animation: ecgStream 0.9s linear infinite;
 
-        ecgMove 1.2s linear infinite;
+}
 
-    }
+@keyframes ecgStream {
 
-    .ecg-line::before {
+  from {
 
-      content: "";
+    transform: translate(0, -50%);
 
-      position: absolute;
+  }
 
-      left: 35%;
+  to {
 
-      top: -26px;
+    transform: translate(-80px, -50%);
 
-      width: 70px;
+  }
 
-      height: 52px;
+}
 
-      clip-path:
+/* 中央に出る心音連動波 */
 
-        polygon(
+.ecg-pulse {
 
-          0 50%,
+  position: absolute;
 
-          20% 50%,
+  left: 50%;
 
-          28% 30%,
+  top: 50%;
 
-          38% 75%,
+  width: clamp(120px, 22vw, 220px);
 
-          48% 5%,
+  height: min(360px, 100%);
 
-          58% 92%,
+  overflow: visible;
 
-          68% 50%,
+  opacity: 0;
 
-          100% 50%
+  transform:
 
-        );
+    translate(-50%, -50%)
 
-      background: #e00000;
-
-    }
-
-/* DTG HEARTBEAT ECG PULSE */
-
-.ecg-line::before {
+    scaleY(0.2);
 
   transform-origin: center;
 
-  transition: transform 0.12s ease-out;
+  transition:
 
-}
+    transform 0.12s ease-out,
 
-#ecgLayer.beat-small .ecg-line::before {
-
-  transform: scaleY(1.35);
-
-}
-
-#ecgLayer.beat-large .ecg-line::before {
-
-  transform: scaleY(9);
+    opacity 0.08s ease-out;
 
   filter: drop-shadow(0 0 8px #ff3030);
 
 }
-    
-    @keyframes ecgMove {
 
-      from {
+/* 1拍目：小さく跳ねる */
 
-        transform: translateX(0);
+#ecgLayer.beat-small .ecg-pulse {
 
-      }
+  opacity: 1;
 
-      to {
+  transform:
 
-        transform: translateX(-50%);
+    translate(-50%, -50%)
 
-      }
+    scaleY(0.25);
+
+}
+
+/* 2拍目：中央だけ大きく跳ねる */
+
+#ecgLayer.beat-large .ecg-pulse {
+
+  opacity: 1;
+
+  transform:
+
+    translate(-50%, -50%)
+
+    scaleY(1);
+
+}
 
     }
 
@@ -1825,11 +1825,91 @@ object-fit: contain;
 
     <div id="dangerOverlay"></div>
 
-    <div id="ecgLayer">
+<div id="ecgLayer">
 
-      <div class="ecg-line"></div>
+  <!-- 常時流れる小さな波 -->
 
-    </div>
+  <svg class="ecg-track" aria-hidden="true">
+
+    <defs>
+
+      <pattern
+
+        id="dtgEcgPattern"
+
+        width="80"
+
+        height="90"
+
+        patternUnits="userSpaceOnUse"
+
+      >
+
+        <path
+
+          d="M0 45 H18 L25 40 L32 51 L40 29 L49 61 L57 45 H80"
+
+          fill="none"
+
+          stroke="#e00000"
+
+          stroke-width="2"
+
+          stroke-linejoin="round"
+
+        />
+
+      </pattern>
+
+    </defs>
+
+    <rect
+
+      width="100%"
+
+      height="100%"
+
+      fill="url(#dtgEcgPattern)"
+
+    />
+
+  </svg>
+
+  <!-- 心音で中央だけ跳ねる波 -->
+
+  <svg
+
+    class="ecg-pulse"
+
+    viewBox="0 0 220 360"
+
+    preserveAspectRatio="none"
+
+    aria-hidden="true"
+
+  >
+
+    <path
+
+      d="M0 180 H40 L65 165 L83 210 L110 15 L137 345 L155 180 H220"
+
+      fill="none"
+
+      stroke="#ff2020"
+
+      stroke-width="3"
+
+      stroke-linecap="round"
+
+      stroke-linejoin="round"
+
+      vector-effect="non-scaling-stroke"
+
+    />
+
+  </svg>
+
+</div>
 
     <div class="game-wrap">
 
