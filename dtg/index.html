@@ -2425,6 +2425,20 @@ const heartMonitorSound =
 
     let gameOver = false;
 
+let heartMonitorTimer = null;
+
+let heartbeatFrame = null;
+
+let ecgPulseTimer = null;
+
+let heartbeatIndex = 0;
+
+let previousHeartbeatTime = 0;
+
+heartbeatSound.volume = 0.85;
+
+heartMonitorSound.volume = 0.18;
+    
     bgm.volume = 0.35;
 
     cardSound.volume = 1;
