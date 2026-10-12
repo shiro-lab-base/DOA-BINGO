@@ -854,13 +854,13 @@
 
   top: 50%;
 
-  width: calc(100% + 80px);
+  width: calc(100% + 400px);
 
   height: 90px;
 
   overflow: visible;
 
-  animation: ecgStream 0.9s linear infinite;
+  animation: ecgStream 4.5s linear infinite;
 
 }
 
@@ -874,7 +874,7 @@
 
   to {
 
-    transform: translate(-80px, -50%);
+    transform: translate(-400px, -50%);
 
   }
 
@@ -1835,7 +1835,7 @@ object-fit: contain;
 
         id="dtgEcgPattern"
 
-        width="80"
+        width="400"
 
         height="90"
 
@@ -1844,8 +1844,10 @@ object-fit: contain;
       >
 
         <path
+          
+          id="dtgEcgWave"
 
-          d="M0 45 H18 L25 40 L32 51 L40 29 L49 61 L57 45 H80"
+          d="M0 45 H400"
 
           fill="none"
 
@@ -4618,6 +4620,66 @@ if (window.visualViewport) {
 
     diceModeSelect
 
+/* DTG RANDOM ECG WAVE */
+
+const ecgTrack =
+
+  document.querySelector(".ecg-track");
+
+const ecgWavePath =
+
+  document.getElementById("dtgEcgWave");
+
+function randomizeEcgWave() {
+
+  let path = "M0 45";
+
+  for (let i = 0; i < 5; i++) {
+
+    const base = i * 80;
+
+    const x = base + 14 + Math.random() * 10;
+
+    const width = 30 + Math.random() * 12;
+
+    const small = 4 + Math.random() * 5;
+
+    const high = 10 + Math.random() * 8;
+
+    const low = 10 + Math.random() * 8;
+
+    path +=
+
+      ` L${x} 45` +
+
+      ` L${x + width * 0.2} ${45 - small}` +
+
+      ` L${x + width * 0.4} ${45 + small}` +
+
+      ` L${x + width * 0.6} ${45 - high}` +
+
+      ` L${x + width * 0.8} ${45 + low}` +
+
+      ` L${x + width} 45` +
+
+      ` L${base + 80} 45`;
+
+  }
+
+  ecgWavePath.setAttribute("d", path);
+
+}
+
+randomizeEcgWave();
+
+ecgTrack.addEventListener(
+
+  "animationiteration",
+
+  randomizeEcgWave
+
+);
+    
       .addEventListener(
 
         "change",
