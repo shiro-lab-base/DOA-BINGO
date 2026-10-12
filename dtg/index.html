@@ -2995,6 +2995,7 @@ function renderGameCards() {
     function prepareGame() {
 
       stopDangerAudio();
+      stopEcgCanvas(); 
       gameOver =
 
         false;
@@ -4155,8 +4156,6 @@ function stopDangerAudio() {
   ecgLayer.classList.add("active");
 
   startDangerAudio();
- 
-  stopEcgCanvas();
     
 }
 
@@ -4165,7 +4164,7 @@ function stopDangerAudio() {
   dangerMode = false;
 
   stopDangerAudio();
-
+  stopEcgCanvas();
   dangerOverlay.classList.remove("active");
 
   ecgLayer.classList.remove("active");
@@ -4354,7 +4353,8 @@ function stopDangerAudio() {
 
       stopBgm();
       stopDangerAudio();
-
+      stopEcgCanvas();
+      
       dangerMode =
 
         false;
