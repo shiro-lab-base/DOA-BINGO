@@ -1593,6 +1593,20 @@ object-fit: contain;
 
       <h1>DOA TARGET GUESS</h1>
 
+<div class="setting-box">
+
+  <label for="gameMode">GAME MODE</label>
+
+  <select id="gameMode">
+
+    <option value="CPU" selected>CPU BATTLE</option>
+
+    <option value="VS">VS MODE (2 PLAYERS)</option>
+
+  </select>
+
+</div>
+      
       <div class="setting-box">
 
         <label for="aliveCount">
@@ -4690,6 +4704,14 @@ if (window.visualViewport) {
 
         () => {
 
+if (document.getElementById("gameMode").value === "VS") {
+
+  window.location.href = "../dtg-vs/";
+
+  return;
+
+}
+          
           aliveCount =
 
             Number(
