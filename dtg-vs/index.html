@@ -1714,6 +1714,24 @@ object-fit: contain;
   font-size: 32px;
 
 }
+ 
+/* DTG VS - OPENED CARDS FLAT */
+
+#gameScreen.vs-mode .game-card.opened {
+
+  transform: none;
+
+}
+
+/* DTG VS - PLAYER 2 LOSE EFFECT */
+
+#deadFxOverlay.p2-loss {
+
+  transform: rotate(180deg);
+
+  transform-origin: center center;
+
+}   
     
   </style>
 
@@ -1783,6 +1801,44 @@ object-fit: contain;
 
         </select>
 
+<div class="setting-box">
+
+  <label for="deadPenalty">DEAD</label>
+
+  <select id="deadPenalty">
+
+    <option value="1" selected>1</option>
+
+    <option value="2">2</option>
+
+    <option value="3">3</option>
+
+  </select>
+
+</div>
+
+<div class="setting-box">
+
+  <label for="openedPenalty">1 OPENED CARD</label>
+
+  <select id="openedPenalty">
+
+    <option value="0.5">0.5</option>
+
+    <option value="1" selected>1</option>
+
+    <option value="1.5">1.5</option>
+
+    <option value="2">2</option>
+
+    <option value="2.5">2.5</option>
+
+    <option value="3">3</option>
+
+  </select>
+
+</div>
+        
       </div>
 
       <button
@@ -4409,6 +4465,8 @@ function stopDangerAudio() {
 
       deadFxOverlay.style.pointerEvents = "none";
       
+      deadFxOverlay.classList.remove("p2-loss");
+      
       deadFxOverlay
 
         .classList
@@ -4609,6 +4667,14 @@ function stopDangerAudio() {
 
       resetDeadEffect();
 
+deadFxOverlay.classList.toggle(
+
+  "p2-loss",
+
+  winner === "PLAYER"
+
+);
+      
       const rect =
 
         cardElement
@@ -4627,13 +4693,19 @@ function stopDangerAudio() {
 
       const overlayBounds = deadFxOverlay.getBoundingClientRect();
 
-deadFxCard.style.left =
+const p2Loss = winner === "PLAYER";
 
-  `${rect.left - overlayBounds.left}px`;
+deadFxCard.style.left = p2Loss
 
-deadFxCard.style.top =
+  ? `${overlayBounds.right - rect.right}px`
 
-  `${rect.top - overlayBounds.top}px`;
+  : `${rect.left - overlayBounds.left}px`;
+
+deadFxCard.style.top = p2Loss
+
+  ? `${overlayBounds.bottom - rect.bottom}px`
+
+  : `${rect.top - overlayBounds.top}px`;
 
       deadFxCard.style.width =
 
@@ -4825,11 +4897,17 @@ if (window.visualViewport) {
 
       }
 
-      const penalty =
+const deadPenalty =
 
-        1
+  Number(document.getElementById("deadPenalty").value);
 
-        + openedBonus;
+const openedPenalty =
+
+  Number(document.getElementById("openedPenalty").value);
+
+const penalty =
+
+  deadPenalty + openedBonus * openedPenalty;
 
       resultTitle.textContent =
 
@@ -4862,11 +4940,14 @@ if (window.visualViewport) {
 
         }`;
 
-      resultDetail.innerHTML =
-        `DEAD：1<br>`
-        + `OPENED：${openedBonus}<br>`
-        + `LOSER：${gameMode === "VS" ? (winner === "PLAYER" ? "PLAYER 2" : "PLAYER 1") : loser}`;
+resultDetail.innerHTML =
 
+  `DEAD：${deadPenalty}<br>`
+
+  + `OPENED：${openedBonus} × ${openedPenalty}<br>`
+
+  + `LOSER：${winner === "PLAYER" ? "PLAYER 2" : "PLAYER 1"}`;
+     
       showScreen(
 
         resultScreen
