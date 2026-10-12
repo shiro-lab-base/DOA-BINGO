@@ -3131,6 +3131,18 @@
 
       refreshBoard();
 
+  deadFxLogo.src =
+
+  players.length === 2 &&
+
+  loser.type === "CPU" &&
+
+  players.some(player => player.type === "HUMAN")
+
+    ? "images/doa-w-rogo.PNG"
+
+    : "images/doa-d-rogo.PNG";
+      
       runDeadFx(
 
         cardIndex
