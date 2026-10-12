@@ -1962,7 +1962,15 @@ object-fit: contain;
 
   ></audio>
 
-  
+<audio
+
+  id="diceRollSound"
+
+  src="../audio/doa-dice-roll.wav"
+
+  preload="auto"
+
+></audio>
 
 <audio
 
@@ -2287,7 +2295,8 @@ object-fit: contain;
         "gunShotSound"
 
       );
-   
+    
+const diceRollSound = document.getElementById("diceRollSound");
     const heartbeatSound =
 
   document.getElementById("heartbeatSound");
@@ -2346,6 +2355,8 @@ heartMonitorSound.volume = 0.02;
 
     gunShotSound.volume = 1;
 
+    diceRollSound.volume = 1;
+   
     function showScreen(
 
       screen
@@ -3121,8 +3132,9 @@ startBgm();
   finalValue
 
 ) {
-
-  centerDice
+playSound(diceRollSound);
+  
+      centerDice
 
     .classList
 
