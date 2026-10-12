@@ -766,6 +766,200 @@
 
     }
 
+/* DB SETTINGS ACCORDIONS */
+
+.settings-accordion {
+
+  width: 100%;
+
+  margin: 12px 0;
+
+  border: 1px solid rgba(55, 35, 19, 0.35);
+
+  border-radius: 10px;
+
+  overflow: hidden;
+
+  background: rgba(255, 246, 222, 0.13);
+
+}
+
+.settings-toggle {
+
+  width: 100%;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  padding: 15px 13px;
+
+  border: 0;
+
+  background: rgba(45, 30, 20, 0.15);
+
+  color: #29211b;
+
+  font: 700 15px Arial, sans-serif;
+
+  letter-spacing: 2px;
+
+  text-align: left;
+
+  cursor: pointer;
+
+}
+
+.settings-toggle::after {
+
+  content: "＋";
+
+  font-size: 18px;
+
+}
+
+.settings-toggle[aria-expanded="true"]::after {
+
+  content: "－";
+
+}
+
+.settings-panel {
+
+  padding: 15px 13px 4px;
+
+}
+
+.settings-panel[hidden] {
+
+  display: none;
+
+}
+
+.settings-panel .setting-box {
+
+  margin-bottom: 15px;
+
+}
+
+.name-input {
+
+  width: 100%;
+
+  height: 44px;
+
+  padding: 0 12px;
+
+  border: 1px solid #666;
+
+  border-radius: 7px;
+
+  background: #1c1c1c;
+
+  color: #fff;
+
+  font: inherit;
+
+}
+
+.name-note {
+
+  color: #4a4039;
+
+  font-size: 12px;
+
+  margin: 0 0 13px;
+
+}
+
+/* DB TURN ORDER PANEL */
+
+#turnOrderPanel {
+
+  position: absolute;
+
+  top: 12px;
+
+  right: 10px;
+
+  z-index: 10;
+
+  width: clamp(100px, 26vw, 155px);
+
+  padding: 9px 8px;
+
+  border: 1px solid rgba(255, 255, 255, 0.16);
+
+  border-radius: 8px;
+
+  background: rgba(0, 0, 0, 0.28);
+
+  color: rgba(255, 255, 255, 0.78);
+
+  pointer-events: none;
+
+  font-size: clamp(9px, 2.4vw, 12px);
+
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+
+}
+
+.turn-order-heading {
+
+  font-size: 0.85em;
+
+  letter-spacing: 1px;
+
+  margin-bottom: 5px;
+
+}
+
+.turn-order-entry {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 5px;
+
+  padding: 4px 3px;
+
+  border-radius: 4px;
+
+  min-width: 0;
+
+}
+
+.turn-order-entry.current {
+
+  background: rgba(175, 34, 27, 0.50);
+
+  color: #fff;
+
+  font-weight: bold;
+
+}
+
+.turn-order-name {
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+
+}
+
+.turn-order-num {
+
+  opacity: 0.75;
+
+  flex: 0 0 auto;
+
+}
+    
   </style>
 
 </head>
@@ -1048,6 +1242,8 @@
 
   >
 
+    <div id="turnOrderPanel" aria-label="TURN ORDER"></div>
+    
     <div class="container">
 
       <div class="game-header">
@@ -2060,7 +2256,9 @@
           number: playerNumber,
 
           type: "HUMAN"
-
+          seat: i,
+　　　　　　 name: seatNames.HUMAN[i].trim()
+        
         });
 
         playerNumber++;
@@ -2082,7 +2280,9 @@
           number: playerNumber,
 
           type: "CPU"
-
+          seat: i,
+          name: seatNames.CPU[i].trim()
+        
         });
 
         playerNumber++;
@@ -2091,6 +2291,340 @@
 
     }
 
+/* DB SETTINGS / PLAYER NAMES / TURN ORDER */
+
+const seatNames = {
+
+  HUMAN: Array(8).fill(""),
+
+  CPU: Array(3).fill("")
+
+};
+
+let shuffleTurnOrder = false;
+
+const turnOrderPanel =
+
+  document.getElementById("turnOrderPanel");
+
+const settingsContainer =
+
+  settingsScreen.querySelector(".container");
+
+function initializeSettingSections() {
+
+  const titles = [
+
+    ...settingsContainer.querySelectorAll(
+
+      ".settings-section-title"
+
+    )
+
+  ];
+
+  const nameTitle = document.createElement("div");
+
+  nameTitle.className = "settings-section-title";
+
+  nameTitle.textContent = "PLAYER NAMES";
+
+  titles[1].before(nameTitle);
+
+  const nameFields = document.createElement("div");
+
+  nameFields.id = "playerNameFields";
+
+  nameTitle.after(nameFields);
+
+  const shuffleBox = document.createElement("div");
+
+  shuffleBox.className = "setting-box";
+
+  const shuffleLabel = document.createElement("label");
+
+  shuffleLabel.htmlFor = "turnShuffleSelect";
+
+  shuffleLabel.textContent = "TURN ORDER SHUFFLE";
+
+  const shuffleSelect = document.createElement("select");
+
+  shuffleSelect.id = "turnShuffleSelect";
+
+  shuffleSelect.innerHTML =
+
+    '<option value="OFF" selected>OFF</option>' +
+
+    '<option value="ON">ON</option>';
+
+  shuffleSelect.addEventListener("change", () => {
+
+    shuffleTurnOrder = shuffleSelect.value === "ON";
+
+  });
+
+  shuffleBox.append(shuffleLabel, shuffleSelect);
+
+  cpuCountSelect
+
+    .closest(".setting-box")
+
+    .after(shuffleBox);
+
+  [
+
+    ...settingsContainer.querySelectorAll(
+
+      ".settings-section-title"
+
+    )
+
+  ].forEach((title, index) => {
+
+    const wrapper = document.createElement("div");
+
+    wrapper.className = "settings-accordion";
+
+    const button = document.createElement("button");
+
+    button.type = "button";
+
+    button.className = "settings-toggle";
+
+    button.textContent = title.textContent.trim();
+
+    button.setAttribute(
+
+      "aria-expanded",
+
+      String(index === 0)
+
+    );
+
+    const panel = document.createElement("div");
+
+    panel.className = "settings-panel";
+
+    panel.hidden = index !== 0;
+
+    title.before(wrapper);
+
+    wrapper.append(button, panel);
+
+    let next = title.nextSibling;
+
+    title.remove();
+
+    while (
+
+      next &&
+
+      !(
+
+        next.nodeType === 1 &&
+
+        (
+
+          next.classList.contains("settings-accordion") ||
+
+          next.classList.contains("settings-section-title")
+
+        )
+
+      ) &&
+
+      !(
+
+        next.nodeType === 1 &&
+
+        next.id === "settingError"
+
+      )
+
+    ) {
+
+      const current = next;
+
+      next = next.nextSibling;
+
+      panel.appendChild(current);
+
+    }
+
+    button.addEventListener("click", () => {
+
+      panel.hidden = !panel.hidden;
+
+      button.setAttribute(
+
+        "aria-expanded",
+
+        String(!panel.hidden)
+
+      );
+
+    });
+
+  });
+
+  humanCountSelect.addEventListener(
+
+    "change",
+
+    renderNameFields
+
+  );
+
+  cpuCountSelect.addEventListener(
+
+    "change",
+
+    renderNameFields
+
+  );
+
+  renderNameFields();
+
+}
+
+function renderNameFields() {
+
+  const fields =
+
+    document.getElementById("playerNameFields");
+
+  fields.replaceChildren();
+
+  const note = document.createElement("p");
+
+  note.className = "name-note";
+
+  note.textContent =
+
+    "未入力の場合はPLAYER番号を表示。人数を戻すと名前も復元。";
+
+  fields.appendChild(note);
+
+  let number = 1;
+
+  for (const type of ["HUMAN", "CPU"]) {
+
+    const count = Number(
+
+      (type === "HUMAN"
+
+        ? humanCountSelect
+
+        : cpuCountSelect).value
+
+    );
+
+    for (
+
+      let seat = 0;
+
+      seat < count;
+
+      seat++, number++
+
+    ) {
+
+      const wrap = document.createElement("div");
+
+      wrap.className = "setting-box";
+
+      const label = document.createElement("label");
+
+      const input = document.createElement("input");
+
+      const id = `name-${type}-${seat}`;
+
+      label.htmlFor = id;
+
+      label.textContent =
+
+        `PLAYER ${number} (${type})`;
+
+      input.id = id;
+
+      input.className = "name-input";
+
+      input.type = "text";
+
+      input.maxLength = 24;
+
+      input.placeholder = `PLAYER ${number}`;
+
+      input.value = seatNames[type][seat];
+
+      input.addEventListener("input", () => {
+
+        seatNames[type][seat] = input.value;
+
+      });
+
+      wrap.append(label, input);
+
+      fields.appendChild(wrap);
+
+    }
+
+  }
+
+}
+
+function displayPlayerName(player) {
+
+  return player.name ||
+
+    `PLAYER ${player.number}`;
+
+}
+
+function renderTurnOrder() {
+
+  turnOrderPanel.replaceChildren();
+
+  const heading = document.createElement("div");
+
+  heading.className = "turn-order-heading";
+
+  heading.textContent = "TURN ORDER";
+
+  turnOrderPanel.appendChild(heading);
+
+  players.forEach((player, index) => {
+
+    const item = document.createElement("div");
+
+    item.className = "turn-order-entry";
+
+    if (index === currentPlayerIndex) {
+
+      item.classList.add("current");
+
+    }
+
+    const number = document.createElement("span");
+
+    number.className = "turn-order-num";
+
+    number.textContent = `${index + 1}.`;
+
+    const name = document.createElement("span");
+
+    name.className = "turn-order-name";
+
+    name.textContent = displayPlayerName(player);
+
+    item.append(number, name);
+
+    turnOrderPanel.appendChild(item);
+
+  });
+
+}
+    
     function startGameFromSettings() {
 
       const humanCount =
@@ -2236,6 +2770,16 @@
       currentPlayerIndex =
 
         0;
+
+      players.sort((a, b) =>
+
+  a.number - b.number
+
+);
+
+if (shuffleTurnOrder) shuffle(players);
+
+renderTurnOrder();
 
       createCards();
 
@@ -3123,7 +3667,7 @@
 
       status.textContent =
 
-        `PLAYER ${loser.number} DIED`;
+      `${displayPlayerName(loser)} DIED`;
 
       gameInfo.textContent =
 
@@ -3226,10 +3770,10 @@ status.classList.add("turn-pop");
 
       ) {
 
-        status.textContent =
+        status.textContent = 
 
-          `PLAYER ${player.number} CPU TURN`;
-
+      `${displayPlayerName(player)} CPU TURN`;
+        
         inputLocked =
 
           true;
@@ -3248,9 +3792,9 @@ status.classList.add("turn-pop");
 
       } else {
 
-        status.textContent =
+        status.textContent =   
 
-          `PLAYER ${player.number} TURN`;
+      `${displayPlayerName(player)} TURN`;
 
         inputLocked =
 
@@ -3264,6 +3808,7 @@ status.classList.add("turn-pop");
 
         `${boardSize}×${boardSize} / DEAD ${deadCardCount}`;
 
+       renderTurnOrder();
     }
 
     function cpuPlay() {
@@ -3668,7 +4213,7 @@ status.classList.add("turn-pop");
 
       resultTitle.textContent =
 
-        `PLAYER ${loser.number} LOSE`;
+     `${displayPlayerName(loser)} LOSE`;
 
       resultDead.textContent =
 
@@ -3883,7 +4428,9 @@ status.classList.add("turn-pop");
       }
 
     );
-
+    
+    initializeSettingSections();
+    
     updateDeadOptions();
 
     loadDealSound();
