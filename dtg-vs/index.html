@@ -1,1 +1,4942 @@
+<!DOCTYPE html>
 
+<html lang="ja">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+
+    name="viewport"
+
+    content="width=device-width, initial-scale=1.0"
+
+  >
+
+  <title>DOA TARGET GUESS</title>
+
+  <style>
+
+    * {
+
+      box-sizing: border-box;
+
+    }
+
+    body {
+
+      margin: 0;
+
+      min-height: 100vh;
+
+      background: #111;
+
+      color: #fff;
+
+      font-family: Arial, sans-serif;
+
+      overflow-x: hidden;
+
+    }
+
+    button,
+
+    select {
+
+      font: inherit;
+
+    }
+
+    button {
+
+      cursor: pointer;
+
+    }
+
+    .screen {
+
+      display: none;
+
+      width: 100%;
+
+      min-height: 100vh;
+
+      padding: 18px;
+
+      background-image: url("../images/doa-play-back.PNG");
+
+      background-size: cover;
+
+      background-position: center;
+
+      background-repeat: no-repeat;
+
+    }
+
+    .screen.active {
+
+      display: flex;
+
+      flex-direction: column;
+
+      align-items: center;
+
+    }
+
+    .container {
+
+      width: 100%;
+
+      max-width: 1000px;
+
+      margin: auto;
+
+      text-align: center;
+
+    }
+
+    h1,
+
+    h2 {
+
+      margin: 0;
+
+      letter-spacing: 3px;
+
+    }
+
+    .main-button {
+
+      width: 100%;
+
+      min-height: 52px;
+
+      margin-top: 18px;
+
+      border: 0;
+
+      border-radius: 8px;
+
+      background: #fff;
+
+      color: #000;
+
+      font-weight: bold;
+
+    }
+
+    .secondary-button {
+
+      width: 100%;
+
+      min-height: 48px;
+
+      margin-top: 12px;
+
+      border: 1px solid #777;
+
+      border-radius: 8px;
+
+      background: rgba(0, 0, 0, 0.65);
+
+      color: #fff;
+
+      font-weight: bold;
+
+    }
+
+    .setting-box {
+
+      margin-top: 28px;
+
+      text-align: left;
+
+    }
+
+    .setting-box label {
+
+      display: block;
+
+      margin-bottom: 8px;
+
+      color: #fff;
+
+      font-weight: bold;
+
+      text-shadow: 0 1px 3px #000;
+
+    }
+
+    .setting-box select {
+
+      width: 100%;
+
+      height: 50px;
+
+      padding: 0 12px;
+
+      border: 1px solid #666;
+
+      border-radius: 8px;
+
+      background: #1c1c1c;
+
+      color: #fff;
+
+    }
+
+    #setupScreen {
+
+      justify-content: center;
+
+    }
+
+    #setupCards {
+
+      --setup-count: 5;
+
+      display: flex;
+
+      flex-wrap: nowrap;
+
+      justify-content: center;
+
+      align-items: flex-end;
+
+      gap: 8px;
+
+      width: 100%;
+
+      margin-top: 28px;
+
+      overflow-x: auto;
+
+      padding: 8px 0 16px;
+
+    }
+
+    .setup-card {
+
+      flex: 0 0 auto;
+
+      width: min(
+
+        90px,
+
+        calc(
+
+          (
+
+            100vw
+
+            - 52px
+
+            - (
+
+              (var(--setup-count) - 1)
+
+              * 8px
+
+            )
+
+          )
+
+          / var(--setup-count)
+
+        )
+
+      );
+
+      min-width: 34px;
+
+      aspect-ratio: 63 / 88;
+
+      padding: 0;
+
+      border: 2px solid transparent;
+
+      border-radius: 8px;
+
+      overflow: hidden;
+
+      background: transparent;
+
+      transition:
+
+        transform 0.18s ease,
+
+        border-color 0.18s ease;
+
+    }
+
+    .setup-card.selected {
+
+      border-color: #d00000;
+
+      transform: translateY(-7px);
+
+    }
+
+    .setup-card img {
+
+      display: block;
+
+      width: 100%;
+
+      height: 100%;
+
+      object-fit: cover;
+
+    }
+
+    .setup-actions {
+
+      display: grid;
+
+      grid-template-columns: 1fr 1fr;
+
+      gap: 10px;
+
+      margin-top: 10px;
+
+    }
+
+    .setup-actions button {
+
+      min-height: 48px;
+
+      border: 1px solid #777;
+
+      border-radius: 8px;
+
+      background: rgba(0, 0, 0, 0.72);
+
+      color: #fff;
+
+      font-weight: bold;
+
+    }
+
+    #blindStatus {
+
+      min-height: 24px;
+
+      margin-top: 8px;
+
+      color: #ddd;
+
+      font-size: 13px;
+
+      letter-spacing: 1px;
+
+    }
+
+    #gameScreen {
+
+      position: relative;
+
+      justify-content: center;
+
+      overflow: hidden;
+
+    }
+
+    /* DTG GAME BACKGROUND */
+
+#gameScreen {
+
+  background-image: url("../images/doa-tate-back.PNG");
+
+  background-size: cover;
+
+  background-position: center;
+
+  background-repeat: no-repeat;
+
+}
+
+@media (orientation: landscape) {
+
+  #gameScreen {
+
+    background-image: url("../images/doa-yoko-back.PNG");
+
+  }
+
+}
+    
+    .game-wrap {
+
+      width: 100%;
+
+      max-width: 1180px;
+
+      position: relative;
+
+      z-index: 3;
+
+    }
+
+    .player-label {
+
+      margin: 4px 0 8px;
+
+      font-size: 15px;
+
+      font-weight: bold;
+
+      letter-spacing: 2px;
+
+      text-shadow: 0 1px 4px #000;
+
+    }
+
+    .card-row {
+
+      display: flex;
+
+      justify-content: center;
+
+      gap: 8px;
+
+      width: 100%;
+
+      min-height: 130px;
+
+      perspective: 900px;
+
+    }
+
+    .game-card {
+
+  width: min(
+
+    110px,
+
+    calc(
+
+      (
+
+        100vw
+
+        - 52px
+
+        - (
+
+          (var(--card-count) - 1)
+
+          * 8px
+
+        )
+
+      )
+
+      / var(--card-count)
+
+    )
+
+  );
+
+  aspect-ratio: 63 / 88;
+
+  padding: 0;
+
+  border: 0;
+
+  border-radius: 8px;
+
+  overflow: hidden;
+
+  background: transparent;
+
+  transition:
+
+    transform 0.38s ease,
+
+    opacity 0.38s ease,
+
+    filter 0.2s ease;
+
+  transform-style: preserve-3d;
+
+}
+
+    .game-card img {
+
+      display: block;
+
+      width: 100%;
+
+      height: 100%;
+
+      object-fit: cover;
+
+    }
+
+    .game-card.selectable {
+
+      outline: 2px solid rgba(255, 255, 255, 0.8);
+
+      animation: cardPulse 0.8s ease-in-out infinite alternate;
+
+    }
+
+    @keyframes cardPulse {
+
+      from {
+
+        filter: brightness(1);
+
+      }
+
+      to {
+
+        filter: brightness(1.45);
+
+      }
+
+    }
+
+    .cpu-card.opened {
+
+      transform:
+
+        perspective(700px)
+
+        rotateX(58deg)
+
+        translateY(20px);
+
+      transform-origin: bottom center;
+
+    }
+    .cpu-card.opened img {
+
+  transform: rotate(180deg);
+
+}
+    .player-card.opened {
+
+      transform:
+
+        perspective(800px)
+
+        translateY(-16px)
+
+        rotateX(32deg);
+
+      transform-origin: bottom center;
+
+    }
+
+    
+
+/* DTG STANDING CARDS */
+
+/* CPU：テーブル奥側 */
+
+.cpu-card:not(.opened) {
+
+  transform:
+
+    perspective(900px)
+
+    rotateX(-13deg);
+
+  transform-origin: center bottom;
+
+  box-shadow:
+
+    0 9px 8px rgba(0, 0, 0, 0.5),
+
+    0 18px 14px rgba(0, 0, 0, 0.3);
+
+}
+
+/* YOU：テーブル手前側 */
+
+.player-card:not(.opened) {
+
+  transform:
+
+    perspective(900px)
+
+    rotateX(-13deg);
+
+  transform-origin: center bottom;
+
+  box-shadow:
+
+    0 8px 7px rgba(0, 0, 0, 0.5),
+
+    0 15px 12px rgba(0, 0, 0, 0.3);
+
+}
+    
+    .dice-zone {
+
+      display: grid;
+
+      grid-template-columns: 1fr auto 1fr;
+
+      align-items: center;
+
+      gap: 18px;
+
+      margin: 18px auto;
+
+      width: 100%;
+
+      max-width: 760px;
+
+      min-height: 150px;
+
+    }
+
+    .roll-result {
+
+      display: flex;
+
+      flex-direction: column;
+
+      justify-content: center;
+
+      min-height: 92px;
+
+      padding: 12px;
+
+      border: 1px solid rgba(255, 255, 255, 0.45);
+
+      border-radius: 10px;
+
+      background: rgba(0, 0, 0, 0.55);
+
+    }
+
+    .roll-label {
+
+      font-size: 12px;
+
+      letter-spacing: 2px;
+
+      color: #bbb;
+
+    }
+
+    .roll-number {
+
+      margin-top: 5px;
+
+      font-size: 42px;
+
+      font-weight: bold;
+
+    }
+
+    .center-dice-area {
+
+      display: flex;
+
+      flex-direction: column;
+
+      align-items: center;
+
+      min-width: 140px;
+
+    }
+
+    #centerDice {
+
+      position: relative;
+      
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      width: 92px;
+
+      height: 92px;
+
+      border: 3px solid #ddd;
+
+      border-radius: 18px;
+
+      background: #f7f3e8;
+
+      color: #111;
+
+      font-size: 52px;
+
+      font-weight: bold;
+
+      box-shadow:
+
+        0 6px 14px rgba(0, 0, 0, 0.45),
+
+        inset 0 0 12px rgba(0, 0, 0, 0.15);
+
+    }
+
+    #centerDice .pip {
+
+  position: absolute;
+
+  width: 17%;
+
+  height: 17%;
+
+  border-radius: 50%;
+
+  background: #111;
+
+  transform: translate(-50%, -50%);
+
+}
+
+#centerDice .pip.red {
+
+  width: 23%;
+
+  height: 23%;
+
+  background: #c00000;
+
+}
+    
+    #centerDice.rolling {
+
+      animation: diceRoll 0.16s linear infinite;
+
+    }
+
+    @keyframes diceRoll {
+
+      0% {
+
+        transform: rotate(0deg) translateY(0);
+
+      }
+
+      25% {
+
+        transform: rotate(90deg) translateY(-8px);
+
+      }
+
+      50% {
+
+        transform: rotate(180deg) translateY(0);
+
+      }
+
+      75% {
+
+        transform: rotate(270deg) translateY(-5px);
+
+      }
+
+      100% {
+
+        transform: rotate(360deg) translateY(0);
+
+      }
+
+    }
+
+    #rollButton {
+
+      width: 140px;
+
+      min-height: 44px;
+
+      margin-top: 10px;
+
+      border: 1px solid #fff;
+
+      border-radius: 8px;
+
+      background: rgba(0, 0, 0, 0.7);
+
+      color: #fff;
+
+      font-weight: bold;
+
+    }
+
+    #rollButton:disabled {
+
+      opacity: 0.35;
+
+      cursor: default;
+
+    }
+
+    #status {
+
+      min-height: 32px;
+
+      margin-top: 8px;
+
+      font-size: 19px;
+
+      font-weight: bold;
+
+      letter-spacing: 1px;
+
+      text-shadow: 0 1px 4px #000;
+
+    }
+
+    #dangerOverlay {
+
+      position: absolute;
+
+      inset: 0;
+
+      z-index: 1;
+
+      background: rgba(150, 0, 0, 0);
+
+      pointer-events: none;
+
+      transition: background 0.4s ease;
+
+    }
+
+    #dangerOverlay.active {
+
+      background: rgba(150, 0, 0, 0.20);
+
+    }
+
+/* DTG ECG — continuous monitor */
+
+#ecgLayer {
+
+  display: none;
+
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 4;
+
+  overflow: hidden;
+
+  pointer-events: none;
+
+}
+
+#ecgLayer.active {
+
+  display: block;
+
+}
+
+#ecgCanvas {
+
+  display: block;
+
+  width: 100%;
+
+  height: 100%;
+
+}
+    
+    #deadFxOverlay {
+
+      display: none;
+
+      position: fixed;
+
+      inset: 0;
+
+      z-index: 5000;
+
+      overflow: hidden;
+
+      pointer-events: none;
+
+    }
+
+    #deadFxOverlay.active {
+
+      display: block;
+
+    }
+
+    #deadFxRed {
+
+      position: absolute;
+
+      inset: 0;
+
+      z-index: 1;
+
+      background: rgba(150, 0, 0, 0.42);
+
+      opacity: 0;
+
+      transition:
+
+        opacity 0.35s linear;
+
+    }
+
+    #deadFxRed.show {
+
+      opacity: 1;
+
+    }
+
+    #deadFxCard {
+
+      position: absolute;
+
+      z-index: 2;
+
+      object-fit: cover;
+
+      border-radius: 8px;
+
+      transition:
+
+        left 0.7s ease-out,
+
+        top 0.7s ease-out,
+
+        width 0.7s ease-out,
+
+        height 0.7s ease-out,
+
+        transform 0.7s ease-out;
+
+    }
+
+    #deadFxBullet {
+
+      position: absolute;
+
+      z-index: 3;
+
+      width: 140vmax;
+
+height: 140vmax;
+
+object-fit: contain;
+
+      opacity: 0;
+
+      transform:
+
+        translate(-50%, -50%)
+
+        scale(0.7);
+
+      transition:
+
+        opacity 0.08s linear,
+
+        transform 0.12s ease-out;
+
+    }
+
+    #deadFxBullet.show {
+
+      opacity: 1;
+
+      transform:
+
+        translate(-50%, -50%)
+
+        scale(1);
+
+    }
+
+    #deadFxResultText {
+
+      position: absolute;
+
+      left: 50%;
+
+      top: 50%;
+
+      z-index: 4;
+
+      transform:
+
+        translate(-50%, -50%)
+
+        scale(0.8);
+
+      opacity: 0;
+
+      font-size: clamp(64px, 13vw, 150px);
+
+      font-weight: 900;
+
+      letter-spacing: 8px;
+
+      color: #fff;
+
+      -webkit-text-stroke: 2px #000;
+
+      text-shadow:
+
+        0 0 3px #000,
+
+        0 0 10px rgba(0, 0, 0, 0.9);
+
+      transition:
+
+        opacity 0.22s ease,
+
+        transform 0.22s ease;
+
+    }
+
+    #deadFxResultText.show {
+
+      opacity: 1;
+
+      transform:
+
+        translate(-50%, -50%)
+
+        scale(1);
+
+    }
+
+    #deadFxResultText.lose {
+
+      color: #d00000;
+
+    }
+
+    #deadFxResultText.win {
+
+      color: #fff;
+
+    }
+
+    
+
+/* DEAD / WIN RESULT LOGOS */
+
+#deadFxResultText {
+
+  width: 100vw;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  pointer-events: none;
+
+}
+
+#deadFxResultText img {
+
+  display: block;
+
+  width: 90vw;
+
+  max-height: 44svh;
+
+  height: auto;
+
+  object-fit: contain;
+
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.8));
+
+}
+
+#deadFxResultText.lose img {
+
+  flex: 0 0 auto;
+
+  width: 130vw;
+
+  max-height: 80svh;
+
+}
+
+@media (orientation: landscape) {
+
+  #deadFxResultText img {
+
+    width: 80vw;
+
+    max-height: 60svh;
+
+  }
+
+  #deadFxResultText.lose img {
+
+  width: 120vw;
+
+  max-height: 85svh;
+
+}
+
+}
+    
+    #resultScreen {
+
+      justify-content: center;
+
+    }
+
+    .result-box {
+
+      width: 100%;
+
+      max-width: 430px;
+
+      padding: 28px 22px;
+
+      border: 1px solid #555;
+
+      border-radius: 12px;
+
+      background: rgba(20, 20, 20, 0.94);
+
+    }
+
+    #resultTitle {
+
+      font-size: 34px;
+
+      font-weight: bold;
+
+      color: #d00000;
+
+    }
+
+    #resultPenalty {
+
+      margin-top: 24px;
+
+      font-size: 38px;
+
+      font-weight: bold;
+
+    }
+
+    #resultDetail {
+
+      margin-top: 14px;
+
+      color: #ccc;
+
+      line-height: 1.7;
+
+    }
+
+    .landscape-note {
+
+      display: none;
+
+      margin-bottom: 10px;
+
+      color: #ddd;
+
+      font-size: 12px;
+
+      letter-spacing: 1px;
+
+    }
+
+    @media (orientation: portrait) {
+
+  .landscape-note {
+
+    display: block;
+
+  }
+
+  .card-row {
+
+    display: grid;
+
+    grid-template-columns:
+
+      repeat(
+
+        var(--card-count),
+
+        minmax(0, 1fr)
+
+      );
+
+    gap: 5px;
+
+    width: 100%;
+
+    min-height: 110px;
+
+  }
+
+  .game-card {
+
+    width: 100%;
+
+    max-width: 110px;
+
+    height: auto;
+
+    justify-self: center;
+
+  }
+
+  .dice-zone {
+
+    gap: 8px;
+
+    margin: 10px auto;
+
+  }
+
+  .center-dice-area {
+
+    min-width: 100px;
+
+  }
+
+  #centerDice {
+
+    width: 72px;
+
+    height: 72px;
+
+    font-size: 40px;
+
+  }
+
+  #rollButton {
+
+    width: 100px;
+
+    font-size: 13px;
+
+  }
+
+  .roll-number {
+
+    font-size: 32px;
+
+  }
+
+}
+
+@media (orientation: landscape) {
+
+  #gameScreen {
+
+    height: 100svh;
+
+    min-height: 0;
+
+    padding:
+
+      max(6px, env(safe-area-inset-top))
+
+      clamp(8px, 1.8vw, 22px)
+
+      max(6px, env(safe-area-inset-bottom));
+
+    justify-content: center;
+
+    overflow: hidden;
+
+  }
+
+  .game-wrap {
+
+    width: 100%;
+
+    height: auto;
+
+    max-height: 100%;
+
+  }
+
+  .player-label {
+
+    margin:
+
+      clamp(1px, 0.4svh, 5px)
+
+      0;
+
+    font-size:
+
+      clamp(11px, 2svh, 15px);
+
+  }
+
+  .card-row {
+
+    display: grid;
+
+    grid-template-columns:
+
+      repeat(
+
+        var(--card-count),
+
+        minmax(0, 1fr)
+
+      );
+
+    align-items: center;
+
+    gap:
+
+      clamp(4px, 0.8vw, 10px);
+
+    width: 100%;
+
+    min-height: 0;
+
+  }
+
+  .game-card {
+
+    width: 100%;
+
+    max-width:
+
+      clamp(
+
+        70px,
+
+        9vw,
+
+        110px
+
+      );
+
+    height: auto;
+
+    justify-self: center;
+
+  }
+
+  .dice-zone {
+
+    min-height: 0;
+
+    margin:
+
+      clamp(3px, 0.8svh, 10px)
+
+      auto;
+
+    gap:
+
+      clamp(8px, 1.5vw, 20px);
+
+  }
+
+  .roll-result {
+
+    min-height:
+
+      clamp(
+
+        58px,
+
+        15svh,
+
+        105px
+
+      );
+
+    padding:
+
+      clamp(5px, 1svh, 12px);
+
+  }
+
+  .roll-number {
+
+    font-size:
+
+      clamp(
+
+        25px,
+
+        7svh,
+
+        42px
+
+      );
+
+  }
+
+  .center-dice-area {
+
+    min-width:
+
+      clamp(
+
+        80px,
+
+        14vw,
+
+        140px
+
+      );
+
+  }
+
+  #centerDice {
+
+    width:
+
+      clamp(
+
+        58px,
+
+        14svh,
+
+        92px
+
+      );
+
+    height:
+
+      clamp(
+
+        58px,
+
+        14svh,
+
+        92px
+
+      );
+
+    font-size:
+
+      clamp(
+
+        30px,
+
+        8svh,
+
+        52px
+
+      );
+
+  }
+
+  #rollButton {
+
+    width:
+
+      clamp(
+
+        90px,
+
+        16vw,
+
+        140px
+
+      );
+
+    min-height:
+
+      clamp(
+
+        30px,
+
+        7svh,
+
+        44px
+
+      );
+
+    margin-top:
+
+      clamp(
+
+        3px,
+
+        0.8svh,
+
+        10px
+
+      );
+
+  }
+
+  #status {
+
+    min-height:
+
+      clamp(
+
+        18px,
+
+        4svh,
+
+        32px
+
+      );
+
+    margin-top:
+
+      clamp(
+
+        1px,
+
+        0.5svh,
+
+        6px
+
+      );
+
+    font-size:
+
+      clamp(
+
+        13px,
+
+        3.4svh,
+
+        19px
+
+      );
+
+  }
+}
+    
+/* DTG LANDSCAPE DICE UI */
+
+@media (orientation: landscape) {
+
+  .dice-zone {
+
+    width: fit-content;
+
+    max-width: 100%;
+
+    grid-template-columns: auto auto auto;
+
+    gap: clamp(8px, 1.5vw, 16px);
+
+  }
+
+  .roll-result {
+
+    width: 110px;
+
+  }
+
+}
+
+/* DTG PORTRAIT DICE UI */
+
+@media (orientation: portrait) {
+
+  .dice-zone {
+
+    width: fit-content;
+
+    max-width: 100%;
+
+    grid-template-columns: auto auto auto;
+
+    gap: 8px;
+
+  }
+
+  .roll-result {
+
+    width: 74px;
+
+    padding: 8px;
+
+  }
+
+}
+
+/* DTG DICE RESULT NUMBER ALIGN */
+
+.roll-number {
+
+  text-align: center;
+
+}
+  
+/* VS standalone background — shared repository image */
+#settingsScreen, #setupScreen, #gameScreen.vs-mode, #resultScreen {
+  background-image: url("../images/doa-vs-back.PNG");
+  background-position: center;
+  background-size: cover;
+}
+/* VS MODE: top seat faces the opposite player */
+#gameScreen.vs-mode .game-wrap { width: 100%; }
+#gameScreen.vs-mode .vs-top-seat { transform: rotate(180deg); }
+#gameScreen.vs-mode .vs-top-seat .cpu-card.opened img { transform: none; }
+#gameScreen.vs-mode .vs-top-seat .cpu-card:not(.opened) { transform: none; }
+#gameScreen.vs-mode .player-card:not(.opened) { transform: none; }
+#gameScreen.vs-mode .game-wrap { display:flex; flex-direction:column; justify-content:space-between; min-height: min(88svh, 900px); }
+#gameScreen.vs-mode .card-row { min-height: 0; }
+#gameScreen.vs-mode .dice-zone { margin: 12px auto; }
+#gameScreen.vs-mode .game-card { width:min(110px, calc((100vw - 52px - (var(--card-count) - 1)*8px)/var(--card-count))); }
+#gameScreen.vs-mode .vs-bottom-seat { text-align:center; }
+#gameScreen.vs-mode .vs-top-seat { text-align:center; }
+#gameScreen.vs-mode .landscape-note { display:none; }
+#handoffScreen { justify-content:center; background:#000; text-align:center; }
+#handoffScreen .container { max-width:500px; }
+#handoffText { font-size: clamp(24px,6vw,40px); letter-spacing:2px; }
+#handoffScreen .main-button { margin-top:35px; }
+@media (orientation: landscape) {
+  #gameScreen.vs-mode .game-wrap { min-height:0; height:100%; }
+}
+  </style>
+
+</head>
+
+<body>
+
+  <section
+
+    id="settingsScreen"
+
+    class="screen active"
+
+  >
+
+    <div class="container">
+
+      <h1>DOA TARGET GUESS — VS</h1>
+      <div class="setting-box">
+        <label for="gameMode">GAME MODE</label>
+        <select id="gameMode">
+          <option value="VS" selected>VS MODE (2 PLAYERS)</option>
+        </select>
+      </div>
+
+      <div class="setting-box">
+
+        <label for="aliveCount">
+
+          ALIVE CARDS
+
+        </label>
+
+        <select id="aliveCount">
+
+          <option value="1">1</option>
+
+          <option value="2">2</option>
+
+          <option value="3">3</option>
+
+          <option value="4" selected>4</option>
+
+          <option value="5">5</option>
+
+          <option value="6">6</option>
+
+          <option value="7">7</option>
+
+        </select>
+
+      </div>
+
+      <div class="setting-box">
+
+        <label for="diceMode">
+
+          DICE MODE
+
+        </label>
+
+        <select id="diceMode">
+
+          <option value="1" selected>1 ROLL</option>
+
+          <option value="2">2 ROLL</option>
+
+        </select>
+
+      </div>
+
+      <button
+
+        id="setupStartButton"
+
+        class="main-button"
+
+      >
+
+        SET DEAD
+
+      </button>
+
+    </div>
+
+  </section>
+
+  <section
+
+    id="setupScreen"
+
+    class="screen"
+
+  >
+
+    <div class="container">
+
+      <h2 id="setupTitle">SET YOUR DEAD</h2>
+
+      <div id="setupCards"></div>
+
+      <div class="setup-actions">
+
+        <button id="randomButton">
+
+          RANDOM
+
+        </button>
+
+        <button id="blindRandomButton">
+
+          BLIND RANDOM
+
+        </button>
+
+      </div>
+
+      <div id="blindStatus"></div>
+
+      <button
+
+        id="confirmSetupButton"
+
+        class="main-button"
+
+      >
+
+        SET
+
+      </button>
+
+      <button
+
+        id="setupBackButton"
+
+        class="secondary-button"
+
+      >
+
+        SETTINGS
+
+      </button>
+
+    </div>
+
+  </section>
+
+  <section id="handoffScreen" class="screen">
+    <div class="container">
+      <h2 id="handoffText">PASS TO PLAYER 2</h2>
+      <button id="handoffButton" class="main-button">TAP TO CONTINUE</button>
+    </div>
+  </section>
+
+  <section
+
+    id="gameScreen"
+
+    class="screen"
+
+  >
+
+    <div id="dangerOverlay"></div>
+
+    <div id="ecgLayer">
+
+  <canvas id="ecgCanvas" aria-hidden="true"></canvas>
+
+</div>
+    <div class="game-wrap">
+
+      <div class="landscape-note">
+
+        LANDSCAPE MODE RECOMMENDED
+
+      </div>
+
+      <div class="vs-top-seat">
+      <div class="player-label" id="topPlayerLabel">CPU</div>
+      <div
+
+        id="cpuCards"
+
+        class="card-row"
+
+      ></div>
+      </div>
+
+      <div class="dice-zone">
+
+        <div class="roll-result">
+
+          <div class="roll-label" id="leftRollLabel">YOU</div>
+
+          <div
+
+            id="playerRollDisplay"
+
+            class="roll-number"
+
+          >
+
+            -
+
+          </div>
+
+        </div>
+
+        <div class="center-dice-area">
+
+          <div id="centerDice"></div>
+
+          <button id="rollButton">
+
+            ROLL
+
+          </button>
+
+        </div>
+
+        <div class="roll-result">
+
+          <div class="roll-label" id="rightRollLabel">CPU</div>
+
+          <div
+
+            id="cpuRollDisplay"
+
+            class="roll-number"
+
+          >
+
+            -
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <div id="status">
+
+        ROLL THE DICE
+
+      </div>
+
+      <div class="vs-bottom-seat">
+      <div class="player-label" id="bottomPlayerLabel">YOU</div>
+      <div
+
+        id="playerCards"
+
+        class="card-row"
+
+      ></div>
+      </div>
+
+    </div>
+
+  </section>
+
+  <section
+
+    id="resultScreen"
+
+    class="screen"
+
+  >
+
+    <div class="result-box">
+
+      <div id="resultTitle">
+
+        YOU WIN
+
+      </div>
+
+      <div id="resultPenalty">
+
+        1 SHOT
+
+      </div>
+
+      <div id="resultDetail"></div>
+
+      <button
+
+        id="retryButton"
+
+        class="main-button"
+
+      >
+
+        PLAY AGAIN
+
+      </button>
+
+      <button
+
+        id="settingsButton"
+
+        class="secondary-button"
+
+      >
+
+        SETTINGS
+
+      </button>
+
+    </div>
+
+  </section>
+
+  <div id="deadFxOverlay">
+
+    <div id="deadFxRed"></div>
+
+    <img
+
+      id="deadFxCard"
+
+      src="../images/doa-dead.PNG"
+
+      alt="DEAD"
+
+    >
+
+    <img
+
+      id="deadFxBullet"
+
+      src="../images/doa-dankon.PNG"
+
+      alt="BULLET HOLE"
+
+    >
+
+    <div id="deadFxResultText">
+
+      DEAD
+
+    </div>
+
+  </div>
+
+  <audio
+
+    id="bgm"
+
+    src="../audio/doa-bgm.mp3"
+
+    preload="auto"
+
+    loop
+
+  ></audio>
+
+  <audio
+
+    id="cardSound"
+
+    src="../audio/doa-card-flick.wav"
+
+    preload="auto"
+
+  ></audio>
+
+  <audio
+
+    id="gunClickSound"
+
+    src="../audio/doa-gun-click.mp3"
+
+    preload="auto"
+
+  ></audio>
+
+  <audio
+
+    id="gunShotSound"
+
+    src="../audio/doa-gun-shot.wav"
+
+    preload="auto"
+
+  ></audio>
+
+<audio
+
+  id="diceRollSound"
+
+  src="../audio/doa-dice-roll.wav"
+
+  preload="auto"
+
+></audio>
+
+<audio
+
+  id="heartbeatSound"
+
+  src="../audio/doa-heartbeat.wav"
+
+  preload="auto"
+
+  loop
+
+></audio>
+
+<audio
+
+  id="heartMonitorSound"
+
+  src="../audio/doa-heart-monitor.wav"
+
+  preload="auto"
+
+></audio>
+  
+  <script>
+
+    const IMAGE_BACK =
+
+      "../images/doa-back.PNG";
+
+    const IMAGE_ALIVE =
+
+      "../images/doa-alive.PNG";
+
+    const IMAGE_DEAD =
+
+      "../images/doa-dead.PNG";
+
+    const settingsScreen =
+
+      document.getElementById(
+
+        "settingsScreen"
+
+      );
+
+    const setupScreen =
+
+      document.getElementById(
+
+        "setupScreen"
+
+      );
+
+    const gameScreen =
+
+      document.getElementById(
+
+        "gameScreen"
+
+      );
+
+    const resultScreen =
+
+      document.getElementById(
+
+        "resultScreen"
+
+      );
+
+    const aliveCountSelect =
+
+      document.getElementById(
+
+        "aliveCount"
+
+      );
+
+    const diceModeSelect =
+
+      document.getElementById(
+
+        "diceMode"
+
+      );
+
+    const setupStartButton =
+
+      document.getElementById(
+
+        "setupStartButton"
+
+      );
+
+    const setupCards =
+
+      document.getElementById(
+
+        "setupCards"
+
+      );
+
+    const randomButton =
+
+      document.getElementById(
+
+        "randomButton"
+
+      );
+
+    const blindRandomButton =
+
+      document.getElementById(
+
+        "blindRandomButton"
+
+      );
+
+    const blindStatus =
+
+      document.getElementById(
+
+        "blindStatus"
+
+      );
+
+    const confirmSetupButton =
+
+      document.getElementById(
+
+        "confirmSetupButton"
+
+      );
+
+    const setupBackButton =
+
+      document.getElementById(
+
+        "setupBackButton"
+
+      );
+
+    const cpuCards =
+
+      document.getElementById(
+
+        "cpuCards"
+
+      );
+
+    const playerCards =
+
+      document.getElementById(
+
+        "playerCards"
+
+      );
+
+    const centerDice =
+
+      document.getElementById(
+
+        "centerDice"
+
+      );
+
+    const rollButton =
+
+      document.getElementById(
+
+        "rollButton"
+
+      );
+
+    const playerRollDisplay =
+
+      document.getElementById(
+
+        "playerRollDisplay"
+
+      );
+
+    const cpuRollDisplay =
+
+      document.getElementById(
+
+        "cpuRollDisplay"
+
+      );
+
+    const status =
+
+      document.getElementById(
+
+        "status"
+
+      );
+
+    const dangerOverlay =
+
+      document.getElementById(
+
+        "dangerOverlay"
+
+      );
+
+    const ecgLayer =
+
+      document.getElementById(
+
+        "ecgLayer"
+
+      );
+
+    const deadFxOverlay =
+
+      document.getElementById(
+
+        "deadFxOverlay"
+
+      );
+
+    const deadFxRed =
+
+      document.getElementById(
+
+        "deadFxRed"
+
+      );
+
+    const deadFxCard =
+
+      document.getElementById(
+
+        "deadFxCard"
+
+      );
+
+    const deadFxBullet =
+
+      document.getElementById(
+
+        "deadFxBullet"
+
+      );
+
+    const deadFxResultText =
+
+      document.getElementById(
+
+        "deadFxResultText"
+
+      );
+
+    const resultTitle =
+
+      document.getElementById(
+
+        "resultTitle"
+
+      );
+
+    const resultPenalty =
+
+      document.getElementById(
+
+        "resultPenalty"
+
+      );
+
+    const resultDetail =
+
+      document.getElementById(
+
+        "resultDetail"
+
+      );
+
+    const retryButton =
+
+      document.getElementById(
+
+        "retryButton"
+
+      );
+
+    const settingsButton =
+
+      document.getElementById(
+
+        "settingsButton"
+
+      );
+
+    const bgm =
+
+      document.getElementById(
+
+        "bgm"
+
+      );
+
+    const cardSound =
+
+      document.getElementById(
+
+        "cardSound"
+
+      );
+
+    const gunClickSound =
+
+      document.getElementById(
+
+        "gunClickSound"
+
+      );
+
+    const gunShotSound =
+
+      document.getElementById(
+
+        "gunShotSound"
+
+      );
+    
+const diceRollSound = document.getElementById("diceRollSound");
+    const heartbeatSound =
+
+  document.getElementById("heartbeatSound");
+
+const heartMonitorSound =
+
+  document.getElementById("heartMonitorSound");
+    
+    const gameModeSelect = document.getElementById("gameMode");
+    const handoffScreen = document.getElementById("handoffScreen");
+    const handoffText = document.getElementById("handoffText");
+    const handoffButton = document.getElementById("handoffButton");
+    const setupTitle = document.getElementById("setupTitle");
+    const topPlayerLabel = document.getElementById("topPlayerLabel");
+    const bottomPlayerLabel = document.getElementById("bottomPlayerLabel");
+    const leftRollLabel = document.getElementById("leftRollLabel");
+    const rightRollLabel = document.getElementById("rightRollLabel");
+    let gameMode = "VS";
+    let setupPlayer = 1;
+    let p1DeadIndex = 0;
+    let p1BlindMode = false;
+    let p2DeadIndex = 0;
+    let p2BlindMode = false;
+    let handoffAction = null;
+
+    function showHandoff(message, action) {
+      handoffText.textContent = message;
+      handoffAction = action;
+      showScreen(handoffScreen);
+    }
+    handoffButton.addEventListener("click", () => {
+      const action = handoffAction;
+      handoffAction = null;
+      if (action) action();
+    });
+
+    function applyGameMode() {
+      gameMode = gameModeSelect.value;
+      const vs = gameMode === "VS";
+      gameScreen.classList.toggle("vs-mode", vs);
+      topPlayerLabel.textContent = vs ? "PLAYER 2" : "CPU";
+      bottomPlayerLabel.textContent = vs ? "PLAYER 1" : "YOU";
+      leftRollLabel.textContent = vs ? "P1" : "YOU";
+      rightRollLabel.textContent = vs ? "P2" : "CPU";
+    }
+
+    let aliveCount = 4;
+
+    let totalCards = 5;
+
+    let diceRollCount = 1;
+
+    let selectedDeadIndex = 0;
+
+    let blindMode = false;
+
+    let playerDeck = [];
+
+    let cpuDeck = [];
+
+    let playerRoll = 0;
+
+    let cpuRoll = 0;
+
+    let rolling = false;
+
+    let playerOpenedCount = 0;
+
+    let cpuOpenedCount = 0;
+
+    let dangerMode = false;
+
+    let gameOver = false;
+
+let heartMonitorTimer = null;
+
+let heartbeatFrame = null;
+
+let ecgPulseTimer = null;
+
+let heartbeatIndex = 0;
+
+let previousHeartbeatTime = 0;
+
+heartbeatSound.volume = 1.00;
+
+heartMonitorSound.volume = 0.02;
+    
+    bgm.volume = 0.35;
+
+    cardSound.volume = 1;
+
+    gunClickSound.volume = 1;
+
+    gunShotSound.volume = 1;
+
+    diceRollSound.volume = 1;
+   
+    function showScreen(
+
+      screen
+
+    ) {
+
+      [
+
+        settingsScreen,
+        handoffScreen,
+        setupScreen,
+
+        gameScreen,
+
+        resultScreen
+
+      ].forEach(
+
+        item =>
+
+          item.classList.remove(
+
+            "active"
+
+          )
+
+      );
+
+      screen.classList.add(
+
+        "active"
+
+      );
+
+    }
+
+    function wait(
+
+      ms
+
+    ) {
+
+      return new Promise(
+
+        resolve =>
+
+          setTimeout(
+
+            resolve,
+
+            ms
+
+          )
+
+      );
+
+    }
+
+    function playSound(
+
+      sound
+
+    ) {
+
+      sound.pause();
+
+      sound.currentTime = 0;
+
+      const promise =
+
+        sound.play();
+
+      if (
+
+        promise
+
+        && typeof promise.catch
+
+        === "function"
+
+      ) {
+
+        promise.catch(
+
+          () => {}
+
+        );
+
+      }
+
+    }
+
+    function startBgm() {
+       return;
+      
+      const promise =
+
+        bgm.play();
+
+      if (
+
+        promise
+
+        && typeof promise.catch
+
+        === "function"
+
+      ) {
+
+        promise.catch(
+
+          () => {}
+
+        );
+
+      }
+
+    }
+
+    function stopBgm() {
+
+      bgm.pause();
+
+    }
+
+    function randomDeadIndex() {
+
+      return Math.floor(
+
+        Math.random()
+
+        * totalCards
+
+      );
+
+    }
+
+    function renderSetupCards() {
+
+      setupCards.innerHTML =
+
+        "";
+
+      setupCards.style.setProperty(
+
+        "--setup-count",
+
+        totalCards
+
+      );
+
+      for (
+
+        let i = 0;
+
+        i < totalCards;
+
+        i++
+
+      ) {
+
+        const button =
+
+          document.createElement(
+
+            "button"
+
+          );
+
+        button.className =
+
+          "setup-card";
+
+        button.dataset.index =
+
+          i;
+
+        const image =
+
+  document.createElement(
+
+    "img"
+
+  );
+
+if (
+
+  blindMode
+
+) {
+
+  image.src =
+
+    IMAGE_BACK;
+
+  image.alt =
+
+    "BACK";
+
+} else if (
+
+  i
+
+  === selectedDeadIndex
+
+) {
+
+  image.src =
+
+    IMAGE_DEAD;
+
+  image.alt =
+
+    "DEAD";
+
+  button.classList.add(
+
+    "selected"
+
+  );
+
+} else {
+
+  image.src =
+
+    IMAGE_ALIVE;
+
+  image.alt =
+
+    "ALIVE";
+
+}
+
+button.appendChild(
+
+  image
+
+);
+
+        button.addEventListener(
+
+          "click",
+
+          () => {
+
+            blindMode =
+
+              false;
+
+            selectedDeadIndex =
+
+              i;
+
+            blindStatus.textContent =
+
+              "";
+
+            renderSetupCards();
+
+          }
+
+        );
+
+        setupCards.appendChild(
+
+          button
+
+        );
+
+      }
+
+    }
+
+    function buildSetupCards() {
+
+      blindMode =
+
+        false;
+
+      selectedDeadIndex =
+
+        randomDeadIndex();
+
+      blindStatus.textContent =
+
+        "";
+
+      renderSetupCards();
+
+    }
+
+    function setVisibleRandom() {
+
+      blindMode =
+
+        false;
+
+      selectedDeadIndex =
+
+        randomDeadIndex();
+
+      blindStatus.textContent =
+
+        "";
+
+      renderSetupCards();
+
+    }
+
+    function setBlindRandom() {
+
+      blindMode =
+
+        true;
+
+      selectedDeadIndex =
+
+        randomDeadIndex();
+
+      blindStatus.textContent =
+
+        "DEAD LOCATION HIDDEN";
+
+      renderSetupCards();
+
+    }
+
+    function buildDecks() {
+
+      playerDeck =
+
+        [];
+
+      cpuDeck =
+
+        [];
+
+      for (
+
+        let i = 0;
+
+        i < totalCards;
+
+        i++
+
+      ) {
+
+        playerDeck.push({
+
+          type:
+
+            i
+
+            === selectedDeadIndex
+
+              ? "DEAD"
+
+              : "ALIVE",
+
+          opened: false
+
+        });
+
+      }
+
+      const cpuDeadIndex =
+        gameMode === "VS" ? p2DeadIndex : randomDeadIndex();
+
+      for (
+
+        let i = 0;
+
+        i < totalCards;
+
+        i++
+
+      ) {
+
+        cpuDeck.push({
+
+          type:
+
+            i
+
+            === cpuDeadIndex
+
+              ? "DEAD"
+
+              : "ALIVE",
+
+          opened: false
+
+        });
+
+      }
+
+    }
+
+    
+  
+function renderGameCards() {
+
+  cpuCards.innerHTML =
+
+    "";
+
+  playerCards.innerHTML =
+
+    "";
+
+  cpuCards.style.setProperty(
+
+    "--card-count",
+
+    totalCards
+
+  );
+
+  playerCards.style.setProperty(
+
+    "--card-count",
+
+    totalCards
+
+  );
+      cpuDeck.forEach(
+
+        (
+
+          card,
+
+          index
+
+        ) => {
+
+          const button =
+
+            document.createElement(
+
+              "button"
+
+            );
+
+          button.className =
+
+            "game-card cpu-card";
+
+          button.dataset.index =
+
+            index;
+
+          const image =
+
+            document.createElement(
+
+              "img"
+
+            );
+
+          if (
+
+            card.opened
+
+          ) {
+
+            if (
+
+              card.type
+
+              === "DEAD"
+
+            ) {
+
+              image.src =
+
+                IMAGE_DEAD;
+
+              image.alt =
+
+                "DEAD";
+
+            } else {
+
+              image.src =
+
+                IMAGE_ALIVE;
+
+              image.alt =
+
+                "ALIVE";
+
+            }
+
+          } else {
+
+            image.src =
+
+              IMAGE_BACK;
+
+            image.alt =
+
+              "BACK";
+
+          }
+
+          button.appendChild(
+
+            image
+
+          );
+
+          if (
+
+            card.opened
+
+          ) {
+
+            button.classList.add(
+
+              "opened"
+
+            );
+
+          }
+
+          cpuCards.appendChild(
+
+            button
+
+          );
+
+        }
+
+      );
+
+      playerDeck.forEach(
+
+        (
+
+          card,
+
+          index
+
+        ) => {
+
+          const button =
+
+            document.createElement(
+
+              "button"
+
+            );
+
+          button.className =
+
+            "game-card player-card";
+
+          button.dataset.index =
+
+            index;
+
+          const image =
+
+            document.createElement(
+
+              "img"
+
+            );
+
+          if (
+            (gameMode === "VS" || blindMode) && !card.opened
+          ) {
+
+            image.src =
+
+              IMAGE_BACK;
+
+            image.alt =
+
+              "BACK";
+
+          } else if (
+
+            card.type
+
+            === "DEAD"
+
+          ) {
+
+            image.src =
+
+              IMAGE_DEAD;
+
+            image.alt =
+
+              "DEAD";
+
+          } else {
+
+            image.src =
+
+              IMAGE_ALIVE;
+
+            image.alt =
+
+              "ALIVE";
+
+          }
+
+          button.appendChild(
+
+            image
+
+          );
+
+          if (
+
+            card.opened
+
+          ) {
+
+            button.classList.add(
+
+              "opened"
+
+            );
+
+          }
+
+          playerCards.appendChild(
+
+            button
+
+          );
+
+        }
+
+      );
+
+    }
+
+    function prepareGame() {
+
+      stopDangerAudio();
+      stopEcgCanvas(); 
+      gameOver =
+
+        false;
+
+      rolling =
+
+        false;
+
+      playerOpenedCount =
+
+        0;
+
+      cpuOpenedCount =
+
+        0;
+
+      dangerMode =
+
+        false;
+
+      dangerOverlay
+
+        .classList
+
+        .remove(
+
+          "active"
+
+        );
+
+      ecgLayer
+
+        .classList
+
+        .remove(
+
+          "active"
+
+        );
+
+      playerRollDisplay.textContent =
+
+        "-";
+
+      cpuRollDisplay.textContent =
+
+        "-";
+
+      renderDiceFace(1);
+
+      rollButton.disabled =
+
+        false;
+
+      status.textContent =
+
+        "ROLL THE DICE";
+
+      buildDecks();
+
+      renderGameCards();
+
+      showScreen(gameScreen);
+
+startBgm();
+
+    }
+
+    function randomDice() {
+
+      return Math.floor(
+
+        Math.random()
+
+        * 6
+
+      ) + 1;
+
+    }
+    
+   function renderDiceFace(value) {
+
+  const positions = {
+
+    1: [[50, 50]],
+
+    2: [[25, 25], [75, 75]],
+
+    3: [[25, 25], [50, 50], [75, 75]],
+
+    4: [[25, 25], [75, 25], [25, 75], [75, 75]],
+
+    5: [[25, 25], [75, 25], [50, 50], [25, 75], [75, 75]],
+
+    6: [[25, 22], [75, 22], [25, 50], [75, 50], [25, 78], [75, 78]]
+
+  };
+
+  centerDice.innerHTML = "";
+
+  const dots = positions[value] || positions[1];
+
+  dots.forEach(([x, y]) => {
+
+    const pip = document.createElement("span");
+
+    pip.className =
+
+      value === 1 ? "pip red" : "pip";
+
+    pip.style.left = `${x}%`;
+
+    pip.style.top = `${y}%`;
+
+    centerDice.appendChild(pip);
+
+  });
+
+}
+    
+    async function animateDice(
+
+  finalValue
+
+) {
+playSound(diceRollSound);
+  
+      centerDice
+
+    .classList
+
+    .add(
+
+      "rolling"
+
+    );
+
+  const start =
+
+    Date.now();
+
+  while (
+
+    Date.now()
+
+    - start
+
+    < 700
+
+  ) {
+
+    const tempValue =
+
+      randomDice();
+
+    renderDiceFace(tempValue);
+
+    await wait(
+
+      70
+
+    );
+
+  }
+
+  centerDice
+
+    .classList
+
+    .remove(
+
+      "rolling"
+
+    );
+
+  renderDiceFace(finalValue);
+}
+
+    async function rollRound() {
+
+      if (
+
+        rolling
+
+        || gameOver
+
+      ) {
+
+        return;
+
+      }
+
+      rolling =
+
+        true;
+
+      rollButton.disabled =
+
+        true;
+
+      clearCpuSelection();
+
+      playerRollDisplay.textContent =
+
+        "-";
+
+      cpuRollDisplay.textContent =
+
+        "-";
+
+      playerRoll =
+
+        0;
+
+      cpuRoll =
+
+        0;
+
+      for (
+
+        let i = 1;
+
+        i <= diceRollCount;
+
+        i++
+
+      ) {
+
+        status.textContent =
+
+          diceRollCount === 1
+
+            ? (gameMode === "VS" ? "PLAYER 1 ROLL" : "YOU ROLL")
+            : `${gameMode === "VS" ? "PLAYER 1" : "YOU"} ROLL ${i}/2`;
+
+       renderDiceFace(1); 
+
+        const roll =
+
+          randomDice();
+
+        await animateDice(
+
+          roll
+
+        );
+
+        playerRoll +=
+
+          roll;
+
+        playerRollDisplay.textContent =
+
+          playerRoll;
+
+        if (
+
+          i < diceRollCount
+
+        ) {
+
+          await wait(
+
+            550
+
+          );
+
+        }
+
+      }
+
+      await wait(
+
+        600
+
+      );
+
+      for (
+
+        let i = 1;
+
+        i <= diceRollCount;
+
+        i++
+
+      ) {
+
+        status.textContent =
+
+          diceRollCount === 1
+
+            ? (gameMode === "VS" ? "PLAYER 2 ROLL" : "CPU ROLL")
+            : `${gameMode === "VS" ? "PLAYER 2" : "CPU"} ROLL ${i}/2`;
+
+       renderDiceFace(1); 
+
+        const roll =
+
+          randomDice();
+
+        await animateDice(
+
+          roll
+
+        );
+
+        cpuRoll +=
+
+          roll;
+
+        cpuRollDisplay.textContent =
+
+          cpuRoll;
+
+        if (
+
+          i < diceRollCount
+
+        ) {
+
+          await wait(
+
+            550
+
+          );
+
+        }
+
+      }
+
+      await wait(
+
+        500
+
+      );
+
+      if (
+
+        playerRoll
+
+        === cpuRoll
+
+      ) {
+
+        status.textContent =
+
+          "DRAW - ROLL AGAIN";
+
+        rolling =
+
+          false;
+
+        rollButton.disabled =
+
+          false;
+
+        return;
+
+      }
+
+      if (
+
+        playerRoll
+
+        > cpuRoll
+
+      ) {
+
+        status.textContent =
+
+          gameMode === "VS" ? "PLAYER 1: CHOOSE P2 CARD" : "CHOOSE CPU CARD";
+
+        rolling =
+
+          false;
+
+        enableCpuSelection();
+
+        return;
+
+      }
+
+      status.textContent =
+
+        gameMode === "VS" ? "PLAYER 2: CHOOSE P1 CARD" : "CPU CHOOSES";
+      if (gameMode === "VS") {
+        rolling = false;
+        enablePlayerSelection();
+        return;
+      }
+
+      if (
+
+        dangerMode
+
+      ) {
+
+        stopDangerMode();
+
+      }
+
+      await wait(
+
+        650
+
+      );
+
+      cpuChoosePlayerCard();
+
+      rolling =
+
+        false;
+
+    }
+
+    function enableCpuSelection() {
+
+      const buttons =
+
+        cpuCards.querySelectorAll(
+
+          ".game-card"
+
+        );
+
+      buttons.forEach(
+
+        button => {
+
+          const index =
+
+            Number(
+
+              button.dataset.index
+
+            );
+
+          if (
+
+            cpuDeck[index].opened
+
+          ) {
+
+            return;
+
+          }
+
+          button.classList.add(
+
+            "selectable"
+
+          );
+
+          button.addEventListener(
+
+            "click",
+
+            handleCpuCardClick,
+
+            {
+
+              once: true
+
+            }
+
+          );
+
+        }
+
+      );
+
+    }
+
+    function clearCpuSelection() {
+
+      const buttons =
+
+        cpuCards.querySelectorAll(
+
+          ".game-card"
+
+        );
+
+      buttons.forEach(
+
+        button => {
+
+          button.classList.remove(
+
+            "selectable"
+
+          );
+
+          button.removeEventListener(
+
+            "click",
+
+            handleCpuCardClick
+
+          );
+
+        }
+
+      );
+
+    }
+
+    function handleCpuCardClick(
+
+      event
+
+    ) {
+
+      if (
+
+        gameOver
+
+      ) {
+
+        return;
+
+      }
+
+      const button =
+
+        event.currentTarget;
+
+      const index =
+
+        Number(
+
+          button.dataset.index
+
+        );
+
+      clearCpuSelection();
+
+      openCpuCard(
+
+        index
+
+      );
+
+    }
+
+    async function openCpuCard(
+
+      index
+
+    ) {
+
+      cpuDeck[index].opened =
+
+        true;
+
+      cpuOpenedCount++;
+
+      playSound(
+
+        cardSound
+
+      );
+
+      renderGameCards();
+
+      await wait(
+
+        420
+
+      );
+
+      if (
+
+        cpuDeck[index].type
+
+        === "DEAD"
+
+      ) {
+
+        const cardElement =
+
+          cpuCards.querySelector(
+
+            `.game-card[data-index="${index}"]`
+
+          );
+
+        await startDeadEffect(
+
+          cardElement,
+
+          "PLAYER"
+
+        );
+
+        return;
+
+      }
+
+      status.textContent =
+
+        "ALIVE";
+
+      await wait(
+
+        500
+
+      );
+
+      status.textContent =
+
+        "ROLL THE DICE";
+
+      rollButton.disabled =
+
+        false;
+
+    }
+
+    function enablePlayerSelection() {
+      playerCards.querySelectorAll(".game-card").forEach(button => {
+        const index = Number(button.dataset.index);
+        if (playerDeck[index].opened) return;
+        button.classList.add("selectable");
+        button.addEventListener("click", handlePlayerCardClick, {once: true});
+      });
+    }
+    function clearPlayerSelection() {
+      playerCards.querySelectorAll(".game-card").forEach(button => {
+        button.classList.remove("selectable");
+        button.removeEventListener("click", handlePlayerCardClick);
+      });
+    }
+    async function handlePlayerCardClick(event) {
+      if (gameOver) return;
+      const index = Number(event.currentTarget.dataset.index);
+      clearPlayerSelection();
+      await openPlayerCardVS(index);
+    }
+    async function openPlayerCardVS(index) {
+      playerDeck[index].opened = true;
+      playerOpenedCount++;
+      playSound(cardSound);
+      renderGameCards();
+      await wait(420);
+      if (playerDeck[index].type === "DEAD") {
+        const cardElement = playerCards.querySelector(`.game-card[data-index="${index}"]`);
+        await startDeadEffect(cardElement, "CPU");
+        return;
+      }
+      const remainingCards = playerDeck.filter(card => !card.opened);
+      if (remainingCards.length === 1 && remainingCards[0].type === "DEAD") {
+        startDangerMode();
+      }
+      status.textContent = "ALIVE";
+      await wait(500);
+      status.textContent = "ROLL THE DICE";
+      rollButton.disabled = false;
+    }
+
+    async function cpuChoosePlayerCard() {
+
+      const unopened =
+
+        playerDeck
+
+          .map(
+
+            (
+
+              card,
+
+              index
+
+            ) =>
+
+              card.opened
+
+                ? null
+
+                : index
+
+          )
+
+          .filter(
+
+            index =>
+
+              index !== null
+
+          );
+
+      if (
+
+        unopened.length
+
+        === 0
+
+      ) {
+
+        return;
+
+      }
+
+      const index =
+
+        unopened[
+
+          Math.floor(
+
+            Math.random()
+
+            * unopened.length
+
+          )
+
+        ];
+
+      playerDeck[index].opened =
+
+        true;
+
+      playerOpenedCount++;
+
+      playSound(
+
+        cardSound
+
+      );
+
+      renderGameCards();
+
+      await wait(
+
+        420
+
+      );
+
+      if (
+
+        playerDeck[index].type
+
+        === "DEAD"
+
+      ) {
+
+        const cardElement =
+
+          playerCards.querySelector(
+
+            `.game-card[data-index="${index}"]`
+
+          );
+
+        await startDeadEffect(
+
+          cardElement,
+
+          "CPU"
+
+        );
+
+        return;
+
+      }
+
+      const remainingCards = playerDeck.filter(
+
+  card => !card.opened
+
+);
+
+if (
+
+  remainingCards.length === 1 &&
+
+  remainingCards[0].type === "DEAD"
+
+) {
+
+  startDangerMode();
+
+}
+
+      status.textContent =
+
+        "ALIVE";
+
+      await wait(
+
+        500
+
+      );
+
+      status.textContent =
+
+        "ROLL THE DICE";
+
+      rollButton.disabled =
+
+        false;
+
+    }
+
+/* DTG HEARTBEAT TIMING */
+
+const heartbeatTimes = [
+
+  0.26, 0.62,
+
+  1.64, 2.01,
+
+  3.10, 3.46,
+
+  4.58, 5.00,
+
+  6.14, 6.53,
+
+  7.67, 8.05,
+
+  9.35, 9.69,
+
+  10.99, 11.37,
+
+  12.60, 13.04,
+
+  14.19, 14.60,
+
+  15.83, 16.27
+
+];
+
+/* DTG CANVAS ECG */
+
+const ecgCanvas = document.getElementById("ecgCanvas");
+
+const ecgCtx = ecgCanvas.getContext("2d");
+
+let ecgAnimationFrame = null;
+
+let ecgLastFrame = 0;
+
+let ecgScroll = 0;
+
+let ecgPulseStart = -1000;
+
+let ecgPulsePower = 0;
+
+function ecgVariation(index) {
+
+  const v = Math.sin(index * 127.1 + 19.19) * 43758.5453;
+
+  return v - Math.floor(v);
+
+}
+
+function ecgNormalWave(position) {
+
+  const beat = Math.floor(position / 92);
+
+  const phase = ((position % 92) + 92) % 92;
+
+  const scale = 0.65 + ecgVariation(beat) * 0.6;
+
+  const points = [
+
+    [0, 0], [15, 0], [22, -4], [28, 0],
+
+    [38, 0], [43, 5], [48, -17], [53, 19],
+
+    [59, 0], [92, 0]
+
+  ];
+
+  for (let i = 1; i < points.length; i++) {
+
+    if (phase <= points[i][0]) {
+
+      const [x0, y0] = points[i - 1];
+
+      const [x1, y1] = points[i];
+
+      return (
+
+        y0 + (y1 - y0) *
+
+        (phase - x0) / (x1 - x0)
+
+      ) * scale;
+
+    }
+
+  }
+
+  return 0;
+
+}
+
+function ecgCenterWave(dx) {
+
+  const points = [
+
+    [-90, 0], [-60, 0], [-35, -0.06],
+
+    [-21, 0.10], [-10, -0.18],
+
+    [0, -1], [17, 1], [32, 0], [90, 0]
+
+  ];
+
+  if (dx < -90 || dx > 90) return 0;
+
+  for (let i = 1; i < points.length; i++) {
+
+    if (dx <= points[i][0]) {
+
+      const [x0, y0] = points[i - 1];
+
+      const [x1, y1] = points[i];
+
+      return y0 + (y1 - y0) *
+
+        (dx - x0) / (x1 - x0);
+
+    }
+
+  }
+
+  return 0;
+
+}
+
+function drawEcg(now) {
+
+  if (!dangerMode || gameOver) {
+
+    ecgAnimationFrame = null;
+
+    return;
+
+  }
+
+  const elapsed = ecgLastFrame
+
+    ? Math.min(now - ecgLastFrame, 50)
+
+    : 0;
+
+  ecgLastFrame = now;
+
+  ecgScroll += elapsed * 0.09;
+
+  const bounds = ecgCanvas.getBoundingClientRect();
+
+  const w = bounds.width;
+
+  const h = bounds.height;
+
+  if (w && h) {
+
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    const pw = Math.round(w * dpr);
+
+    const ph = Math.round(h * dpr);
+
+    if (ecgCanvas.width !== pw || ecgCanvas.height !== ph) {
+
+      ecgCanvas.width = pw;
+
+      ecgCanvas.height = ph;
+
+    }
+
+    ecgCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    ecgCtx.clearRect(0, 0, w, h);
+
+    const age = now - ecgPulseStart;
+
+    const envelope = age >= 0 && age < 280
+
+      ? Math.pow(Math.sin(Math.PI * age / 280), 0.75)
+
+      : 0;
+
+    const strength = ecgPulsePower * envelope;
+
+    const bigAmplitude = Math.min(h * 0.38, 260);
+
+    const center = w / 2;
+
+    ecgCtx.beginPath();
+
+    for (let x = 0; x <= w + 2; x += 2) {
+
+      const dx = x - center;
+
+      const normal = ecgNormalWave(x + ecgScroll);
+
+      const nearCenter = Math.max(0, 1 - Math.abs(dx) / 90);
+
+      const weight = strength * nearCenter;
+
+      const y = h / 2
+
+        + normal * (1 - weight)
+
+        + ecgCenterWave(dx) * bigAmplitude * strength;
+
+      if (x === 0) ecgCtx.moveTo(x, y);
+
+      else ecgCtx.lineTo(x, y);
+
+    }
+
+    ecgCtx.strokeStyle = "#e00000";
+
+    ecgCtx.lineWidth = 2.5;
+
+    ecgCtx.lineJoin = "round";
+
+    ecgCtx.shadowColor = "#ff2020";
+
+    ecgCtx.shadowBlur = 7;
+
+    ecgCtx.stroke();
+
+  }
+
+  ecgAnimationFrame = requestAnimationFrame(drawEcg);
+
+}
+
+function startEcgCanvas() {
+
+  if (ecgAnimationFrame !== null) {
+
+    cancelAnimationFrame(ecgAnimationFrame);
+
+  }
+
+  ecgLastFrame = 0;
+
+  ecgScroll = 0;
+
+  ecgPulsePower = 0;
+
+  ecgAnimationFrame = requestAnimationFrame(drawEcg);
+
+}
+
+function stopEcgCanvas() {
+
+  if (ecgAnimationFrame !== null) {
+
+    cancelAnimationFrame(ecgAnimationFrame);
+
+  }
+
+  ecgAnimationFrame = null;
+
+  ecgLastFrame = 0;
+
+  ecgCtx.clearRect(0, 0, ecgCanvas.width, ecgCanvas.height);
+
+}
+
+function pulseEcg(strong) {
+
+  ecgPulsePower = strong ? 1 : 0.28;
+
+  ecgPulseStart = performance.now();
+
+}
+
+function syncHeartbeat() {
+
+  if (!dangerMode || gameOver) {
+
+    return;
+
+  }
+
+  const time = heartbeatSound.currentTime;
+
+  if (time < previousHeartbeatTime - 0.5) {
+
+    heartbeatIndex = 0;
+
+  }
+
+  previousHeartbeatTime = time;
+
+  while (
+
+    heartbeatIndex < heartbeatTimes.length &&
+
+    time >= heartbeatTimes[heartbeatIndex]
+
+  ) {
+
+    const beatTime =
+
+      heartbeatTimes[heartbeatIndex];
+
+    if (time - beatTime < 0.12) {
+
+      pulseEcg(heartbeatIndex % 2 === 1);
+
+    }
+
+    heartbeatIndex++;
+
+  }
+
+  heartbeatFrame =
+
+    requestAnimationFrame(syncHeartbeat);
+
+}
+
+function startDangerAudio() {
+
+  stopDangerAudio();
+
+  heartbeatIndex = 0;
+
+  previousHeartbeatTime = 0;
+
+  heartbeatSound.currentTime = 0;
+
+  const promise = heartbeatSound.play();
+
+  if (promise && typeof promise.catch === "function") {
+
+    promise.catch(() => {});
+
+  }
+
+  heartbeatFrame =
+
+    requestAnimationFrame(syncHeartbeat);
+
+  playSound(heartMonitorSound);
+
+  heartMonitorTimer = setInterval(() => {
+
+    if (dangerMode && !gameOver) {
+
+      playSound(heartMonitorSound);
+
+    }
+
+  }, 1000);
+
+}
+
+function stopDangerAudio() {
+
+  clearInterval(heartMonitorTimer);
+
+  cancelAnimationFrame(heartbeatFrame);
+
+  clearTimeout(ecgPulseTimer);
+
+  heartMonitorTimer = null;
+
+  heartbeatFrame = null;
+
+  ecgPulseTimer = null;
+
+  heartbeatSound.pause();
+
+  heartMonitorSound.pause();
+
+  ecgLayer.classList.remove(
+
+    "beat-small",
+
+    "beat-large"
+
+  );
+
+}
+    
+  function startDangerMode() {
+
+  if (dangerMode) {
+
+    return;
+
+  }
+
+  dangerMode = true;
+
+  stopBgm();
+
+  dangerOverlay.classList.add("active");
+  
+  startEcgCanvas();
+    
+  ecgLayer.classList.add("active");
+
+  startDangerAudio();
+    
+}
+
+  function stopDangerMode() {
+
+  dangerMode = false;
+
+  stopDangerAudio();
+  stopEcgCanvas();
+  dangerOverlay.classList.remove("active");
+
+  ecgLayer.classList.remove("active");
+
+  if (!gameOver) {
+
+    startBgm();
+
+  }
+
+}
+    
+    function resetDeadEffect() {
+
+      deadFxOverlay.style.pointerEvents = "none";
+      
+      deadFxOverlay
+
+        .classList
+
+        .remove(
+
+          "active"
+
+        );
+
+      deadFxRed
+
+        .classList
+
+        .remove(
+
+          "show"
+
+        );
+
+      deadFxBullet
+
+        .classList
+
+        .remove(
+
+          "show"
+
+        );
+
+      deadFxResultText
+
+        .classList
+
+        .remove(
+
+          "show",
+
+          "lose",
+
+          "win"
+
+        );
+
+      deadFxCard.style.transition =
+
+        "none";
+
+      deadFxCard.style.left =
+
+        "";
+
+      deadFxCard.style.top =
+
+        "";
+
+      deadFxCard.style.width =
+
+        "";
+
+      deadFxCard.style.height =
+
+        "";
+
+      deadFxCard.style.transform =
+
+        "";
+
+      deadFxBullet.style.left =
+
+        "";
+
+      deadFxBullet.style.top =
+
+        "";
+
+    }
+    
+     function updateDeadFxLayout(animate = false) {
+
+  if (!deadFxOverlay.classList.contains("active")) {
+
+    return;
+
+  }
+
+  const viewWidth = deadFxOverlay.clientWidth;
+
+  const viewHeight = deadFxOverlay.clientHeight;
+
+  const isPortrait = viewHeight > viewWidth;
+
+  const targetWidth = Math.min(
+
+    viewWidth * (isPortrait ? 0.68 : 0.90),
+
+    viewHeight * (isPortrait ? 0.70 : 0.85) * 63 / 88
+
+  );
+
+  const targetHeight = targetWidth * 88 / 63;
+
+  const targetLeft = (viewWidth - targetWidth) / 2;
+
+  const margin = viewHeight * 0.04;
+
+  const preferredTop =
+
+    viewHeight * (isPortrait ? 0.42 : 0.50)
+
+    - targetHeight / 2;
+
+  const targetTop = Math.max(
+
+    margin,
+
+    Math.min(
+
+      preferredTop,
+
+      viewHeight - targetHeight - margin
+
+    )
+
+  );
+
+  deadFxCard.style.transition = animate
+
+    ? "left 700ms ease-out, top 700ms ease-out, width 700ms ease-out, height 700ms ease-out, transform 700ms ease-out"
+
+    : "none";
+
+  deadFxCard.style.left = `${targetLeft}px`;
+
+  deadFxCard.style.top = `${targetTop}px`;
+
+  deadFxCard.style.width = `${targetWidth}px`;
+
+  deadFxCard.style.height = `${targetHeight}px`;
+
+  deadFxCard.style.transform = "translate(0, 0)";
+
+  deadFxBullet.style.left =
+
+    `${targetLeft + targetWidth / 2}px`;
+
+  deadFxBullet.style.top =
+
+    `${targetTop + targetHeight / 2}px`;
+
+}
+    
+    async function startDeadEffect(
+
+      cardElement,
+
+      winner
+
+    ) {
+
+      gameOver =
+
+        true;
+
+      rollButton.disabled =
+
+        true;
+
+      clearCpuSelection();
+
+      stopBgm();
+      stopDangerAudio();
+      stopEcgCanvas();
+      
+      dangerMode =
+
+        false;
+
+      dangerOverlay
+
+        .classList
+
+        .remove(
+
+          "active"
+
+        );
+
+      ecgLayer
+
+        .classList
+
+        .remove(
+
+          "active"
+
+        );
+
+      resetDeadEffect();
+
+      const rect =
+
+        cardElement
+
+          .getBoundingClientRect();
+
+      deadFxOverlay
+
+        .classList
+
+        .add(
+
+          "active"
+
+        );
+
+      const overlayBounds = deadFxOverlay.getBoundingClientRect();
+
+deadFxCard.style.left =
+
+  `${rect.left - overlayBounds.left}px`;
+
+deadFxCard.style.top =
+
+  `${rect.top - overlayBounds.top}px`;
+
+      deadFxCard.style.width =
+
+        `${rect.width}px`;
+
+      deadFxCard.style.height =
+
+        `${rect.height}px`;
+
+      deadFxCard.style.transform =
+
+        "translate(0, 0)";
+
+      await wait(
+
+        40
+
+      );
+
+      updateDeadFxLayout(true);
+      
+      await wait(
+
+        760
+
+      );
+
+      playSound(
+
+        gunClickSound
+
+      );
+
+      await wait(
+
+        1000
+
+      );
+
+     playSound(
+
+        gunShotSound
+
+      );
+
+      deadFxBullet
+
+        .classList
+
+        .add(
+
+          "show"
+
+        );
+
+      await wait(
+
+        350
+
+      );
+
+      if (winner === "CPU") {
+
+  deadFxRed.classList.add("show");
+
+  deadFxResultText.innerHTML =
+
+    '<img src="../images/doa-d-rogo.PNG" alt="DEAD">';
+
+  deadFxResultText.classList.add("lose", "show");
+
+} else {
+
+  deadFxResultText.innerHTML =
+
+    '<img src="../images/doa-w-rogo.PNG" alt="WIN">';
+
+  deadFxResultText.classList.add("win", "show");
+
+}
+      
+      await new Promise(resolve => {
+
+  deadFxOverlay.style.pointerEvents = "auto";
+
+  deadFxOverlay.addEventListener(
+
+    "click",
+
+    resolve,
+
+    { once: true }
+
+  );
+
+});
+
+resetDeadEffect();
+
+finishGame(winner);
+
+    }
+    
+    function syncDeadFxAfterRotation() {
+
+  if (!deadFxOverlay.classList.contains("active")) {
+
+    return;
+
+  }
+
+  requestAnimationFrame(() => {
+
+    updateDeadFxLayout(false);
+
+    setTimeout(() => {
+
+      updateDeadFxLayout(false);
+
+    }, 200);
+
+  });
+
+}
+
+window.addEventListener(
+
+  "resize",
+
+  syncDeadFxAfterRotation
+
+);
+
+window.addEventListener(
+
+  "orientationchange",
+
+  syncDeadFxAfterRotation
+
+);
+
+if (window.visualViewport) {
+
+  window.visualViewport.addEventListener(
+
+    "resize",
+
+    syncDeadFxAfterRotation
+
+  );
+
+}
+    
+    function finishGame(
+
+      winner
+
+    ) {
+
+      let loser;
+
+      let openedBonus;
+
+      if (
+
+        winner
+
+        === "PLAYER"
+
+      ) {
+
+        loser =
+
+          "CPU";
+
+        openedBonus =
+
+          playerOpenedCount;
+
+      } else {
+
+        loser =
+
+          "YOU";
+
+        openedBonus =
+
+          cpuOpenedCount;
+
+      }
+
+      const penalty =
+
+        1
+
+        + openedBonus;
+
+      resultTitle.textContent =
+
+        winner
+
+        === "PLAYER"
+
+          ? (gameMode === "VS" ? "PLAYER 1 WIN" : "YOU WIN")
+          : (gameMode === "VS" ? "PLAYER 2 WIN" : "YOU LOSE");
+
+      resultTitle.style.color =
+
+        winner
+
+        === "PLAYER"
+
+          ? "#fff"
+
+          : "#d00000";
+
+      resultPenalty.textContent =
+
+        `${penalty} SHOT${
+
+          penalty === 1
+
+            ? ""
+
+            : "S"
+
+        }`;
+
+      resultDetail.innerHTML =
+        `DEAD：1<br>`
+        + `OPENED：${openedBonus}<br>`
+        + `LOSER：${gameMode === "VS" ? (winner === "PLAYER" ? "PLAYER 2" : "PLAYER 1") : loser}`;
+
+      showScreen(
+
+        resultScreen
+
+      );
+
+    }  
+    
+    diceModeSelect
+      .addEventListener(
+
+        "change",
+
+        () => {
+
+          diceRollCount =
+
+            Number(
+
+              diceModeSelect.value
+
+            );
+
+        }
+
+      );
+
+    setupStartButton
+
+      .addEventListener(
+
+        "click",
+
+        () => {
+
+          aliveCount =
+
+            Number(
+
+              aliveCountSelect.value
+
+            );
+
+          totalCards =
+
+            aliveCount
+
+            + 1;
+
+          applyGameMode();
+          setupPlayer = 1;
+          setupTitle.textContent = gameMode === "VS" ? "PLAYER 1: SET YOUR DEAD" : "SET YOUR DEAD";
+          buildSetupCards();
+
+          showScreen(
+
+            setupScreen
+
+          );
+
+        }
+
+      );
+
+    randomButton
+
+      .addEventListener(
+
+        "click",
+
+        setVisibleRandom
+
+      );
+
+    blindRandomButton
+
+      .addEventListener(
+
+        "click",
+
+        setBlindRandom
+
+      );
+
+    confirmSetupButton
+      .addEventListener("click", () => {
+        if (gameMode !== "VS") {
+          prepareGame();
+          return;
+        }
+        if (setupPlayer === 1) {
+          p1DeadIndex = selectedDeadIndex;
+          p1BlindMode = blindMode;
+          showHandoff("PASS TO PLAYER 2", () => {
+            setupPlayer = 2;
+            setupTitle.textContent = "PLAYER 2: SET YOUR DEAD";
+            buildSetupCards();
+            showScreen(setupScreen);
+          });
+        } else {
+          p2DeadIndex = selectedDeadIndex;
+          p2BlindMode = blindMode;
+          selectedDeadIndex = p1DeadIndex;
+          blindMode = p1BlindMode;
+          showHandoff("PLACE PHONE BETWEEN PLAYERS", prepareGame);
+        }
+      });
+
+    setupBackButton
+
+      .addEventListener(
+
+        "click",
+
+        () => {
+
+          showScreen(
+
+            settingsScreen
+
+          );
+
+        }
+
+      );
+
+    rollButton
+
+      .addEventListener(
+
+        "click",
+
+        rollRound
+
+      );
+
+    retryButton
+
+      .addEventListener(
+
+        "click",
+
+        () => {
+
+          resetDeadEffect();
+          setupPlayer = 1;
+          setupTitle.textContent = gameMode === "VS" ? "PLAYER 1: SET YOUR DEAD" : "SET YOUR DEAD";
+          buildSetupCards();
+
+          showScreen(
+
+            setupScreen
+
+          );
+
+        }
+
+      );
+
+    settingsButton
+
+      .addEventListener(
+
+        "click",
+
+        () => {
+
+          stopBgm();
+
+          resetDeadEffect();
+
+          showScreen(
+
+            settingsScreen
+
+          );
+
+        }
+
+      );
+
+    applyGameMode();
+  </script>
+
+</body>
+
+</html>
