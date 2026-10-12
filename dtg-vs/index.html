@@ -1601,6 +1601,120 @@ object-fit: contain;
 @media (orientation: landscape) {
   #gameScreen.vs-mode .game-wrap { min-height:0; height:100%; }
 }
+  
+
+/* DTG VS - DICE UI LAYOUT */
+
+#gameScreen.vs-mode .dice-zone {
+
+  display: grid;
+
+  grid-template-columns: 56px 110px;
+
+  grid-template-rows: auto 92px auto;
+
+  grid-template-areas:
+
+    ". p2"
+
+    "roll dice"
+
+    ". p1";
+
+  justify-content: center;
+
+  align-items: center;
+
+  column-gap: 14px;
+
+  row-gap: 10px;
+
+  width: fit-content;
+
+  max-width: 100%;
+
+  margin: 12px auto;
+
+  min-height: 0;
+
+}
+
+/* P2 RESULT - 180 DEGREE ROTATION */
+
+#gameScreen.vs-mode .dice-zone > .roll-result:last-child {
+
+  grid-area: p2;
+
+  transform: rotate(180deg);
+
+}
+
+/* P1 RESULT - NORMAL */
+
+#gameScreen.vs-mode .dice-zone > .roll-result:first-child {
+
+  grid-area: p1;
+
+}
+
+/* DICE AND BUTTON POSITION */
+
+#gameScreen.vs-mode .center-dice-area {
+
+  display: contents;
+
+}
+
+#gameScreen.vs-mode #centerDice {
+
+  grid-area: dice;
+
+  justify-self: center;
+
+}
+
+#gameScreen.vs-mode #rollButton {
+
+  grid-area: roll;
+
+  width: 52px;
+
+  height: 92px;
+
+  min-height: 0;
+
+  margin: 0;
+
+  padding: 8px;
+
+  writing-mode: vertical-rl;
+
+  text-orientation: upright;
+
+  letter-spacing: 2px;
+
+  justify-self: center;
+
+}
+
+/* RESULT UI SIZE */
+
+#gameScreen.vs-mode .roll-result {
+
+  width: 110px;
+
+  min-height: 76px;
+
+  padding: 8px;
+
+}
+
+#gameScreen.vs-mode .roll-number {
+
+  font-size: 32px;
+
+}
+    
   </style>
 
 </head>
