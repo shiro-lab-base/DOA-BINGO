@@ -3846,6 +3846,23 @@ playSound(diceRollSound);
 
       }
 
+　　　const remainingCards = cpuDeck.filter(
+
+  card => !card.opened
+
+);
+
+if (
+
+  remainingCards.length === 1 &&
+
+  remainingCards[0].type === "DEAD"
+
+) {
+
+  startDangerMode();
+
+}
       status.textContent =
 
         "ALIVE";
