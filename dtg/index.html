@@ -1575,6 +1575,18 @@ object-fit: contain;
 
 }
   
+/* DTG SHARED SETTINGS BACKGROUND */
+
+#settingsScreen {
+
+  background-image: url("../images/doa-vs-back.PNG");
+
+  background-position: center;
+
+  background-size: cover;
+
+}
+    
   </style>
 
 </head>
@@ -1653,6 +1665,55 @@ object-fit: contain;
 
       </div>
 
+<h2 style="text-align:left; margin-top:30px; font-size:20px;">
+
+  PENALTY
+
+</h2>
+
+<div class="setting-box">
+
+  <label for="deadPenalty">
+
+    DEAD CARD（DEADを引いた罰杯数）
+
+  </label>
+
+  <select id="deadPenalty">
+
+    <option value="1" selected>1 SHOT</option>
+
+    <option value="2">2 SHOTS</option>
+
+    <option value="3">3 SHOTS</option>
+
+  </select>
+
+</div>
+
+<div class="setting-box">
+
+  <label for="openedPenalty">
+
+    PER OPENED CARD（開封1枚あたりの罰杯数）
+
+  </label>
+
+  <select id="openedPenalty">
+
+    <option value="0">0 SHOT</option>
+
+    <option value="0.5">0.5 SHOT</option>
+
+    <option value="1" selected>1 SHOT</option>
+
+    <option value="2">2 SHOTS</option>
+
+    <option value="3">3 SHOTS</option>
+
+  </select>
+
+</div>
       <button
 
         id="setupStartButton"
@@ -4623,11 +4684,17 @@ if (window.visualViewport) {
 
       }
 
-      const penalty =
+      const deadPenalty =
 
-        1
+  Number(document.getElementById("deadPenalty").value);
 
-        + openedBonus;
+const openedPenalty =
+
+  Number(document.getElementById("openedPenalty").value);
+
+const penalty =
+
+  deadPenalty + openedBonus * openedPenalty;
 
       resultTitle.textContent =
 
@@ -4661,13 +4728,13 @@ if (window.visualViewport) {
 
         }`;
 
-      resultDetail.innerHTML =
+resultDetail.innerHTML =
 
-        `DEAD：1<br>`
+  `DEAD：${deadPenalty}<br>`
 
-        + `OPENED：${openedBonus}<br>`
+  + `OPENED：${openedBonus} × ${openedPenalty}<br>`
 
-        + `LOSER：${loser}`;
+  + `LOSER：${loser}`;
 
       showScreen(
 
@@ -4704,9 +4771,23 @@ if (window.visualViewport) {
 
         () => {
 
-if (document.getElementById("gameMode").value === "VS") {
+   if (document.getElementById("gameMode").value === "VS") {
 
-  window.location.href = "../dtg-vs/";
+  const params = new URLSearchParams({
+
+    mode: "VS",
+
+    alive: aliveCountSelect.value,
+
+    dice: diceModeSelect.value,
+
+    dead: document.getElementById("deadPenalty").value,
+
+    opened: document.getElementById("openedPenalty").value
+
+  });
+
+  window.location.href = "../dtg-vs/?" + params.toString();
 
   return;
 
@@ -4840,6 +4921,48 @@ if (document.getElementById("gameMode").value === "VS") {
 
       );
 
+/* Restore shared DTG settings */
+
+const sharedParams = new URLSearchParams(window.location.search);
+
+const sharedFields = {
+
+  mode: document.getElementById("gameMode"),
+
+  alive: aliveCountSelect,
+
+  dice: diceModeSelect,
+
+  dead: document.getElementById("deadPenalty"),
+
+  opened: document.getElementById("openedPenalty")
+
+};
+
+for (const [key, select] of Object.entries(sharedFields)) {
+
+  const requested = sharedParams.get(key);
+
+  if (
+
+    requested !== null &&
+
+    Array.from(select.options).some(
+
+      option => option.value === requested
+
+    )
+
+  ) {
+
+    select.value = requested;
+
+  }
+
+}
+
+diceRollCount = Number(diceModeSelect.value);
+    
   </script>
 
 </body>
