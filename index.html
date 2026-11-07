@@ -4736,41 +4736,33 @@ if (penaltyType === "RANDOM") {
 
     );
 
-    titleStartButton.addEventListener(
+    const dbSelectButton = document.getElementById("dbSelectButton");
 
-      "click",
+    dbSelectButton.addEventListener("click", async () => {
 
-      async () => {
+      await resumeDealAudio();
 
-        await resumeDealAudio();
+      startBgm();
 
-        startBgm();
+      showScreen(settingsScreen);
 
-        showScreen(
+    });
 
-          settingsScreen
+    titleStartButton.addEventListener("click", () => {
 
-        );
+      pauseBgm();
 
-      }
+      window.location.href = "dtg/";
 
-    );
+    });
 
-    backTitleButton.addEventListener(
+    backTitleButton.addEventListener("click", () => {
 
-      "click",
+      pauseBgm();
 
-      () => {
+      showScreen(titleScreen);
 
-        showScreen(
-
-          titleScreen
-
-        );
-
-      }
-
-    );
+    });
 
     gameStartButton.addEventListener(
 
