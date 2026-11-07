@@ -1602,104 +1602,59 @@ object-fit: contain;
   #gameScreen.vs-mode .game-wrap { min-height:0; height:100%; }
 }
   
-
-/* DTG VS - DICE UI LAYOUT */
+/* DTG VS - TWO INDEPENDENT ROLL CONTROLS */
 
 #gameScreen.vs-mode .dice-zone {
 
-  display: grid;
+  display: flex;
 
-  grid-template-columns: 56px 110px;
-
-  grid-template-rows: auto 92px auto;
-
-  grid-template-areas:
-
-    ". p2"
-
-    "roll dice"
-
-    ". p1";
-
-  justify-content: center;
+  flex-direction: column;
 
   align-items: center;
 
-  column-gap: 14px;
+  justify-content: center;
 
-  row-gap: 10px;
-
-  width: fit-content;
-
-  max-width: 100%;
-
-  margin: 12px auto;
+  width: 100%;
 
   min-height: 0;
 
+  gap: 10px;
+
+  margin: 12px auto;
+
 }
 
-/* P2 RESULT - 180 DEGREE ROTATION */
+/* Independent player controls */
 
-#gameScreen.vs-mode .dice-zone > .roll-result:last-child {
+#gameScreen.vs-mode .vs-roll-row {
 
-  grid-area: p2;
+  position: relative;
+
+  width: 268px;
+
+  height: 84px;
+
+  flex: none;
+
+}
+
+/* P2 faces the opposite direction */
+
+#gameScreen.vs-mode .vs-roll-row.p2-row {
 
   transform: rotate(180deg);
 
 }
 
-/* P1 RESULT - NORMAL */
+/* Result UI */
 
-#gameScreen.vs-mode .dice-zone > .roll-result:first-child {
+#gameScreen.vs-mode .vs-roll-row .roll-result {
 
-  grid-area: p1;
+  position: absolute;
 
-}
+  top: 0;
 
-/* DICE AND BUTTON POSITION */
-
-#gameScreen.vs-mode .center-dice-area {
-
-  display: contents;
-
-}
-
-#gameScreen.vs-mode #centerDice {
-
-  grid-area: dice;
-
-  justify-self: center;
-
-}
-
-#gameScreen.vs-mode #rollButton {
-
-  grid-area: roll;
-
-  width: 52px;
-
-  height: 92px;
-
-  min-height: 0;
-
-  margin: 0;
-
-  padding: 8px;
-
-  writing-mode: vertical-rl;
-
-  text-orientation: upright;
-
-  letter-spacing: 2px;
-
-  justify-self: center;
-
-}
-
-/* RESULT UI SIZE */
-
-#gameScreen.vs-mode .roll-result {
+  left: 79px;
 
   width: 110px;
 
@@ -1707,11 +1662,77 @@ object-fit: contain;
 
   padding: 8px;
 
+  text-align: center;
+
 }
 
-#gameScreen.vs-mode .roll-number {
+#gameScreen.vs-mode .vs-roll-row .roll-number {
 
   font-size: 32px;
+
+}
+
+/* ROLL button to the right of each result */
+
+#gameScreen.vs-mode .vs-roll-row .vs-roll-button {
+
+  position: absolute;
+
+  top: 9px;
+
+  left: 199px;
+
+  width: 66px;
+
+  height: 58px;
+
+  margin: 0;
+
+  padding: 0 4px;
+
+  border: 1px solid #fff;
+
+  border-radius: 8px;
+
+  background: rgba(0, 0, 0, 0.70);
+
+  color: #fff;
+
+  font-size: 13px;
+
+  font-weight: bold;
+
+  cursor: pointer;
+
+}
+
+#gameScreen.vs-mode .vs-roll-button:disabled {
+
+  opacity: 0.35;
+
+  cursor: default;
+
+}
+
+/* Shared central dice */
+
+#gameScreen.vs-mode .center-dice-area {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  min-width: 0;
+
+  width: 100%;
+
+}
+
+#gameScreen.vs-mode #centerDice {
+
+  flex: none;
 
 }
  
@@ -1972,55 +1993,41 @@ object-fit: contain;
 
       <div class="dice-zone">
 
-        <div class="roll-result">
+  <div class="vs-roll-row p2-row">
 
-          <div class="roll-label" id="leftRollLabel">YOU</div>
+    <div class="roll-result">
 
-          <div
+      <div class="roll-label" id="rightRollLabel">P2</div>
 
-            id="playerRollDisplay"
+      <div id="cpuRollDisplay" class="roll-number">-</div>
 
-            class="roll-number"
+    </div>
 
-          >
+    <button id="p2RollButton" class="vs-roll-button" type="button">ROLL</button>
 
-            -
+  </div>
 
-          </div>
+  <div class="center-dice-area">
 
-        </div>
+    <div id="centerDice"></div>
 
-        <div class="center-dice-area">
+  </div>
 
-          <div id="centerDice"></div>
+  <div class="vs-roll-row p1-row">
 
-          <button id="rollButton">
+    <div class="roll-result">
 
-            ROLL
+      <div class="roll-label" id="leftRollLabel">P1</div>
 
-          </button>
+      <div id="playerRollDisplay" class="roll-number">-</div>
 
-        </div>
+    </div>
 
-        <div class="roll-result">
+    <button id="p1RollButton" class="vs-roll-button" type="button">ROLL</button>
 
-          <div class="roll-label" id="rightRollLabel">CPU</div>
+  </div>
 
-          <div
-
-            id="cpuRollDisplay"
-
-            class="roll-number"
-
-          >
-
-            -
-
-          </div>
-
-        </div>
-
-      </div>
+</div>
 
       <div id="status">
 
@@ -2343,13 +2350,9 @@ object-fit: contain;
 
       );
 
-    const rollButton =
+    const p1RollButton = document.getElementById("p1RollButton");
 
-      document.getElementById(
-
-        "rollButton"
-
-      );
+    const p2RollButton = document.getElementById("p2RollButton");
 
     const playerRollDisplay =
 
@@ -2569,7 +2572,13 @@ const heartMonitorSound =
     let cpuRoll = 0;
 
     let rolling = false;
+　　
+    let rollPhase = "rolling";
 
+    let p1RollsDone = 0;
+
+　　　let p2RollsDone = 0;
+    
     let playerOpenedCount = 0;
 
     let cpuOpenedCount = 0;
@@ -3287,23 +3296,9 @@ function renderGameCards() {
 
         );
 
-      playerRollDisplay.textContent =
+      resetVsRollTurn();
 
-        "-";
-
-      cpuRollDisplay.textContent =
-
-        "-";
-
-      renderDiceFace(1);
-
-      rollButton.disabled =
-
-        false;
-
-      status.textContent =
-
-        "ROLL THE DICE";
+　　　　renderDiceFace(1);
 
       buildDecks();
 
@@ -3425,242 +3420,145 @@ playSound(diceRollSound);
   renderDiceFace(finalValue);
 }
 
-    async function rollRound() {
+function updateVsRollButtons() {
 
-      if (
+  const canRoll = !gameOver && !rolling && rollPhase === "rolling";
 
-        rolling
+  p1RollButton.disabled = !canRoll || p1RollsDone >= diceRollCount;
 
-        || gameOver
+  p2RollButton.disabled = !canRoll || p2RollsDone >= diceRollCount;
 
-      ) {
+}
 
-        return;
+function resetVsRollTurn() {
 
-      }
+  playerRoll = 0;
 
-      rolling =
+  cpuRoll = 0;
 
-        true;
+  p1RollsDone = 0;
 
-      rollButton.disabled =
+  p2RollsDone = 0;
 
-        true;
+  rolling = false;
 
-      clearCpuSelection();
+  rollPhase = "rolling";
 
-      playerRollDisplay.textContent =
+  playerRollDisplay.textContent = "-";
 
-        "-";
+  cpuRollDisplay.textContent = "-";
 
-      cpuRollDisplay.textContent =
+  status.textContent = "ROLL THE DICE";
 
-        "-";
+  updateVsRollButtons();
 
-      playerRoll =
+}
 
-        0;
+async function rollForPlayer(playerNumber) {
 
-      cpuRoll =
+  if (gameOver || rolling || rollPhase !== "rolling") return;
 
-        0;
+  const isP1 = playerNumber === 1;
 
-      for (
+  if (isP1 ? p1RollsDone >= diceRollCount : p2RollsDone >= diceRollCount) {
 
-        let i = 1;
+    return;
 
-        i <= diceRollCount;
+  }
 
-        i++
+  rolling = true;
 
-      ) {
+  updateVsRollButtons();
 
-        status.textContent =
+  clearCpuSelection();
 
-          diceRollCount === 1
+  clearPlayerSelection();
 
-            ? (gameMode === "VS" ? "PLAYER 1 ROLL" : "YOU ROLL")
-            : `${gameMode === "VS" ? "PLAYER 1" : "YOU"} ROLL ${i}/2`;
+  const nextRoll = (isP1 ? p1RollsDone : p2RollsDone) + 1;
 
-       renderDiceFace(1); 
+  status.textContent = diceRollCount === 1
 
-        const roll =
+    ? `PLAYER ${playerNumber} ROLL`
 
-          randomDice();
+    : `PLAYER ${playerNumber} ROLL ${nextRoll}/${diceRollCount}`;
 
-        await animateDice(
+  renderDiceFace(1);
 
-          roll
+  const value = randomDice();
 
-        );
+  await animateDice(value);
 
-        playerRoll +=
+  if (isP1) {
 
-          roll;
+    playerRoll += value;
 
-        playerRollDisplay.textContent =
+    p1RollsDone++;
 
-          playerRoll;
+    playerRollDisplay.textContent = String(playerRoll);
 
-        if (
+  } else {
 
-          i < diceRollCount
+    cpuRoll += value;
 
-        ) {
+    p2RollsDone++;
 
-          await wait(
+    cpuRollDisplay.textContent = String(cpuRoll);
 
-            550
+  }
 
-          );
+  const p1Finished = p1RollsDone >= diceRollCount;
 
-        }
+  const p2Finished = p2RollsDone >= diceRollCount;
 
-      }
+  if (p1Finished && p2Finished) {
 
-      await wait(
+    rollPhase = "choosing";
 
-        600
+    updateVsRollButtons();
 
-      );
+    await wait(500);
 
-      for (
+    if (playerRoll === cpuRoll) {
 
-        let i = 1;
+      status.textContent = "DRAW - ROLL AGAIN";
 
-        i <= diceRollCount;
+      await wait(550);
 
-        i++
+      resetVsRollTurn();
 
-      ) {
-
-        status.textContent =
-
-          diceRollCount === 1
-
-            ? (gameMode === "VS" ? "PLAYER 2 ROLL" : "CPU ROLL")
-            : `${gameMode === "VS" ? "PLAYER 2" : "CPU"} ROLL ${i}/2`;
-
-       renderDiceFace(1); 
-
-        const roll =
-
-          randomDice();
-
-        await animateDice(
-
-          roll
-
-        );
-
-        cpuRoll +=
-
-          roll;
-
-        cpuRollDisplay.textContent =
-
-          cpuRoll;
-
-        if (
-
-          i < diceRollCount
-
-        ) {
-
-          await wait(
-
-            550
-
-          );
-
-        }
-
-      }
-
-      await wait(
-
-        500
-
-      );
-
-      if (
-
-        playerRoll
-
-        === cpuRoll
-
-      ) {
-
-        status.textContent =
-
-          "DRAW - ROLL AGAIN";
-
-        rolling =
-
-          false;
-
-        rollButton.disabled =
-
-          false;
-
-        return;
-
-      }
-
-      if (
-
-        playerRoll
-
-        > cpuRoll
-
-      ) {
-
-        status.textContent =
-
-          gameMode === "VS" ? "PLAYER 1: CHOOSE P2 CARD" : "CHOOSE CPU CARD";
-
-        rolling =
-
-          false;
-
-        enableCpuSelection();
-
-        return;
-
-      }
-
-      status.textContent =
-
-        gameMode === "VS" ? "PLAYER 2: CHOOSE P1 CARD" : "CPU CHOOSES";
-      if (gameMode === "VS") {
-        rolling = false;
-        enablePlayerSelection();
-        return;
-      }
-
-      if (
-
-        dangerMode
-
-      ) {
-
-        stopDangerMode();
-
-      }
-
-      await wait(
-
-        650
-
-      );
-
-      cpuChoosePlayerCard();
-
-      rolling =
-
-        false;
+      return;
 
     }
+
+    rolling = false;
+
+    updateVsRollButtons();
+
+    if (playerRoll > cpuRoll) {
+
+      status.textContent = "PLAYER 1: CHOOSE P2 CARD";
+
+      enableCpuSelection();
+
+    } else {
+
+      status.textContent = "PLAYER 2: CHOOSE P1 CARD";
+
+      enablePlayerSelection();
+
+    }
+
+    return;
+
+  }
+
+  rolling = false;
+
+  status.textContent = "ROLL THE DICE";
+
+  updateVsRollButtons();
+
+}
 
     function enableCpuSelection() {
 
@@ -3877,9 +3775,7 @@ if (
 
         "ROLL THE DICE";
 
-      rollButton.disabled =
-
-        false;
+      resetVsRollTurn();
 
     }
 
@@ -3921,7 +3817,7 @@ if (
       status.textContent = "ALIVE";
       await wait(500);
       status.textContent = "ROLL THE DICE";
-      rollButton.disabled = false;
+      resetVsRollTurn();
     }
 
     async function cpuChoosePlayerCard() {
@@ -4062,9 +3958,7 @@ if (
 
         "ROLL THE DICE";
 
-      rollButton.disabled =
-
-        false;
+      resetVsRollTurn();
 
     }
 
@@ -4660,9 +4554,9 @@ function stopDangerAudio() {
 
         true;
 
-      rollButton.disabled =
+      rollPhase = "choosing";
 
-        true;
+　　　　updateVsRollButtons();
 
       clearCpuSelection();
 
@@ -5104,10 +4998,10 @@ resultDetail.innerHTML =
         }
 
       );
+p1RollButton.addEventListener("click", () => rollForPlayer(1));
 
-    rollButton
-
-      .addEventListener(
+p2RollButton.addEventListener("click", () => rollForPlayer(2));
+    (
 
         "click",
 
