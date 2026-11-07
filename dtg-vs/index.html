@@ -1753,7 +1753,16 @@ object-fit: contain;
   transform-origin: center center;
 
 }   
-    
+  
+/* DTG VS - P2 RESULT ROTATION */
+
+#resultScreen.p2-lose .result-box {
+
+  transform: rotate(180deg);
+
+  transform-origin: center center;
+
+}  
   </style>
 
 </head>
@@ -4834,24 +4843,17 @@ const penalty =
 
   deadPenalty + openedBonus * openedPenalty;
 
-      resultTitle.textContent =
+const p2Lose = winner === "PLAYER";
 
-        winner
+resultTitle.textContent = p2Lose
 
-        === "PLAYER"
+  ? "PLAYER 2 LOSE"
 
-          ? (gameMode === "VS" ? "PLAYER 1 WIN" : "YOU WIN")
-          : (gameMode === "VS" ? "PLAYER 2 WIN" : "YOU LOSE");
+  : "PLAYER 1 LOSE";
 
-      resultTitle.style.color =
+resultTitle.style.color = "#d00000";
 
-        winner
-
-        === "PLAYER"
-
-          ? "#fff"
-
-          : "#d00000";
+resultScreen.classList.toggle("p2-lose", p2Lose);
 
       resultPenalty.textContent =
 
