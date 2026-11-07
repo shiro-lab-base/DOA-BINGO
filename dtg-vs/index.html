@@ -5144,25 +5144,7 @@ dtgPenaltyBox.innerHTML = `
 
     </div>
 
-    <div class="setting-box">
-
-      <label for="dtgRandomOpened">PER OPENED CARD（追加抽選回数）</label>
-
-      <select id="dtgRandomOpened">
-
-        <option value="0">0</option>
-
-        <option value="1">1</option>
-
-        <option value="2">2</option>
-
-        <option value="3">3</option>
-
-      </select>
-
-    </div>
-
-    <p>最大8種類から罰数分抽選・重複あり。空欄は抽選対象外。</p>
+     <p>最大8種類から罰数分抽選・重複あり。空欄は抽選対象外。</p>
 
     <div id="dtgRandomInputs"></div>
 
@@ -5280,8 +5262,6 @@ function dtgPenaltySnapshot() {
 
     randomDead: document.getElementById("dtgRandomDead").value,
 
-    randomOpened: document.getElementById("dtgRandomOpened").value,
-
     random: dtgInputValues(dtgRandomInputs),
 
     level: dtgInputValues(dtgLevelInputs)
@@ -5311,12 +5291,6 @@ function dtgLoadPenaltySnapshot() {
     if (["1", "2", "3"].includes(saved.randomDead)) {
 
       document.getElementById("dtgRandomDead").value = saved.randomDead;
-
-    }
-
-    if (["0", "1", "2", "3"].includes(saved.randomOpened)) {
-
-      document.getElementById("dtgRandomOpened").value = saved.randomOpened;
 
     }
 
@@ -5438,9 +5412,7 @@ function renderDtgPenalty(openedBonus, loser) {
 
   if (settings.mode === "RANDOM") {
 
-    const count = Number(settings.randomDead)
-
-      + openedBonus * Number(settings.randomOpened);
+    const count = Number(settings.randomDead) + openedBonus; 
 
     const pool = settings.random.filter(Boolean);
 
