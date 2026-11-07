@@ -1762,7 +1762,114 @@ object-fit: contain;
 
   transform-origin: center center;
 
-}  
+}    
+
+/* CPU BATTLE dice display */
+
+#gameScreen:not(.vs-mode) .dice-zone {
+
+  display: grid;
+
+  grid-template-columns:
+
+    minmax(0, 1fr) auto minmax(0, 1fr);
+
+  align-items: center;
+
+  width: 100%;
+
+  max-width: 760px;
+
+}
+
+#gameScreen:not(.vs-mode) .vs-roll-row {
+
+  position: static;
+
+  width: auto;
+
+  height: auto;
+
+  transform: none;
+
+}
+
+#gameScreen:not(.vs-mode) .vs-roll-row.p1-row {
+
+  grid-column: 1;
+
+  grid-row: 1;
+
+}
+
+#gameScreen:not(.vs-mode) .center-dice-area {
+
+  grid-column: 2;
+
+  grid-row: 1;
+
+}
+
+#gameScreen:not(.vs-mode) .vs-roll-row.p2-row {
+
+  grid-column: 3;
+
+  grid-row: 1;
+
+}
+
+#gameScreen:not(.vs-mode) .vs-roll-row .roll-result {
+
+  position: static;
+
+  width: 100%;
+
+  min-height: 76px;
+
+  padding: 8px;
+
+}
+
+#gameScreen:not(.vs-mode) .vs-roll-button {
+
+  display: none;
+
+}
+
+#gameScreen.vs-mode #rollButton {
+
+  display: none;
+
+}
+
+#rollButton {
+
+  width: 120px;
+
+  min-height: 44px;
+
+  margin-top: 10px;
+
+  border: 1px solid #fff;
+
+  border-radius: 8px;
+
+  background: rgba(0, 0, 0, .7);
+
+  color: #fff;
+
+  font-weight: bold;
+
+}
+
+#rollButton:disabled {
+
+  opacity: .35;
+
+  cursor: default;
+
+}
+    
   </style>
 
 </head>
@@ -1777,15 +1884,23 @@ object-fit: contain;
 
   >
 
-    <div class="container">
+    <div class="container">    
 
-      <h1>DOA TARGET GUESS — VS</h1>
-      <div class="setting-box">
-        <label for="gameMode">GAME MODE</label>
-        <select id="gameMode">
-          <option value="VS" selected>VS MODE (2 PLAYERS)</option>
-        </select>
-      </div>
+<h1>DOA TARGET GUESS</h1>
+
+<div class="setting-box">
+
+  <label for="gameMode">GAME MODE</label>
+
+  <select id="gameMode">
+
+    <option value="CPU" selected>CPU BATTLE</option>
+
+    <option value="VS">VS MODE (2 PLAYERS)</option>
+
+  </select>
+
+</div>
 
       <div class="setting-box">
 
@@ -2014,7 +2129,7 @@ object-fit: contain;
       ></div>
       </div>
 
-      <div class="dice-zone">
+<div class="dice-zone">
 
   <div class="vs-roll-row p2-row">
 
@@ -2026,13 +2141,19 @@ object-fit: contain;
 
     </div>
 
-    <button id="p2RollButton" class="vs-roll-button" type="button">ROLL</button>
+    <button id="p2RollButton"
+
+            class="vs-roll-button"
+
+            type="button">ROLL</button>
 
   </div>
 
   <div class="center-dice-area">
 
     <div id="centerDice"></div>
+
+    <button id="rollButton" type="button">ROLL</button>
 
   </div>
 
@@ -2046,7 +2167,11 @@ object-fit: contain;
 
     </div>
 
-    <button id="p1RollButton" class="vs-roll-button" type="button">ROLL</button>
+    <button id="p1RollButton"
+
+            class="vs-roll-button"
+
+            type="button">ROLL</button>
 
   </div>
 
@@ -2539,6 +2664,8 @@ const heartMonitorSound =
   document.getElementById("heartMonitorSound");
     
     const gameModeSelect = document.getElementById("gameMode");
+
+const rollButton = document.getElementById("rollButton");
     const handoffScreen = document.getElementById("handoffScreen");
     const handoffText = document.getElementById("handoffText");
     const handoffButton = document.getElementById("handoffButton");
@@ -2547,7 +2674,7 @@ const heartMonitorSound =
     const bottomPlayerLabel = document.getElementById("bottomPlayerLabel");
     const leftRollLabel = document.getElementById("leftRollLabel");
     const rightRollLabel = document.getElementById("rightRollLabel");
-    let gameMode = "VS";
+    let gameMode = "CPU";
     let setupPlayer = 1;
     let p1DeadIndex = 0;
     let p1BlindMode = false;
@@ -3268,63 +3395,41 @@ function renderGameCards() {
 
     }
 
-    function prepareGame() {
+function prepareGame() {
 
-      stopDangerAudio();
-      stopEcgCanvas(); 
-      gameOver =
+  stopDangerAudio();
 
-        false;
+  stopEcgCanvas();
 
-      rolling =
+  gameOver = false;
 
-        false;
+  rolling = false;
 
-      playerOpenedCount =
+  playerOpenedCount = 0;
 
-        0;
+  cpuOpenedCount = 0;
 
-      cpuOpenedCount =
+  dangerMode = false;
 
-        0;
+  dangerOverlay.classList.remove("active");
 
-      dangerMode =
+  ecgLayer.classList.remove("active");
 
-        false;
+  resetVsRollTurn();
 
-      dangerOverlay
+  renderDiceFace(1);
 
-        .classList
+  rollButton.disabled = false;
 
-        .remove(
+  buildDecks();
 
-          "active"
+  renderGameCards();
 
-        );
+  showScreen(gameScreen);
 
-      ecgLayer
+  startBgm();
 
-        .classList
-
-        .remove(
-
-          "active"
-
-        );
-
-      resetVsRollTurn();
-
-　　　　renderDiceFace(1);
-
-      buildDecks();
-
-      renderGameCards();
-
-      showScreen(gameScreen);
-
-startBgm();
-
-    }
+}
 
     function randomDice() {
 
@@ -3436,6 +3541,108 @@ playSound(diceRollSound);
   renderDiceFace(finalValue);
 }
 
+async function rollRound() {
+
+  if (gameMode !== "CPU" || rolling || gameOver) return;
+
+  rolling = true;
+
+  rollButton.disabled = true;
+
+  clearCpuSelection();
+
+  playerRollDisplay.textContent = "-";
+
+  cpuRollDisplay.textContent = "-";
+
+  playerRoll = 0;
+
+  cpuRoll = 0;
+
+  for (let i = 1; i <= diceRollCount; i++) {
+
+    status.textContent = diceRollCount === 1
+
+      ? "YOU ROLL"
+
+      : `YOU ROLL ${i}/2`;
+
+    renderDiceFace(1);
+
+    const roll = randomDice();
+
+    await animateDice(roll);
+
+    playerRoll += roll;
+
+    playerRollDisplay.textContent = playerRoll;
+
+    if (i < diceRollCount) await wait(550);
+
+  }
+
+  await wait(600);
+
+  for (let i = 1; i <= diceRollCount; i++) {
+
+    status.textContent = diceRollCount === 1
+
+      ? "CPU ROLL"
+
+      : `CPU ROLL ${i}/2`;
+
+    renderDiceFace(1);
+
+    const roll = randomDice();
+
+    await animateDice(roll);
+
+    cpuRoll += roll;
+
+    cpuRollDisplay.textContent = cpuRoll;
+
+    if (i < diceRollCount) await wait(550);
+
+  }
+
+  await wait(500);
+
+  if (playerRoll === cpuRoll) {
+
+    status.textContent = "DRAW - ROLL AGAIN";
+
+    rolling = false;
+
+    rollButton.disabled = false;
+
+    return;
+
+  }
+
+  if (playerRoll > cpuRoll) {
+
+    status.textContent = "CHOOSE CPU CARD";
+
+    rolling = false;
+
+    enableCpuSelection();
+
+    return;
+
+  }
+
+  status.textContent = "CPU CHOOSES";
+
+  if (dangerMode) stopDangerMode();
+
+  await wait(650);
+
+  cpuChoosePlayerCard();
+
+  rolling = false;
+
+}
+    
 function updateVsRollButtons() {
 
   const canRoll = !gameOver && !rolling && rollPhase === "rolling";
@@ -3758,8 +3965,30 @@ async function rollForPlayer(playerNumber) {
 
         return;
 
-      }
+      } 
 
+if (gameMode === "VS") {
+
+  const remainingCards = cpuDeck.filter(
+
+    card => !card.opened
+
+  );
+
+  if (
+
+    remainingCards.length === 1 &&
+
+    remainingCards[0].type === "DEAD"
+
+  ) {
+
+    startDangerMode();
+
+  }
+
+}
+      
 　　　const remainingCards = cpuDeck.filter(
 
   card => !card.opened
@@ -3787,13 +4016,13 @@ if (
 
       );
 
-      status.textContent =
+      status.textContent = "ROLL THE DICE";
 
-        "ROLL THE DICE";
+if (gameMode === "VS") resetVsRollTurn();
 
-      resetVsRollTurn();
+else rollButton.disabled = false;
 
-    }
+}
 
     function enablePlayerSelection() {
       playerCards.querySelectorAll(".game-card").forEach(button => {
@@ -3970,11 +4199,11 @@ if (
 
       );
 
-      status.textContent =
+      status.textContent = "ROLL THE DICE";
 
-        "ROLL THE DICE";
+if (gameMode === "VS") resetVsRollTurn();
 
-      resetVsRollTurn();
+else rollButton.disabled = false;
 
     }
 
@@ -4606,11 +4835,11 @@ function stopDangerAudio() {
 
       resetDeadEffect();
 
-deadFxOverlay.classList.toggle(
+  deadFxOverlay.classList.toggle(
 
   "p2-loss",
 
-  winner === "PLAYER"
+  gameMode === "VS" && winner === "PLAYER"
 
 );
       
@@ -4632,7 +4861,7 @@ deadFxOverlay.classList.toggle(
 
       const overlayBounds = deadFxOverlay.getBoundingClientRect();
 
-const p2Loss = winner === "PLAYER";
+   const p2Loss = gameMode === "VS" && winner === "PLAYER";
 
 deadFxCard.style.left = p2Loss
 
@@ -4706,15 +4935,13 @@ deadFxCard.style.top = p2Loss
 
       );
 
-      if (winner === "CPU") {
-
-  deadFxRed.classList.add("show");
+if (gameMode === "CPU" && winner === "PLAYER") {
 
   deadFxResultText.innerHTML =
 
-    '<img src="../images/doa-d-rogo.PNG" alt="DEAD">';
+    '<img src="../images/doa-w-rogo.PNG" alt="WIN">';
 
-  deadFxResultText.classList.add("lose", "show");
+  deadFxResultText.classList.add("win", "show");
 
 } else {
 
@@ -4798,105 +5025,43 @@ if (window.visualViewport) {
 
   );
 
-}
-    
-    function finishGame(
+}    
 
-      winner
+function finishGame(winner) {
 
-    ) {
+  const openedBonus = winner === "PLAYER"
 
-      let loser;
+    ? playerOpenedCount : cpuOpenedCount;
 
-      let openedBonus;
+  const vs = gameMode === "VS";
 
-      if (
+  const loser = vs
 
-        winner
+    ? (winner === "PLAYER" ? "PLAYER 2" : "PLAYER 1")
 
-        === "PLAYER"
+    : (winner === "PLAYER" ? "CPU" : "YOU");
 
-      ) {
+  resultTitle.textContent = vs
 
-        loser =
+    ? `${loser} LOSE`
 
-          "CPU";
+    : (winner === "PLAYER" ? "YOU WIN" : "YOU LOSE");
 
-        openedBonus =
+  resultTitle.style.color = (!vs && winner === "PLAYER")
 
-          playerOpenedCount;
+    ? "#fff" : "#d00000";
 
-      } else {
+  resultScreen.classList.toggle(
 
-        loser =
+    "p2-lose",
 
-          "YOU";
+    vs && winner === "PLAYER"
 
-        openedBonus =
+  );
 
-          cpuOpenedCount;
+  renderDtgPenalty(openedBonus, loser);
 
-      }
-
-const deadPenalty =
-
-  Number(document.getElementById("deadPenalty").value);
-
-const openedPenalty =
-
-  Number(document.getElementById("openedPenalty").value);
-
-const penalty =
-
-  deadPenalty + openedBonus * openedPenalty;
-
-const p2Lose = winner === "PLAYER";
-
-resultTitle.textContent = p2Lose
-
-  ? "PLAYER 2 LOSE"
-
-  : "PLAYER 1 LOSE";
-
-resultTitle.style.color = "#d00000";
-
-resultScreen.classList.toggle("p2-lose", p2Lose);
-
-      renderDtgPenalty(
-
-  openedBonus,
-
-  winner === "PLAYER" ? "PLAYER 2" : "PLAYER 1"
-
-);
-      
-      showScreen(
-
-        resultScreen
-
-      );
-
-    }  
-    
-/* Return to shared DTG settings */
-
-function returnToSharedSettings() {
-
-  const params = new URLSearchParams({
-
-    mode: "VS",
-
-    alive: aliveCountSelect.value,
-
-    dice: diceModeSelect.value,
-
-    dead: document.getElementById("deadPenalty").value,
-
-    opened: document.getElementById("openedPenalty").value
-
-  });
-
-  window.location.href = "../dtg/?" + params.toString();
+  showScreen(resultScreen);
 
 }
     
@@ -5000,13 +5165,13 @@ function returnToSharedSettings() {
         }
       });
 
-   setupBackButton.addEventListener(
+   setupBackButton.addEventListener("click", () => {
 
-  "click",
+  showScreen(settingsScreen);
 
-  returnToSharedSettings
-
-);
+});
+    
+ rollButton.addEventListener("click", rollRound);
     
 p1RollButton.addEventListener("click", () => rollForPlayer(1));
 
@@ -5037,73 +5202,21 @@ p2RollButton.addEventListener("click", () => rollForPlayer(2));
 
    settingsButton.addEventListener("click", () => {
 
-  stopBgm();
+  stopDangerAudio();
+
+  stopEcgCanvas();
 
   resetDeadEffect();
 
-  returnToSharedSettings();
+  resultScreen.classList.remove("p2-lose");
+
+  showScreen(settingsScreen);
+
+  startBgm();
 
 });
 
 applyGameMode();
-
-/* Receive settings and open P1 DEAD SET */
-
-const incomingSettings =
-
-  new URLSearchParams(window.location.search);
-
-if (incomingSettings.get("mode") === "VS") {
-
-  const incomingFields = {
-
-    alive: aliveCountSelect,
-
-    dice: diceModeSelect,
-
-    dead: document.getElementById("deadPenalty"),
-
-    opened: document.getElementById("openedPenalty")
-
-  };
-
-  for (const [key, select] of Object.entries(incomingFields)) {
-
-    const requested = incomingSettings.get(key);
-
-    if (
-
-      requested !== null &&
-
-      Array.from(select.options).some(
-
-        option => option.value === requested
-
-      )
-
-    ) {
-
-      select.value = requested;
-
-    }
-
-  }
-
-  diceRollCount = Number(diceModeSelect.value);
-
-  aliveCount = Number(aliveCountSelect.value);
-
-  totalCards = aliveCount + 1;
-
-  setupPlayer = 1;
-
-  setupTitle.textContent = "PLAYER 1: SET YOUR DEAD";
-
-  buildSetupCards();
-
-  showScreen(setupScreen);
-
-}
   
 /* DTG PENALTY: shared by CPU and VS */
 
