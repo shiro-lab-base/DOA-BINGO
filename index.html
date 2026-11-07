@@ -240,9 +240,9 @@
 
       text-align: center;
 
-    }
+    } 
 
-    .title-wrap h1 {
+    #titleScreen #dbSelectButton {
 
       position: absolute;
 
@@ -252,13 +252,17 @@
 
       transform: translate(-50%, -50%);
 
+      width: calc(100% - 60px);
+
       margin: 0;
 
-      width: 100%;
+      padding: 8px 0;
 
-      font-size: 52px;
+      font-size: clamp(24px, 7vw, 38px);
 
-      letter-spacing: 4px;
+      font-weight: 900;
+
+      letter-spacing: 3px;
 
       color: #c00000;
 
@@ -269,6 +273,8 @@
         0 0 2px #000,
 
         0 0 6px rgba(0, 0, 0, 0.9);
+
+      cursor: pointer;
 
     }
 
@@ -292,7 +298,7 @@
 
       position: absolute;
 
-      top: 72%;
+      top: 68%;
 
       left: 50%;
 
@@ -302,11 +308,13 @@
 
       margin-top: 0;
 
-      font-size: 30px;
+      font-size: clamp(17px, 4.3vw, 24px);
+
+      letter-spacing: 1px;
 
       color: #fff;
 
-      -webkit-text-stroke: 1.5px #000;
+      -webkit-text-stroke: 1px #000;
 
       text-shadow:
 
@@ -1072,7 +1080,19 @@
 
     <div class="title-wrap">
 
-      <h1>DOA BINGO</h1>
+      <button
+
+        id="dbSelectButton"
+
+        class="main-button"
+
+        type="button"
+
+      >
+
+        DOA BINGO
+
+      </button>
 
       <button
 
@@ -1080,9 +1100,11 @@
 
         class="main-button"
 
+        type="button"
+
       >
 
-        START
+        DOA TARGET GUESS
 
       </button>
 
