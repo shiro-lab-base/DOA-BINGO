@@ -1851,7 +1851,19 @@
     let bingoPenalty = 1;
 
     let drinkType = "SHOT";
+    
+let penaltyType = "SHOT";
 
+let randomPenaltyEntries = [];
+
+let levelPenaltyEntries = Array.from(
+
+  { length: 5 },
+
+  () => []
+
+);
+    
     let bgmEnabled = true;
 
     let seEnabled = true;
@@ -2625,6 +2637,194 @@ function renderTurnOrder() {
 
 }
     
+/* DB CUSTOM PENALTY */
+
+const DB_LEVEL_RANGES = [
+
+  [1, 3],
+
+  [4, 6],
+
+  [7, 9],
+
+  [10, 11],
+
+  [12, 13]
+
+];
+
+function getDbLevel(count) {
+
+  return DB_LEVEL_RANGES.findIndex(
+
+    ([min, max]) => count >= min && count <= max
+
+  ) + 1;
+
+}
+
+function createPenaltyInput(container, placeholder) {
+
+  const input = document.createElement("input");
+
+  input.type = "text";
+
+  input.className = "penalty-input";
+
+  input.maxLength = 120;
+
+  input.placeholder = placeholder;
+
+  container.appendChild(input);
+
+  return input;
+
+}
+
+function initializeCustomPenaltyInputs() {
+
+  for (let i = 0; i < 8; i++) {
+
+    createPenaltyInput(
+
+      randomPenaltyInputs,
+
+      `PENALTY ${i + 1}`
+
+    );
+
+  }
+
+  for (let level = 1; level <= 5; level++) {
+
+    const title = document.createElement("div");
+
+    title.className = "penalty-level-heading";
+
+    const [min, max] = DB_LEVEL_RANGES[level - 1];
+
+    title.textContent = `LEVEL ${level}（${min}〜${max}）`;
+
+    levelPenaltyInputs.appendChild(title);
+
+    for (let i = 1; i <= 3; i++) {
+
+      const input = createPenaltyInput(
+
+        levelPenaltyInputs,
+
+        `LEVEL ${level} - ${i}`
+
+      );
+
+      input.dataset.level = String(level);
+
+    }
+
+  }
+
+}
+
+function updatePenaltySettings() {
+
+  const mode = penaltyTypeSelect.value;
+
+  drinkPenaltySettings.hidden =
+
+    mode !== "SHOT" && mode !== "IKKI";
+
+  randomPenaltySettings.hidden = mode !== "RANDOM";
+
+  levelPenaltySettings.hidden = mode !== "LEVEL";
+
+  settingError.textContent = "";
+
+}
+
+function collectPenaltyEntries() {
+
+  randomPenaltyEntries = Array.from(
+
+    randomPenaltyInputs.querySelectorAll("input"),
+
+    input => input.value.trim()
+
+  ).filter(Boolean);
+
+  levelPenaltyEntries = Array.from(
+
+    { length: 5 },
+
+    (_, index) => Array.from(
+
+      levelPenaltyInputs.querySelectorAll(
+
+        `input[data-level="${index + 1}"]`
+
+      ),
+
+      input => input.value.trim()
+
+    ).filter(Boolean)
+
+  );
+
+}
+
+function validateCustomPenalties() {
+
+  collectPenaltyEntries();
+
+  if (
+
+    penaltyType === "RANDOM" &&
+
+    !randomPenaltyEntries.length
+
+  ) {
+
+    return "RANDOM PENALTYは最低1種類入力してください。";
+
+  }
+
+  if (penaltyType === "LEVEL") {
+
+    const maximumLevel = getDbLevel(2 * boardSize + 3);
+
+    for (let i = 0; i < maximumLevel; i++) {
+
+      if (!levelPenaltyEntries[i].length) {
+
+        return `LEVEL ${i + 1}の罰ゲームを最低1種類入力してください。`;
+
+      }
+
+    }
+
+  }
+
+  return "";
+
+}
+
+function drawCustomPenalty(pool) {
+
+  return pool[Math.floor(Math.random() * pool.length)];
+
+}
+
+function addCustomPenaltyText(parent, value, className) {
+
+  const div = document.createElement("div");
+
+  div.className = className;
+
+  div.textContent = value;
+
+  parent.appendChild(div);
+
+}
+    
     function startGameFromSettings() {
 
       const humanCount =
@@ -2701,9 +2901,27 @@ function renderTurnOrder() {
 
         );
 
-      drinkType =
+penaltyType = penaltyTypeSelect.value;
 
-        drinkTypeSelect.value;
+drinkType = penaltyType === "IKKI" ? "IKKI" : "SHOT";
+
+if (penaltyType === "RANDOM") {
+
+  deadPenalty = Number(randomDeadPenaltySelect.value);
+
+  bingoPenalty = Number(randomBingoPenaltySelect.value);
+
+}
+
+const penaltyError = validateCustomPenalties();
+
+if (penaltyError) {
+
+  settingError.textContent = penaltyError;
+
+  return;
+
+}
 
       bgmEnabled =
 
@@ -4199,41 +4417,93 @@ status.classList.add("turn-pop");
 
         countBingo();
 
-      const shots =
+      const isLevel = penaltyType === "LEVEL";
 
-        deadPenalty
+const penaltyCount = isLevel
 
-        + (
+  ? 1 + bingo
 
-          bingo
+  : deadPenalty + bingo * bingoPenalty;
 
-          * bingoPenalty
+resultTitle.textContent =
 
-        );
+  `${displayPlayerName(loser)} LOSE`;
 
-      resultTitle.textContent =
+resultDead.closest(".result-line").hidden = isLevel;
 
-     `${displayPlayerName(loser)} LOSE`;
+resultBingo.closest(".result-line").hidden = isLevel;
 
-      resultDead.textContent =
+resultShots.closest(".total-shots").hidden = isLevel;
 
-        deadPenalty;
+customPenaltyResult.hidden =
 
-      resultBingo.textContent =
+  penaltyType !== "RANDOM" && !isLevel;
 
-        bingo;
+customPenaltyResult.replaceChildren();
 
-      resultBingoPenalty.textContent =
+resultDead.textContent = deadPenalty;
 
-        bingoPenalty;
+resultBingo.textContent = bingo;
 
-      resultShots.textContent =
+resultBingoPenalty.textContent = bingoPenalty;
 
-        shots;
+resultShots.textContent = penaltyCount;
 
-      resultDrinkType.textContent =
+resultDrinkType.textContent =
 
-        drinkType;
+  penaltyType === "RANDOM" ? "PENALTIES" : drinkType;
+
+if (penaltyType === "RANDOM") {
+
+  addCustomPenaltyText(
+
+    customPenaltyResult,
+
+    "RANDOM PENALTY",
+
+    "custom-penalty-heading"
+
+  );
+
+  for (let i = 0; i < penaltyCount; i++) {
+
+    addCustomPenaltyText(
+
+      customPenaltyResult,
+
+      `${i + 1}. ${drawCustomPenalty(randomPenaltyEntries)}`,
+
+      "custom-penalty-item"
+
+    );
+
+  }
+
+} else if (isLevel) {
+
+  const level = getDbLevel(penaltyCount);
+
+  addCustomPenaltyText(
+
+    customPenaltyResult,
+
+    `LEVEL ${level}（${penaltyCount}）`,
+
+    "custom-penalty-heading"
+
+  );
+
+  addCustomPenaltyText(
+
+    customPenaltyResult,
+
+    drawCustomPenalty(levelPenaltyEntries[level - 1]),
+
+    "custom-penalty-item"
+
+  );
+
+}
 
       awaitingResult =
 
@@ -4428,6 +4698,12 @@ status.classList.add("turn-pop");
       }
 
     );
+    
+initializeCustomPenaltyInputs();
+
+penaltyTypeSelect.addEventListener("change", updatePenaltySettings);
+
+updatePenaltySettings();
     
     initializeSettingSections();
     
