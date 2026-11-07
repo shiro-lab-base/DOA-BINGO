@@ -1592,9 +1592,7 @@
 
     id="bgm"
 
-    src="audio/doa-bgm.mp3"
-
-    preload="auto"
+    preload="none"
 
     loop
 
@@ -1629,7 +1627,9 @@
     preload="auto"
 
   ></audio>
-
+ 
+  <script src="assets/bgm-loader.js"></script>
+  
   <script>
 
     const IMAGE_BACK =
@@ -2262,40 +2262,29 @@ let levelPenaltyEntries = Array.from(
 
     }
 
+    let bgmPlayToken = 0;
+
     function startBgm() {
-        return;
-      
-      if (!bgmEnabled) {
 
-        return;
+      if (!bgmEnabled) return;
 
-      }
+      const token = ++bgmPlayToken;
 
-      const playPromise =
+      loadProtectedBgm(bgm, "db").then(() => {
 
-        bgm.play();
+        if (token === bgmPlayToken && bgmEnabled) {
 
-      if (
+          bgm.play().catch(() => {});
 
-        playPromise
+        }
 
-        && typeof playPromise.catch
-
-        === "function"
-
-      ) {
-
-        playPromise.catch(
-
-          () => {}
-
-        );
-
-      }
+      }).catch(console.error);
 
     }
 
     function pauseBgm() {
+
+      ++bgmPlayToken;
 
       bgm.pause();
 
