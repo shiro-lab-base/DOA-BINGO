@@ -4883,6 +4883,28 @@ resultDetail.innerHTML =
 
     }  
     
+/* Return to shared DTG settings */
+
+function returnToSharedSettings() {
+
+  const params = new URLSearchParams({
+
+    mode: "VS",
+
+    alive: aliveCountSelect.value,
+
+    dice: diceModeSelect.value,
+
+    dead: document.getElementById("deadPenalty").value,
+
+    opened: document.getElementById("openedPenalty").value
+
+  });
+
+  window.location.href = "../dtg/?" + params.toString();
+
+}
+    
     diceModeSelect
       .addEventListener(
 
@@ -4983,23 +5005,14 @@ resultDetail.innerHTML =
         }
       });
 
-    setupBackButton
+   setupBackButton.addEventListener(
 
-      .addEventListener(
+  "click",
 
-        "click",
+  returnToSharedSettings
 
-        () => {
-
-          showScreen(
-
-            settingsScreen
-
-          );
-
-        }
-
-      );
+);
+    
 p1RollButton.addEventListener("click", () => rollForPlayer(1));
 
 p2RollButton.addEventListener("click", () => rollForPlayer(2));
@@ -5027,29 +5040,76 @@ p2RollButton.addEventListener("click", () => rollForPlayer(2));
 
       );
 
-    settingsButton
+   settingsButton.addEventListener("click", () => {
 
-      .addEventListener(
+  stopBgm();
 
-        "click",
+  resetDeadEffect();
 
-        () => {
+  returnToSharedSettings();
 
-          stopBgm();
+});
 
-          resetDeadEffect();
+applyGameMode();
 
-          showScreen(
+/* Receive settings and open P1 DEAD SET */
 
-            settingsScreen
+const incomingSettings =
 
-          );
+  new URLSearchParams(window.location.search);
 
-        }
+if (incomingSettings.get("mode") === "VS") {
 
-      );
+  const incomingFields = {
 
-    applyGameMode();
+    alive: aliveCountSelect,
+
+    dice: diceModeSelect,
+
+    dead: document.getElementById("deadPenalty"),
+
+    opened: document.getElementById("openedPenalty")
+
+  };
+
+  for (const [key, select] of Object.entries(incomingFields)) {
+
+    const requested = incomingSettings.get(key);
+
+    if (
+
+      requested !== null &&
+
+      Array.from(select.options).some(
+
+        option => option.value === requested
+
+      )
+
+    ) {
+
+      select.value = requested;
+
+    }
+
+  }
+
+  diceRollCount = Number(diceModeSelect.value);
+
+  aliveCount = Number(aliveCountSelect.value);
+
+  totalCards = aliveCount + 1;
+
+  setupPlayer = 1;
+
+  setupTitle.textContent = "PLAYER 1: SET YOUR DEAD";
+
+  buildSetupCards();
+
+  showScreen(setupScreen);
+
+}
+    
   </script>
 
 </body>
