@@ -76,7 +76,7 @@
 
       padding:18px 15px;
 
-      color:#17110c;
+      color:#fff;
 
       font-size:clamp(17px,4.2vw,22px);
 
