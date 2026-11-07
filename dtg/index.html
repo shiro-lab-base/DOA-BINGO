@@ -2001,9 +2001,7 @@ object-fit: contain;
 
     id="bgm"
 
-    src="../audio/doa-bgm.mp3"
-
-    preload="auto"
+    preload="none"
 
     loop
 
@@ -2070,6 +2068,8 @@ object-fit: contain;
   preload="auto"
 
 ></audio>
+  
+    <script src="../assets/bgm-loader.js"></script>
   
   <script>
 
@@ -2526,34 +2526,27 @@ heartMonitorSound.volume = 0.02;
 
     }
 
+     let bgmPlayToken = 0;
+
     function startBgm() {
-       return;
-      
-      const promise =
 
-        bgm.play();
+      const token = ++bgmPlayToken;
 
-      if (
+      loadProtectedBgm(bgm, "dtg").then(() => {
 
-        promise
+        if (token === bgmPlayToken) {
 
-        && typeof promise.catch
+          bgm.play().catch(() => {});
 
-        === "function"
+        }
 
-      ) {
-
-        promise.catch(
-
-          () => {}
-
-        );
-
-      }
+      }).catch(console.error);
 
     }
 
     function stopBgm() {
+
+      ++bgmPlayToken;
 
       bgm.pause();
 
