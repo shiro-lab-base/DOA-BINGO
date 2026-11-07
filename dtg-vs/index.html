@@ -5315,6 +5315,14 @@ dtgLoadPenaltySnapshot();
 
 dtgUpdatePenaltyUI();
 
+document.getElementById("backTitleButton").addEventListener("click", () => {
+
+  stopBgm();
+
+  window.location.href = "../";
+
+});
+    
 setupStartButton.addEventListener("click", event => {
 
   const settings = dtgPenaltySnapshot();
