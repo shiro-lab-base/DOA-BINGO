@@ -3415,6 +3415,36 @@ function renderGameCards() {
 
     }
 
+function updateOpenedCard(container, deck, index) {
+
+  const button = container.querySelector(
+
+    `.game-card[data-index="${index}"]`
+
+  );
+
+  if (!button) return;
+
+  const card = deck[index];
+
+  const image = button.querySelector("img");
+
+  if (!card || !image) return;
+
+  image.src = card.type === "DEAD"
+
+    ? IMAGE_DEAD
+
+    : IMAGE_ALIVE;
+
+  image.alt = card.type;
+
+  button.classList.remove("selectable");
+
+  button.classList.add("opened");
+
+}
+    
 function prepareGame() {
 
   stopDangerAudio();
@@ -3951,7 +3981,7 @@ async function rollForPlayer(playerNumber) {
 
       );
 
-      renderGameCards();
+      updateOpenedCard(cpuCards, cpuDeck, index);
 
       await wait(
 
@@ -4068,7 +4098,7 @@ else rollButton.disabled = false;
       playerDeck[index].opened = true;
       playerOpenedCount++;
       playSound(cardSound);
-      renderGameCards();
+      updateOpenedCard(playerCards, playerDeck, index);
       await wait(420);
       if (playerDeck[index].type === "DEAD") {
         const cardElement = playerCards.querySelector(`.game-card[data-index="${index}"]`);
@@ -4155,7 +4185,7 @@ else rollButton.disabled = false;
 
       );
 
-      renderGameCards();
+      updateOpenedCard(playerCards, playerDeck, index);
 
       await wait(
 
