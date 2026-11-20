@@ -967,7 +967,7 @@ white-space: nowrap;
 
   z-index: 10;
 
-  width: clamp(100px, 26vw, 155px);
+  width: clamp(145px, 34vw, 205px);
 
   padding: 9px 8px;
 
@@ -1134,6 +1134,48 @@ white-space: nowrap;
   overflow-wrap: anywhere;
 
   background: rgba(0, 0, 0, 0.3);
+
+}
+  
+    /* DB MULTI DEAD ADDITIONS */
+
+.turn-order-stock {
+
+  margin-left: auto;
+
+  flex: 0 0 auto;
+
+  color: #e8c38d;
+
+  font-weight: bold;
+
+  font-size: 0.9em;
+
+  white-space: nowrap;
+
+}
+
+.card.interim-dead {
+
+  position: relative;
+
+}
+
+.card.interim-dead::after {
+
+  content: "";
+
+  position: absolute;
+
+  inset: 12%;
+
+  background:
+
+    url("images/doa-dankon.PNG")
+
+    center / contain no-repeat;
+
+  pointer-events: none;
 
 }
     
@@ -1303,6 +1345,24 @@ white-space: nowrap;
 
       </div>
 
+      <div class="setting-box" id="deadShuffleSetting" hidden>
+
+  <label for="deadShuffleSelect">
+
+    SHUFFLE AFTER DEAD
+
+  </label>
+
+  <select id="deadShuffleSelect">
+
+    <option value="OFF" selected>OFF</option>
+
+    <option value="ON">ON</option>
+
+  </select>
+
+</div>
+      
       <div class="settings-section-title">
 
   PENALTY
@@ -1885,6 +1945,14 @@ white-space: nowrap;
 
       );
 
+    const deadShuffleSetting =
+
+  document.getElementById("deadShuffleSetting");
+
+const deadShuffleSelect =
+
+  document.getElementById("deadShuffleSelect");
+    
     const deadPenaltySelect =
 
       document.getElementById(
@@ -2151,6 +2219,10 @@ const customPenaltyResult =
 
     let deadCardCount = 1;
 
+    let deadShuffleEnabled = false;
+
+let deadRecords = [];
+    
     let deadPenalty = 1;
 
     let bingoPenalty = 1;
@@ -2529,8 +2601,26 @@ let levelPenaltyEntries = Array.from(
 
         );
 
+      updateDeadShuffleVisibility();
+      
     }
 
+    function updateDeadShuffleVisibility() {
+
+  const multiple =
+
+    Number(deadCountSelect.value) > 1;
+
+  deadShuffleSetting.hidden = !multiple;
+
+  if (!multiple) {
+
+    deadShuffleSelect.value = "OFF";
+
+  }
+
+}
+    
     function createPlayers(
 
       humanCount,
@@ -2925,6 +3015,44 @@ function renderTurnOrder() {
 
     item.append(number, name);
 
+    if (deadCardCount > 1) {
+
+  const records = deadRecords.filter(
+
+    record => record.playerNumber === player.number
+
+  );
+
+  const stock = document.createElement("span");
+
+  stock.className = "turn-order-stock";
+
+  if (penaltyType === "LEVEL") {
+
+    stock.textContent = `${records.length} PEN`;
+
+  } else {
+
+    const total = records.reduce(
+
+      (sum, record) => sum + record.amount,
+
+      0
+
+    );
+
+    stock.textContent = penaltyType === "RANDOM"
+
+      ? `${total} DRAW`
+
+      : `${total} ${drinkType}`;
+
+  }
+
+  item.appendChild(stock);
+
+}
+    
     turnOrderPanel.appendChild(item);
 
   });
@@ -3178,7 +3306,12 @@ function addCustomPenaltyText(parent, value, className) {
           deadCountSelect.value
 
         );
+deadShuffleEnabled =
 
+  deadCardCount > 1 &&
+
+  deadShuffleSelect.value === "ON";
+      
       deadPenalty =
 
         Number(
@@ -3263,6 +3396,8 @@ if (penaltyError) {
 
       resetDeadFx();
 
+      deadRecords = [];
+      
       gameOver =
 
         false;
@@ -3667,21 +3802,68 @@ renderTurnOrder();
 
             ) {
 
-              pauseBgm();
+              if (deadCardCount > 1) {
 
-              prepareDeadResult(
+  const player = players[currentPlayerIndex];
 
-                players[
+  const bingo = countBingo();
 
-                  currentPlayerIndex
+  const amount = penaltyType === "LEVEL"
 
-                ],
+    ? 1 + bingo
 
-                index
+    : deadPenalty + bingo * bingoPenalty;
 
-              );
+  deadRecords.push({
 
-              return;
+    playerNumber: player.number,
+
+    bingo,
+
+    amount
+
+  });
+
+  renderTurnOrder();
+
+  if (deadRecords.length < deadCardCount) {
+
+    status.textContent =
+
+      `${displayPlayerName(player)} DEAD`;
+
+    flipTimer = setTimeout(() => {
+
+      if (deadShuffleEnabled) {
+
+        shuffle(cards);
+
+      }
+
+      refreshBoard();
+
+      nextTurn();
+
+    }, 750);
+
+    return;
+
+  }
+
+}
+
+pauseBgm();
+
+prepareDeadResult(
+
+  players[currentPlayerIndex],
+
+  index
+
+);
+
+return;
+              
 
             }
 
@@ -4189,6 +4371,8 @@ renderTurnOrder();
 
   deadFxLogo.src =
 
+    deadCardCount === 1 &&
+    
   players.length === 2 &&
 
   loser.type === "CPU" &&
@@ -4485,6 +4669,20 @@ status.classList.add("turn-pop");
 
           );
 
+          button.classList.toggle(
+
+  "interim-dead",
+
+  deadCardCount > 1 &&
+
+  deadRecords.length < deadCardCount &&
+
+  card.opened &&
+
+  card.type === "DEAD"
+
+);
+          
           button.disabled =
 
             gameOver
@@ -4701,12 +4899,154 @@ status.classList.add("turn-pop");
 
     }
 
+    function finishMultipleDeadGame() {
+
+  resultTitle.textContent = "PENALTY RESULTS";
+
+  resultDead.closest(".result-line").hidden = true;
+
+  resultBingo.closest(".result-line").hidden = true;
+
+  resultShots.closest(".total-shots").hidden = true;
+
+  customPenaltyResult.hidden = false;
+
+  customPenaltyResult.replaceChildren();
+
+  players.forEach(player => {
+
+    const records = deadRecords.filter(
+
+      record => record.playerNumber === player.number
+
+    );
+
+    if (!records.length) return;
+
+    const total = records.reduce(
+
+      (sum, record) => sum + record.amount,
+
+      0
+
+    );
+
+    addCustomPenaltyText(
+
+      customPenaltyResult,
+
+      `${displayPlayerName(player)} — DEAD ${records.length}`,
+
+      "custom-penalty-heading"
+
+    );
+
+    records.forEach((record, index) => {
+
+      const label = penaltyType === "LEVEL"
+
+        ? `DEAD ${index + 1}: BINGO ${record.bingo} / LEVEL ${getDbLevel(record.amount)}`
+
+        : `DEAD ${index + 1}: BINGO ${record.bingo} / +${record.amount}`;
+
+      addCustomPenaltyText(
+
+        customPenaltyResult,
+
+        label,
+
+        "custom-penalty-item"
+
+      );
+
+    });
+
+    if (penaltyType === "LEVEL") {
+
+      records.forEach((record, index) => {
+
+        const level = getDbLevel(record.amount);
+
+        addCustomPenaltyText(
+
+          customPenaltyResult,
+
+          `LEVEL ${level} (${index + 1}回目): ${drawCustomPenalty(levelPenaltyEntries[level - 1])}`,
+
+          "custom-penalty-item"
+
+        );
+
+      });
+
+    } else if (penaltyType === "RANDOM") {
+
+      addCustomPenaltyText(
+
+        customPenaltyResult,
+
+        `TOTAL: ${total} DRAWS`,
+
+        "custom-penalty-heading"
+
+      );
+
+      for (let i = 0; i < total; i++) {
+
+        addCustomPenaltyText(
+
+          customPenaltyResult,
+
+          `${i + 1}. ${drawCustomPenalty(randomPenaltyEntries)}`,
+
+          "custom-penalty-item"
+
+        );
+
+      }
+
+    } else {
+
+      addCustomPenaltyText(
+
+        customPenaltyResult,
+
+        `TOTAL: ${total} ${drinkType}`,
+
+        "custom-penalty-heading"
+
+      );
+
+    }
+
+  });
+
+  awaitingResult = false;
+
+  pendingLoser = null;
+
+  resetDeadFx();
+
+  showScreen(resultScreen);
+
+  startBgm();
+
+}
+    
     function finishGame(
 
       loser
 
     ) {
 
+      if (deadCardCount > 1) {
+
+  finishMultipleDeadGame();
+
+  return;
+
+}
+      
       const bingo =
 
         countBingo();
@@ -4915,6 +5255,14 @@ if (penaltyType === "RANDOM") {
 
     );
 
+    deadCountSelect.addEventListener(
+
+  "change",
+
+  updateDeadShuffleVisibility
+
+);
+    
     humanCountSelect.addEventListener(
 
       "change",
