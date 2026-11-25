@@ -2077,6 +2077,11 @@ body.dtg-online-connected #setupBackButton {display:none;}
 #hostWaitBoard #onlineStart {position:absolute;left:17%;right:17%;bottom:23%;padding:0;border:0;background:transparent;color:#2c2016;font-size:clamp(18px,5.4cqw,31px);font-weight:700;letter-spacing:.08em;text-shadow:0 1px 0 rgba(255,245,224,.35);}
 #hostWaitBoard #onlineKick {position:absolute;left:17%;right:17%;bottom:19%;padding:0;border:0;background:transparent;color:#2c2016;font-size:3cqw;font-weight:bold;}
 #hostWaitBoard #onlineStart[disabled] {opacity:.38;}
+/* V17: host READY stamp only */
+#hostWaitBoard .host-ready-stamp {position:absolute;left:50%;top:61.5%;width:65%;height:auto;display:block;z-index:2;pointer-events:none;opacity:.8;transform:translate(-50%,-50%) rotate(-15deg);}
+#hostWaitBoard .host-ready-stamp.stamp-press {animation:hostReadyPress .32s ease-out both;}
+@keyframes hostReadyPress {0% {opacity:0;transform:translate(-50%,-50%) rotate(-15deg) scale(1.55);} 72% {opacity:.88;transform:translate(-50%,-50%) rotate(-15deg) scale(.97);} 100% {opacity:.8;transform:translate(-50%,-50%) rotate(-15deg) scale(1);}}
+@media (prefers-reduced-motion:reduce) {#hostWaitBoard .host-ready-stamp.stamp-press {animation:none;}}
 #hostWaitBoard #onlineLeave {position:absolute;right:8.5%;bottom:10%;padding:0;border:0;background:transparent;color:#f0dfbf;font-size:clamp(13px,3.9cqw,22px);font-weight:700;letter-spacing:.12em;text-shadow:0 1px 3px #1b1009;}
 
 #hostSubmissionModal input::placeholder {color:#f0dfbf;opacity:.65;}
@@ -6231,7 +6236,9 @@ function renderDtgPenalty(openedBonus, loser) {
     if(host){
       const roomDataRows=hostWaitingRows(s.rules);
       const waitLabel=!s.guestPresent?'WAITING':guestReady?'READY':'CHECKING';
-      showOnline(`<div id="hostWaitBoard"><div class="host-card-copy"><div class="host-card-line kicker">MATCH REGISTRATION</div><div class="host-card-line title">WAITING ROOM</div><div class="host-card-line roomid">ROOM ID : ${escapeHtml(s.roomId)}</div><div class="host-card-line meta-row"><span>HOST : ${escapeHtml(s.seats[0].name)}</span><span>GUEST : ${escapeHtml(guest)}</span></div><div class="host-card-line status">${waitLabel}</div></div><div class="host-roomdata-title">ROOM DATA</div><div class="host-roomdata"><div class="rule-sheet">${roomDataRows}</div></div><button id="onlineStart" type="button">SET DEAD</button><button id="onlineKick" type="button">KICK GUEST</button><button id="onlineLeave" type="button">BACK</button></div>`);
+      const stampPress=!byId('hostWaitBoard') || !onlineContents.querySelector('.host-ready-stamp');
+      const readyStamp=s.guestPresent&&guestReady?`<svg class="host-ready-stamp${stampPress?' stamp-press':''}" viewBox="0 0 220 76" aria-label="READY" role="img"><defs><pattern id="hostReadyInkPattern" width="13" height="11" patternUnits="userSpaceOnUse"><rect width="13" height="11" fill="white"/><path d="M2 1l1 .7M8 5l1.5 .4M4 9l.8 -.7M12 2l.3 1.2" stroke="black" stroke-width=".65" stroke-linecap="round"/></pattern><mask id="hostReadyInkMask"><rect width="220" height="76" fill="url(#hostReadyInkPattern)"/></mask></defs><g mask="url(#hostReadyInkMask)" stroke="#a0251c"><rect x="5" y="5" width="210" height="66" rx="3" fill="none" stroke-width="4"/><rect x="11" y="11" width="198" height="54" rx="1" fill="none" stroke-width="1.2"/><text x="110" y="54" text-anchor="middle" font-family="Georgia,serif" font-weight="900" font-size="44" letter-spacing="5" fill="#a0251c" stroke="none">READY</text></g></svg>`:'';
+      showOnline(`<div id="hostWaitBoard"><div class="host-card-copy"><div class="host-card-line kicker">MATCH REGISTRATION</div><div class="host-card-line title">WAITING ROOM</div><div class="host-card-line roomid">ROOM ID : ${escapeHtml(s.roomId)}</div><div class="host-card-line meta-row"><span>HOST : ${escapeHtml(s.seats[0].name)}</span><span>GUEST : ${escapeHtml(guest)}</span></div><div class="host-card-line status">${waitLabel}</div></div><div class="host-roomdata-title">ROOM DATA</div><div class="host-roomdata"><div class="rule-sheet">${roomDataRows}</div></div>${readyStamp}<button id="onlineStart" type="button">SET DEAD</button><button id="onlineKick" type="button">KICK GUEST</button><button id="onlineLeave" type="button">BACK</button></div>`);
       onlineContents.dataset.signature=signature;
       byId('onlineStart').disabled=!s.guestPresent||!guestReady;
       byId('onlineStart').onclick=()=>action('start');
