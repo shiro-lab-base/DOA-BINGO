@@ -1905,6 +1905,8 @@ object-fit: contain;
 #onlineMessage {color:#ff7777;font-weight:bold;margin-top:15px;white-space:pre-line;}
 #onlineIndicator {position:fixed;top:8px;left:50%;transform:translateX(-50%);z-index:100;max-width:min(96vw,680px);padding:5px 12px;border-radius:6px;background:rgba(0,0,0,.85);color:white;font-size:12px;pointer-events:none;text-align:center;}
 #gameScreen {position:relative;}
+/* ONLINE: reverse opponent visual order without changing card indices. */
+#gameScreen.online-mode #cpuCards {direction:rtl;}
 body.dtg-online-connected #setupBackButton {display:none;}
 #onlineLeaveGame {position:absolute;bottom:10px;right:12px;width:auto;min-height:38px;margin:0;padding:5px 16px;z-index:20;font-size:12px;}
 .online-only-control {max-width:700px;}
@@ -5048,7 +5050,7 @@ deadFxCard.style.top = p2Loss
 
       );
 
-if (gameMode === "CPU" && winner === "PLAYER") {
+if ((gameMode === "CPU" || gameMode === "ONLINE") && winner === "PLAYER") {
 
   deadFxResultText.innerHTML =
 
@@ -5839,6 +5841,7 @@ function renderDtgPenalty(openedBonus, loser) {
     [onlineLeaveSetup,onlineKickSetup,onlineLeaveGame,onlineLeaveResult].forEach(b=>b.hidden=true);
     gameModeSelect.value='ONLINE';modeChoice.value='ONLINE';applyGameMode();
     showScreen(modeScreen);
+    startBgm();
     onlineIndicator.hidden=true;
     if(reason)window.alert(reason);
   }
@@ -6075,10 +6078,18 @@ function renderDtgPenalty(openedBonus, loser) {
     applyGameMode();
     setupStartButton.textContent=isOnline()?'ONLINE ROOM':'SET DEAD';
   });
-  modeSettingsButton.onclick=()=>{applyGameMode();showScreen(settingsScreen);startBgm();};
+  // Retry on a user gesture if browser autoplay blocked the mode-screen BGM.
+  function retryModeBgm(e){
+    if(!modeScreen.classList.contains('active')||!bgm.paused||e.target.closest('#modeTitleButton, #modeSettingsButton'))return;
+    if(bgm.getAttribute('src'))bgm.play().catch(()=>{});
+    else startBgm();
+  }
+  modeScreen.addEventListener('click',retryModeBgm);
+  modeScreen.addEventListener('change',retryModeBgm);
+  modeSettingsButton.onclick=()=>{applyGameMode();showScreen(settingsScreen);if(bgm.paused)startBgm();};
   modeTitleButton.onclick=()=>{stopBgm();window.location.href='../';};
   // Override original TITLE navigation only in detailed settings, returning to mode selector.
-  byId('backTitleButton').addEventListener('click',e=>{e.preventDefault();e.stopImmediatePropagation();stopBgm();showScreen(modeScreen);},true);
+  byId('backTitleButton').addEventListener('click',e=>{e.preventDefault();e.stopImmediatePropagation();showScreen(modeScreen);if(bgm.paused)startBgm();},true);
   // Online room opens from existing 'SET DEAD' (CPU/VS remains unchanged).
   setupStartButton.addEventListener('click',e=>{
     if(!isOnline())return;
@@ -6120,7 +6131,7 @@ function renderDtgPenalty(openedBonus, loser) {
     };
     document.addEventListener('click',resumeAudio,true);
     beginPolling();refresh();
-  }else showScreen(modeScreen);
+  }else {showScreen(modeScreen);startBgm();}
 })();
 ;
 
