@@ -2034,6 +2034,28 @@ body.dtg-online-connected #setupBackButton {display:none;}
 #onlineHostFields input {box-sizing:border-box;width:100%;min-height:48px;padding:10px;border:1px solid #888;border-radius:7px;background:#1c1c1c;color:#fff;font-size:16px;}
 #onlineHostError {color:#ff7777;white-space:pre-line;}
 #onlineContents .online-rules {text-align:left;border-top:1px solid #666;border-bottom:1px solid #666;padding:12px 0;overflow-wrap:anywhere;}
+/* V13: host submission sheet only. */
+#settingsScreen.online-host-settings {padding:0;height:100dvh;min-height:0;overflow:hidden;background:#1b130e;justify-content:center;position:relative;}
+#settingsScreen.online-host-settings > .container {position:absolute;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none;margin:0;}
+#hostSubmissionArt {display:none;}
+#settingsScreen.online-host-settings > #hostSubmissionArt {display:block;position:relative;flex:none;width:min(100%,56.25dvh);aspect-ratio:9/16;background:url('../images/online-hset.PNG') center/contain no-repeat;container-type:inline-size;color:#352316;font-family:Georgia,serif;}
+#hostSubmissionArt .host-sheet-menu {position:absolute;left:12%;right:12%;top:30%;bottom:21%;display:flex;flex-direction:column;justify-content:space-between;gap:1%;text-align:center;}
+#hostSubmissionArt h2 {font:700 5.5cqw Georgia,serif;letter-spacing:.025em;margin:0;}
+#hostSubmissionArt button {font:700 4.5cqw Georgia,serif;color:#352316;background:transparent;border:0;border-radius:0;margin:0;padding:1.8cqw;min-height:0;cursor:pointer;}
+#hostSubmissionArt .host-section {display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #82603b88;text-align:left;}
+#hostSubmissionArt .host-sheet-actions {display:flex;flex-direction:column;gap:0;}
+#hostSubmissionArt .host-sheet-actions button:first-child {border:1px solid #82603b;}
+#hostSubmissionError {font: 3.2cqw Arial,sans-serif;color:#8d1c15;overflow-wrap:anywhere;max-height:3em;overflow:auto;margin:0;}
+#hostSubmissionModal {display:none;}
+#settingsScreen.online-host-settings #hostSubmissionModal:not([hidden]) {display:flex;position:fixed;inset:0;z-index:1000;align-items:center;justify-content:center;background:rgba(0,0,0,.65);padding:18px;}
+#hostSubmissionModal .host-modal-paper {width:min(100%,520px);max-height:85dvh;overflow:auto;background:#e2bd85;color:#382518;padding:clamp(16px,5vw,30px);border:1px solid #957044;font-family:Georgia,serif;box-shadow:0 8px 30px #0007;}
+#hostSubmissionModal h2 {font:700 22px Georgia,serif;text-align:center;letter-spacing:.04em;margin:0 0 18px;color:#382518;}
+#hostSubmissionModal .setting-box {margin:10px 0 14px;text-align:left;}
+#hostSubmissionModal label {color:#382518;font:700 14px Georgia,serif;text-shadow:none;}
+#hostSubmissionModal select,#hostSubmissionModal input {width:100%;min-height:40px;padding:8px;border:1px solid #93734e;border-radius:0;background:#f0d8ab;color:#352316;font:16px Georgia,serif;}
+#hostSubmissionModal #dtgRandomSettings,#hostSubmissionModal #dtgLevelSettings {max-height:none;overflow:visible;}
+#hostSubmissionModal #dtgRandomInputs input,#hostSubmissionModal #dtgLevelInputs input {background:#f0d8ab!important;color:#352316!important;border-radius:0!important;}
+#hostSubmissionModal #hostModalClose {display:block;width:100%;padding:12px;margin-top:16px;border:1px solid #82603b;background:transparent;color:#352316;font:700 17px Georgia,serif;}
   </style>
 
 </head>
@@ -6373,6 +6395,76 @@ function renderDtgPenalty(openedBonus, loser) {
   </script>
   
 <script src="../assets/dtg-settings-common.js"></script>
+<script>
+/* V13: only host settings presentation; original controls retain their listeners and values. */
+(() => {
+  const screen=document.getElementById('settingsScreen');
+  const original=screen.querySelector('.container');
+  const art=document.createElement('div');
+  art.id='hostSubmissionArt';
+  art.innerHTML='<div class="host-sheet-menu"><h2>GAME SETTINGS</h2><button type="button" class="host-section" data-section="GAME">GAME <span>›</span></button><button type="button" class="host-section" data-section="PENALTY">PENALTY <span>›</span></button><button type="button" class="host-section" data-section="ROOM SETTINGS">ROOM SETTINGS <span>›</span></button><button type="button" class="host-section" data-section="SOUND">SOUND <span>›</span></button><p id="hostSubmissionError" role="status"></p><div class="host-sheet-actions"><button type="button" id="hostSheetCreate">CREATE ROOM</button><button type="button" id="hostSheetBack">BACK</button></div></div>';
+  screen.append(art);
+  const modal=document.createElement('div');
+  modal.id='hostSubmissionModal';modal.hidden=true;
+  modal.innerHTML='<div class="host-modal-paper" role="dialog" aria-modal="true" aria-labelledby="hostModalTitle"><h2 id="hostModalTitle"></h2><div id="hostModalFields"></div><button type="button" id="hostModalClose">CLOSE</button></div>';
+  screen.append(modal);
+  const fields=modal.querySelector('#hostModalFields');
+  const closeButton=modal.querySelector('#hostModalClose');
+  let moved=[],trigger=null;
+  const byId=id=>document.getElementById(id);
+  const box=id=>byId(id)?.closest('.setting-box');
+  function soundNodes(){
+    // The shared settings script creates SOUND controls before this script runs.
+    const result=[];
+    for(const control of original.querySelectorAll('select,input,button')){
+      const wrap=control.closest('.setting-box')||control.parentElement;
+      const label=control.labels?.[0]?.textContent||'';
+      if(/(?:bgm|sound|volume|(?:^|[^a-z])se(?:$|[^a-z]))/i.test([control.id,control.name,label,wrap?.querySelector('label')?.textContent].join(' ')) && wrap && wrap!==original && !wrap.contains(byId('setupStartButton')))result.push(wrap);
+    }
+    return [...new Set(result)].filter(n=>!result.some(p=>p!==n&&p.contains(n)));
+  }
+  function closeModal(){
+    for(const [node,marker] of moved)marker.replaceWith(node);
+    moved=[];modal.hidden=true;
+    if(trigger&&screen.classList.contains('online-host-settings'))trigger.focus();
+    trigger=null;
+  }
+  function openModal(button){
+    closeModal();trigger=button;
+    const section=button.dataset.section;
+    let nodes=[];
+    if(section==='GAME')nodes=[box('aliveCount'),box('diceMode')];
+    if(section==='PENALTY')nodes=[dtgPenaltyBox,dtgDeadBox,dtgOpenedBox];
+    if(section==='ROOM SETTINGS')nodes=[box('onlineHostName'),box('onlineHostPassword')];
+    if(section==='SOUND')nodes=soundNodes();
+    for(const node of [...new Set(nodes.filter(Boolean))]){
+      const marker=document.createComment('host settings original position');
+      node.before(marker);fields.append(node);moved.push([node,marker]);
+    }
+    if(!moved.length){trigger=null;return;}
+    modal.querySelector('#hostModalTitle').textContent=section;
+    modal.hidden=false;modal.querySelector('.host-modal-paper').scrollTop=0;closeButton.focus({preventScroll:true});
+  }
+  art.querySelectorAll('[data-section]').forEach(b=>b.addEventListener('click',()=>openModal(b)));
+  closeButton.addEventListener('click',closeModal);
+  modal.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+  art.querySelector('#hostSheetCreate').addEventListener('click',()=>byId('setupStartButton').click());
+  art.querySelector('#hostSheetBack').addEventListener('click',()=>byId('backTitleButton').click());
+  const error=byId('onlineHostError'),create=byId('setupStartButton'),back=byId('backTitleButton');
+  function sync(){
+    if(!screen.classList.contains('online-host-settings')||!screen.classList.contains('active')){if(!modal.hidden)closeModal();return;}
+    art.querySelector('#hostSubmissionError').textContent=error.textContent;
+    art.querySelector('#hostSheetCreate').disabled=create.disabled;
+    art.querySelector('#hostSheetBack').disabled=back.disabled;
+  }
+  const observer=new MutationObserver(sync);
+  observer.observe(screen,{attributes:true,attributeFilter:['class']});
+  observer.observe(error,{childList:true,subtree:true,characterData:true});
+  for(const b of [create,back])observer.observe(b,{attributes:true,attributeFilter:['disabled']});
+  sync();
+})();
+</script>
+
   
 </body>
 
