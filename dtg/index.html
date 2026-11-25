@@ -2048,14 +2048,16 @@ body.dtg-online-connected #setupBackButton {display:none;}
 #hostSubmissionError {font: 3.2cqw Arial,sans-serif;color:#8d1c15;overflow-wrap:anywhere;max-height:3em;overflow:auto;margin:0;}
 #hostSubmissionModal {display:none;}
 #settingsScreen.online-host-settings #hostSubmissionModal:not([hidden]) {display:flex;position:fixed;inset:0;z-index:1000;align-items:center;justify-content:center;background:rgba(0,0,0,.65);padding:18px;}
-#hostSubmissionModal .host-modal-paper {width:min(100%,520px);max-height:85dvh;overflow:auto;background:#e2bd85;color:#382518;padding:clamp(16px,5vw,30px);border:1px solid #957044;font-family:Georgia,serif;box-shadow:0 8px 30px #0007;}
-#hostSubmissionModal h2 {font:700 22px Georgia,serif;text-align:center;letter-spacing:.04em;margin:0 0 18px;color:#382518;}
+#hostSubmissionModal .host-modal-paper {width:min(100%,520px);max-height:85dvh;overflow:auto;background:transparent;color:#f0dfbf;padding:clamp(16px,5vw,30px);border:0;font-family:Georgia,serif;box-shadow:none;}
+#hostSubmissionModal h2 {font:700 22px Georgia,serif;text-align:center;letter-spacing:.04em;margin:0 0 18px;color:#f0dfbf;}
 #hostSubmissionModal .setting-box {margin:10px 0 14px;text-align:left;}
-#hostSubmissionModal label {color:#382518;font:700 14px Georgia,serif;text-shadow:none;}
-#hostSubmissionModal select,#hostSubmissionModal input {width:100%;min-height:40px;padding:8px;border:1px solid #93734e;border-radius:0;background:#f0d8ab;color:#352316;font:16px Georgia,serif;}
+#hostSubmissionModal label {color:#f0dfbf;font:700 14px Georgia,serif;text-shadow:none;}
+#hostSubmissionModal select,#hostSubmissionModal input {width:100%;min-height:40px;padding:8px;border:0;border-radius:0;background:transparent;color:#f0dfbf;font:16px Georgia,serif;color-scheme:dark;}
+#hostSubmissionModal input::placeholder {color:#f0dfbf;opacity:.65;}
+#hostSubmissionModal select option {background:#241b15;color:#f0dfbf;}
 #hostSubmissionModal #dtgRandomSettings,#hostSubmissionModal #dtgLevelSettings {max-height:none;overflow:visible;}
-#hostSubmissionModal #dtgRandomInputs input,#hostSubmissionModal #dtgLevelInputs input {background:#f0d8ab!important;color:#352316!important;border-radius:0!important;}
-#hostSubmissionModal #hostModalClose {display:block;width:100%;padding:12px;margin-top:16px;border:1px solid #82603b;background:transparent;color:#352316;font:700 17px Georgia,serif;}
+#hostSubmissionModal #dtgRandomInputs input,#hostSubmissionModal #dtgLevelInputs input {background:transparent!important;color:#f0dfbf!important;border:0!important;border-radius:0!important;}
+#hostSubmissionModal #hostModalClose {display:block;width:100%;padding:12px;margin-top:16px;border:0;background:transparent;color:#f0dfbf;font:700 17px Georgia,serif;}
   </style>
 
 </head>
