@@ -1922,26 +1922,34 @@ object-fit: contain;
 #onlineContents:has(#guestRoomBoard) {padding:0;border:0;border-radius:0;background:none;box-shadow:none;}
 #onlineScreen:has(#guestRoomBoard) #onlineMessage {margin:0;padding:0 8px;text-align:center;font-size:12px;}
 #guestRoomBoard {position:relative;width:100%;aspect-ratio:9/16;background:url('../images/dtg-room-back.PNG') center/100% 100% no-repeat;color:#21150b;font-family:Georgia,serif;container-type:inline-size;}
-#guestRoomBoard .guest-search {position:absolute;top:9%;left:10%;width:80%;display:flex;gap:5px;align-items:center;}
+#guestRoomBoard .guest-search {position:absolute;top:8.5%;left:10%;width:80%;display:flex;gap:5px;align-items:center;z-index:2;}
 #onlineContents #guestRoomBoard input {min-width:0;min-height:0;height:36px;padding:5px 8px;background:#e7d1a9;color:#24180d;border:1px solid #74512e;border-radius:0;font-size:16px;}
+#guestRoomBoard .guest-search input {flex:1;width:0;}
 #guestRoomBoard button {font-family:inherit;cursor:pointer;}
-#guestRoomBoard .guest-search button,#guestRoomBoard .guest-back {border:0;background:transparent;color:#21150b;font-weight:bold;padding:7px;font-size:clamp(12px,4cqw,20px);white-space:nowrap;}
-#guestRoomBoard #onlineRooms {position:absolute;top:18%;left:9%;width:82%;height:66%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(3,minmax(0,1fr));gap:2% 4%;}
-#guestRoomBoard .guest-note {position:relative;border:0;background:var(--paper) center/100% 100% no-repeat;transform:rotate(var(--tilt));color:#24180d;padding:23% 12% 12%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-width:0;min-height:0;text-align:center;overflow:hidden;}
-#guestRoomBoard .guest-note strong {font-size:clamp(12px,4.3cqw,24px);letter-spacing:.05em;}
-#guestRoomBoard .guest-note span {font-size:clamp(9px,3.1cqw,17px);overflow-wrap:anywhere;max-width:100%;}
-#guestRoomBoard .guest-note small {font-size:clamp(8px,2.5cqw,14px);}
-#guestRoomBoard .guest-back {position:absolute;right:9%;bottom:6%;}
-#guestRoomBoard .guest-empty {grid-column:1/-1;align-self:center;text-align:center;font-weight:bold;color:#21150b;}
-#guestRoomBoard .guest-overlay {position:absolute;inset:0;z-index:10;background:rgba(0,0,0,.78);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2%;padding:8% 5%;}
+#guestRoomBoard .guest-search button {flex:none;border:0;background:transparent;color:#f0dfbf;text-shadow:0 1px 3px #000;font-weight:bold;padding:6px 3px;font-size:clamp(12px,3.5cqw,20px);white-space:nowrap;}
+#guestRoomBoard #onlineRooms {position:absolute;top:19%;left:13%;width:74%;height:63%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(3,minmax(0,1fr));gap:1.5% 5%;align-items:center;justify-items:center;}
+#guestRoomBoard .guest-note {position:relative;display:block;box-sizing:border-box;width:100%;height:auto;aspect-ratio:1305/1206;padding:0;margin:0;border:0;background:transparent;transform:rotate(var(--tilt));color:#24180d;text-align:center;overflow:hidden;}
+#guestRoomBoard .guest-paper-art {position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block;pointer-events:none;}
+#guestRoomBoard .guest-note-text {position:absolute;inset:22% 13% 15%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1%;min-width:0;min-height:0;overflow:hidden;}
+#guestRoomBoard .guest-note-text strong {font-size:clamp(13px,4.3cqw,24px);line-height:1.1;letter-spacing:.04em;}
+#guestRoomBoard .guest-note-text span {font-size:clamp(10px,3.1cqw,17px);line-height:1.15;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%;}
+#guestRoomBoard .guest-note-text small {font-size:clamp(9px,2.5cqw,14px);line-height:1.15;}
+#guestRoomBoard #onlineBack.guest-back {position:absolute;display:block;right:10%;bottom:7%;z-index:3;margin:0;padding:6px 14px;border:1px solid #74512e;border-radius:2px;background:#e7d1a9;color:#21150b;font-weight:bold;font-size:clamp(13px,3.8cqw,21px);white-space:nowrap;}
+#guestRoomBoard .guest-empty {grid-column:1/-1;align-self:center;text-align:center;font-weight:bold;color:#f0dfbf;text-shadow:0 1px 3px #000;}
+#guestRoomBoard .guest-overlay {position:absolute;inset:0;z-index:10;background:rgba(0,0,0,.78);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3%;padding:5%;}
 #guestRoomBoard .guest-overlay[hidden] {display:none;}
-#guestRoomBoard .guest-detail {width:100%;max-height:80%;min-height:40%;background:var(--paper) center/100% 100% no-repeat;padding:17% 12% 10%;overflow:auto;color:#24180d;text-align:left;overscroll-behavior:contain;font-size:clamp(12px,3.5cqw,19px);}
-#guestRoomBoard .guest-detail h3 {text-align:center;color:#24180d;}
-#guestRoomBoard .guest-detail .details-card {padding:0;background:none;border:0;border-radius:0;}
+#guestRoomBoard .guest-detail-paper {position:relative;width:100%;aspect-ratio:1305/1206;flex:none;}
+#guestRoomBoard .guest-detail {position:absolute;inset:19% 12% 15%;overflow:auto;color:#24180d;text-align:left;overscroll-behavior:contain;font-size:clamp(11px,2.8cqw,17px);line-height:1.25;padding:0 3px;}
+#guestRoomBoard .guest-detail h3 {text-align:center;color:#24180d;font-size:1.2em;}
+#onlineContents #guestRoomBoard .guest-detail p {margin:4px 0;}
+#onlineContents #guestRoomBoard .guest-detail .details-card {padding:0;background:none;border:0;border-radius:0;}
 #guestRoomBoard .guest-detail .details-card h3 {display:none;}
-#guestRoomBoard .guest-detail .rule-row {border-color:rgba(55,35,15,.3);gap:5px;}
-#guestRoomBoard .guest-detail .rule-row strong,#guestRoomBoard .guest-detail .rule-row span,#onlineContents #guestRoomBoard label {color:#24180d;overflow-wrap:anywhere;min-width:0;}
+#guestRoomBoard .guest-detail .rule-sheet {gap:3px;}
+#guestRoomBoard .guest-detail .rule-row {border-color:rgba(55,35,15,.3);gap:5px;padding-bottom:3px;}
+#guestRoomBoard .guest-detail .rule-row strong,#guestRoomBoard .guest-detail .rule-row span {color:#24180d;overflow-wrap:anywhere;min-width:0;}
 #guestRoomBoard .guest-detail .rule-row span {max-width:60%;}
+#onlineContents #guestRoomBoard .guest-detail label {color:#24180d;margin:6px 0 3px;font-size:1em;}
+#onlineContents #guestRoomBoard .guest-detail input {height:28px;padding:2px 5px;}
 #guestRoomBoard .guest-detail-actions {display:flex;gap:12px;width:90%;}
 #guestRoomBoard .guest-detail-actions button {flex:1;background:#20160d;color:#e9d7b5;border:1px solid #bda078;padding:9px 4px;font-weight:bold;}
 #guestRoomBoard #guestDetailMessage {color:#8e2015;font-weight:bold;}
@@ -5988,9 +5996,14 @@ function renderDtgPenalty(openedBonus, loser) {
     if(!guestPaperStyles.has(id))guestPaperStyles.set(id,{paper:Math.random()<.5?'a':'b',tilt:(Math.random()*6-3).toFixed(2)});
     return guestPaperStyles.get(id);
   }
-  function guestPaperUrl(id){return `url("../images/dtg-paper-${guestPaperStyle(id).paper}.PNG")`;}
+  function guestPaperUrl(id){return `../images/dtg-paper-${guestPaperStyle(id).paper}.PNG`;}
+  function setGuestPaper(image,id){
+    image.onload=()=>{if(image.naturalWidth&&image.naturalHeight)image.parentElement.style.aspectRatio=`${image.naturalWidth}/${image.naturalHeight}`;};
+    image.src=guestPaperUrl(id);
+    if(image.complete&&image.naturalWidth)image.onload();
+  }
   async function joinMenu() {
-    showOnline(`<div id="guestRoomBoard"><form id="guestSearch" class="guest-search"><input id="onlineRoomId" maxlength="6" autocapitalize="characters" autocomplete="off" placeholder="ROOM ID" aria-label="ROOM ID"><button type="submit">SEARCH</button><button type="button" id="onlineRefresh" aria-label="REFRESH">↻</button></form><div id="onlineRooms"></div><button id="onlineBack" class="guest-back" type="button">BACK</button><div id="guestOverlay" class="guest-overlay" hidden><div id="guestDetail" class="guest-detail"></div><div class="guest-detail-actions"><button id="onlineJoin" type="button" disabled>JOIN ROOM</button><button id="guestDetailBack" type="button">BACK</button></div></div></div>`);
+    showOnline(`<div id="guestRoomBoard"><form id="guestSearch" class="guest-search"><input id="onlineRoomId" maxlength="6" autocapitalize="characters" autocomplete="off" placeholder="ROOM ID" aria-label="ROOM ID"><button type="submit">SEARCH</button><button type="button" id="onlineRefresh" aria-label="REFRESH">↻</button></form><div id="onlineRooms"></div><button id="onlineBack" class="guest-back" type="button">BACK</button><div id="guestOverlay" class="guest-overlay" hidden><div class="guest-detail-paper"><img id="guestDetailPaper" class="guest-paper-art" alt=""><div id="guestDetail" class="guest-detail"></div></div><div class="guest-detail-actions"><button id="onlineJoin" type="button" disabled>JOIN ROOM</button><button id="guestDetailBack" type="button">BACK</button></div></div></div>`);
     const board=byId('guestRoomBoard');
     const box=byId('onlineRooms'),overlay=byId('guestOverlay'),detail=byId('guestDetail');
     const join=byId('onlineJoin'),search=byId('onlineRoomId');
@@ -6002,9 +6015,9 @@ function renderDtgPenalty(openedBonus, loser) {
       if(!visible.length){box.innerHTML='<div class="guest-empty">NO OPEN ROOMS</div>';return;}
       visible.forEach(r=>{
         const note=document.createElement('button');note.type='button';note.className='guest-note';
-        note.style.setProperty('--paper',guestPaperUrl(r.roomId));
         note.style.setProperty('--tilt',guestPaperStyle(r.roomId).tilt+'deg');
-        note.innerHTML=`<small>ROOM ID</small><strong>${escapeHtml(r.roomId)}</strong><small>HOST NAME</small><span>${escapeHtml(r.hostName)}</span>`;
+        note.innerHTML=`<img class="guest-paper-art" alt=""><div class="guest-note-text"><small>ROOM ID</small><strong>${escapeHtml(r.roomId)}</strong><small>HOST NAME</small><span>${escapeHtml(r.hostName)}</span></div>`;
+        setGuestPaper(note.querySelector("img"),r.roomId);
         note.onclick=()=>openDetail(r);box.append(note);
       });
     }
@@ -6015,7 +6028,7 @@ function renderDtgPenalty(openedBonus, loser) {
     }
     async function openDetail(room){
       const seq=++detailRequest;selected=null;join.disabled=true;overlay.hidden=false;
-      detail.style.setProperty('--paper',guestPaperUrl(room.roomId));
+      setGuestPaper(byId('guestDetailPaper'),room.roomId);
       detail.innerHTML='<p>LOADING...</p>';
       try{
         const r=await api('roomInfo',{roomId:room.roomId});
