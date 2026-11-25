@@ -5347,6 +5347,83 @@ updatePenaltySettings();
 
   </script>
 
+<script>
+/* 96/46games — DOA shared title menu only */
+(() => {
+  const screen = document.getElementById('titleScreen');
+  const wrap = screen?.querySelector('.title-wrap');
+  const db = document.getElementById('dbSelectButton');
+  const dtg = document.getElementById('titleStartButton');
+  const clickSE = document.getElementById('gunClickSound');
+  const shotSE = document.getElementById('gunShotSound');
+  if (!wrap || !db || !dtg) return;
+  const load = src => new Promise((resolve,reject) => {
+    const img = new Image(); img.onload = () => resolve(img); img.onerror = reject; img.src = src;
+  });
+  Promise.all(['images/skull-logo.PNG','images/ballad-db.PNG','images/ballad-dtg.PNG'].map(load)).then(([skull, dbArt, dtgArt]) => {
+    const style = document.createElement('style');
+    style.textContent = `#titleScreen.doa-wheel {background-image:none;background-color:#000} #titleScreen.doa-wheel #dbSelectButton,#titleScreen.doa-wheel #titleStartButton {display:none} #doaWheelStage {position:absolute;left:50%;top:43%;transform:translate(-50%,-50%);width:100%;max-height:86%;touch-action:none;user-select:none;-webkit-user-select:none} #doaWheelStage canvas {display:block;width:100%;height:100%;pointer-events:none} #doaWheelHit {position:absolute;left:38.58%;top:43.85%;width:21.42%;height:12.1%;border:0;background:transparent;padding:0;cursor:pointer;touch-action:none} #doaWheelHit:disabled {cursor:default} #doaWheelHit:focus-visible {outline:2px solid #fff;border-radius:50%} #titleScreen.doa-wheel #supportButton {z-index:2}`;
+    document.head.append(style);
+    const stage = document.createElement('div'); stage.id='doaWheelStage';
+    const canvas = document.createElement('canvas'); canvas.width=565; canvas.height=1000;
+    const hit=document.createElement('button'); hit.id='doaWheelHit'; hit.type='button';
+    stage.append(canvas,hit); wrap.prepend(stage);
+    const ctx=canvas.getContext('2d');
+    if (!ctx) {stage.remove();style.remove();return;}
+    // Reference coordinates measured from the uploaded 565 × 1000 preview.
+    const cx=278.5, cy=364, rx=137, ry=135;
+    const crop=(img,x,y,w,h)=>{
+      const c=document.createElement('canvas');c.width=w*2;c.height=h*2;
+      c.getContext('2d').drawImage(img,x/565*img.naturalWidth,y/1000*img.naturalHeight,w/565*img.naturalWidth,h/1000*img.naturalHeight,0,0,c.width,c.height);return c;
+    };
+    const blank=crop(dbArt,218,169,121,121);
+    const titles=[crop(dbArt,218,438,121,121),crop(dtgArt,218,438,121,121)];
+    const red=titles.map(img=>{
+      const c=document.createElement('canvas');c.width=img.width;c.height=img.height;
+      const x=c.getContext('2d');x.drawImage(img,0,0);x.globalCompositeOperation='source-atop';x.fillStyle='rgba(195,0,0,.65)';x.fillRect(0,0,c.width,c.height);x.globalCompositeOperation='source-over';return c;
+    });
+    let selected=0, angle=0, rotating=false, launching=false, down=null, suppressUntil=0;
+    const names=['DOA BINGO','DOA TARGET GUESS'];
+    function fit(){const w=Math.min(wrap.clientWidth,wrap.clientHeight*.86*565/1000);stage.style.width=w+'px';stage.style.height=w*1000/565+'px';}
+    function draw(a, active){
+      ctx.clearRect(0,0,565,1000);
+      for(let i=0;i<6;i++){
+        const t=a+i*Math.PI/3;
+        const x=cx+rx*Math.sin(t),y=cy+ry*Math.cos(t);
+        const titleIndex=i===0?0:i===1?1:-1;
+        const chosen=titleIndex>=0&&titleIndex===active;
+        ctx.globalAlpha=chosen?1:.65;
+        ctx.drawImage(titleIndex<0?blank:chosen?red[titleIndex]:titles[titleIndex],x-60.5,y-60.5,121,121);
+      }
+      ctx.globalAlpha=1;ctx.drawImage(skull,0,0,565,1000);
+    }
+    function sync(){hit.disabled=rotating||launching;hit.setAttribute('aria-label',names[selected]);}
+    function play(audio){if(!audio)return Promise.resolve();try{audio.currentTime=0;return Promise.resolve(audio.play()).catch(()=>{});}catch{return Promise.resolve();}}
+    function turn(direction=1){
+      if(rotating||launching)return;
+      rotating=true;sync();const target=angle + (direction < 0 ? -1 : 1) * (selected===0 ? (direction < 0 ? 1 : 5) : (direction < 0 ? 5 : 1)) * Math.PI/3, start=angle, begin=performance.now();
+      play(clickSE);
+      function frame(now){const p=Math.min(1,(now-begin)/300);const e=1-Math.pow(1-p,3);angle=start+(target-start)*e;draw(angle,-1);if(p<1)requestAnimationFrame(frame);else{selected=1-selected;angle=target;rotating=false;draw(angle,selected);sync();}}
+      requestAnimationFrame(frame);
+    }
+    stage.addEventListener('pointerdown',e=>{if(rotating||launching||!e.isPrimary||e.button!==0)return;down={id:e.pointerId,x:e.clientX,y:e.clientY};});
+    stage.addEventListener('pointercancel',()=>{down=null;});
+    window.addEventListener('pointerup',e=>{if(!down||e.pointerId!==down.id)return;const dx=e.clientX-down.x,dy=e.clientY-down.y;down=null;if(Math.abs(dx)>Math.max(24,stage.clientWidth*.06)&&Math.abs(dx)>Math.abs(dy)){suppressUntil=performance.now()+450;turn(dx > 0 ? 1 : -1);}else if(Math.abs(dx)>12||Math.abs(dy)>12)suppressUntil=performance.now()+450;});
+    hit.addEventListener('keydown',e=>{if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();turn(e.key==='ArrowRight'?1:-1);}});
+    hit.addEventListener('click',()=>{
+      if(rotating||launching||performance.now()<suppressUntil)return;
+      launching=true;sync();const button=selected===0?db:dtg;
+      if(selected===0) resumeDealAudio();
+      let done=false,timer;const go=()=>{if(done)return;done=true;clearTimeout(timer);shotSE?.removeEventListener('ended',go);shotSE?.removeEventListener('error',go);button.click();launching=false;sync();};
+      if(shotSE){shotSE.addEventListener('ended',go,{once:true});shotSE.addEventListener('error',go,{once:true});timer=setTimeout(go,2500);try { shotSE.currentTime=0; Promise.resolve(shotSE.play()).catch(go); } catch { go(); }}else go();
+    });
+    window.addEventListener('resize',fit);if(window.ResizeObserver)new ResizeObserver(fit).observe(wrap);
+    screen.classList.add('doa-wheel');fit();draw(0,0);sync();
+  }).catch(error=>console.warn('DOA title assets unavailable; original menu retained.',error));
+})();
+</script>
+
+
 </body>
 
 </html>
