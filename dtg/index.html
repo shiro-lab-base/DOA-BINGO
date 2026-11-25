@@ -1958,6 +1958,18 @@ object-fit: contain;
 #guestRoomBoard .guest-detail-actions {display:flex;gap:12px;width:90%;}
 #guestRoomBoard .guest-detail-actions button {flex:1;background:#20160d;color:#e9d7b5;border:1px solid #bda078;padding:9px 4px;font-weight:bold;}
 #guestRoomBoard #guestDetailMessage {color:#8e2015;font-weight:bold;}
+/* V18: fit text inside guest paper without scrolling. */
+#guestRoomBoard .guest-detail {overflow:hidden;overflow-wrap:anywhere;}
+#guestRoomBoard .guest-note-text {gap:.08em;}
+#guestRoomBoard .guest-note-text > * {flex-shrink:0;max-width:100%;}
+#guestRoomBoard .guest-note-text strong {font-size:1.38em;}
+#guestRoomBoard .guest-note-text span {font-size:1em;white-space:normal;overflow:visible;overflow-wrap:anywhere;}
+#guestRoomBoard .guest-note-text small {font-size:.8em;}
+#onlineContents #guestRoomBoard .guest-detail p {margin:.24em 0;}
+#onlineContents #guestRoomBoard .guest-detail .rule-sheet {gap:.18em;}
+#onlineContents #guestRoomBoard .guest-detail .rule-row {padding-bottom:.18em;gap:.3em;}
+#onlineContents #guestRoomBoard .guest-detail label {margin:.36em 0 .18em;}
+#onlineContents #guestRoomBoard .guest-detail input {height:1.6em;min-height:0;padding:.12em .3em;}
 #onlineContents .board-title {margin-bottom:6px;letter-spacing:.18em;font-size:30px;color:#f0dfbf;text-shadow:0 2px 8px rgba(0,0,0,.35);}
 #onlineContents .board-subtitle {margin:0 0 18px;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:#d1b58f;}
 #onlineContents .board-actions {display:grid;gap:12px;margin-top:18px;}
@@ -6095,6 +6107,25 @@ function renderDtgPenalty(openedBonus, loser) {
     }));
     return guestPaperCrops.get(url);
   }
+  function fitGuestPaperText(){
+    const board=byId('guestRoomBoard');
+    if(!board||!board.clientWidth||!onlineScreen.classList.contains('active'))return;
+    for(const area of board.querySelectorAll('.guest-note-text,.guest-detail')){
+      if(!area.clientWidth||!area.clientHeight)continue;
+      const detail=area.classList.contains('guest-detail');
+      const max=detail?Math.min(17,Math.max(10,area.parentElement.clientWidth*.035)):Math.min(17,Math.max(10,board.clientWidth*.031));
+      const fits=()=>area.scrollHeight<=area.clientHeight&&area.scrollWidth<=area.clientWidth;
+      let low=.25,high=max;
+      area.style.fontSize=high+'px';
+      if(fits())continue;
+      for(let i=0;i<18;i++){
+        const mid=(low+high)/2;area.style.fontSize=mid+'px';
+        if(fits())low=mid;else high=mid;
+      }
+      area.style.fontSize=low+'px';
+    }
+  }
+  window.addEventListener('resize',fitGuestPaperText);
   function setGuestPaper(image,id){
     const url=guestPaperUrl(id);image.dataset.paperRequest=id;
     const parent=image.parentElement;delete parent.dataset.paperReady;
@@ -6103,7 +6134,7 @@ function renderDtgPenalty(openedBonus, loser) {
       image.onload=()=>{
         if(image.dataset.paperRequest!==id)return;
         if(image.naturalWidth&&image.naturalHeight)parent.style.aspectRatio=`${image.naturalWidth}/${image.naturalHeight}`;
-        parent.dataset.paperReady='1';
+        parent.dataset.paperReady='1';fitGuestPaperText();
       };
       image.src=src;if(image.complete&&image.naturalWidth)image.onload();
     });
@@ -6126,6 +6157,7 @@ function renderDtgPenalty(openedBonus, loser) {
         setGuestPaper(note.querySelector("img"),r.roomId);
         note.onclick=()=>openDetail(r);box.append(note);
       });
+      fitGuestPaperText();
     }
     async function fetchRooms(){
       const seq=++request;say('');
@@ -6135,15 +6167,15 @@ function renderDtgPenalty(openedBonus, loser) {
     async function openDetail(room){
       const seq=++detailRequest;selected=null;join.disabled=true;overlay.hidden=false;
       setGuestPaper(byId('guestDetailPaper'),room.roomId);
-      detail.innerHTML='<p>LOADING...</p>';
+      detail.innerHTML='<p>LOADING...</p>';fitGuestPaperText();
       try{
         const r=await api('roomInfo',{roomId:room.roomId});
         if(!active()||seq!==detailRequest)return;
         selected=r;
         detail.innerHTML=`<h3>ROOM DETAILS</h3><p><strong>ROOM ID</strong>：${escapeHtml(r.roomId)}<br><strong>HOST NAME</strong>：${escapeHtml(r.hostName)}</p>${lobbyRules(r.rules)}<label for="onlinePlayerName">PLAYER NAME（任意）</label><input id="onlinePlayerName" maxlength="20" autocomplete="nickname" placeholder="GUEST"><div ${r.locked?'':'hidden'}><label for="onlinePassword">ROOM PASSWORD</label><input id="onlinePassword" maxlength="64" type="text" autocomplete="off"></div><p id="guestDetailMessage" role="status"></p>`;
         byId('onlinePlayerName').value=localStorage.getItem(nameKey)||'';
-        detail.scrollTop=0;join.disabled=false;
-      }catch(e){if(active()&&seq===detailRequest)detail.innerHTML=`<p>${escapeHtml(e.message)}</p>`;}
+        detail.scrollTop=0;join.disabled=false;fitGuestPaperText();
+      }catch(e){if(active()&&seq===detailRequest){detail.innerHTML=`<p>${escapeHtml(e.message)}</p>`;fitGuestPaperText();}}
     }
     byId('guestSearch').onsubmit=async e=>{
       e.preventDefault();const id=search.value.trim().toUpperCase();
@@ -6166,7 +6198,7 @@ function renderDtgPenalty(openedBonus, loser) {
       try{
         const r=await api('join',{name,roomId,password});
         identity={roomId:r.roomId,token:r.token,role:'guest'};saveName(name);saveIdentity();beginPolling();await receive(r.state);
-      }catch(e){if(active()){byId('guestDetailMessage').textContent=e.message;join.disabled=false;}}
+      }catch(e){if(active()){byId('guestDetailMessage').textContent=e.message;join.disabled=false;fitGuestPaperText();}}
       finally{joining=false;}
     };
     await fetchRooms();
