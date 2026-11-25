@@ -34,13 +34,7 @@ or commercial use of original assets is prohibited.
 
   >
 
-<title>96/46games</title>
-
-<meta name="apple-mobile-web-app-title" content="96/46games">
-
-<link rel="apple-touch-icon" href="/images/9646games-icon.PNG">
-
-<link rel="icon" type="image/png" href="/images/9646games-icon.PNG">
+  <title>DOA TARGET GUESS</title>
 
   <style>
 
@@ -62,6 +56,8 @@ or commercial use of original assets is prohibited.
 
       font-family: Arial, sans-serif;
 
+      overflow-x: hidden;
+
     }
 
     button,
@@ -69,6 +65,12 @@ or commercial use of original assets is prohibited.
     select {
 
       font: inherit;
+
+    }
+
+    button {
+
+      cursor: pointer;
 
     }
 
@@ -80,13 +82,15 @@ or commercial use of original assets is prohibited.
 
       min-height: 100vh;
 
-      padding: 24px 18px;
+      padding: 18px;
+
+      background-image: url("../images/doa-play-back.PNG");
+
+      background-size: cover;
 
       background-position: center;
 
       background-repeat: no-repeat;
-
-      background-size: cover;
 
     }
 
@@ -104,37 +108,21 @@ or commercial use of original assets is prohibited.
 
       width: 100%;
 
-      max-width: 500px;
+      max-width: 1000px;
+
+      margin: auto;
 
       text-align: center;
 
     }
 
-    h1 {
-
-      margin: 0;
-
-      font-size: 38px;
-
-      letter-spacing: 4px;
-
-    }
+    h1,
 
     h2 {
 
-      margin: 0 0 28px;
+      margin: 0;
 
-      letter-spacing: 2px;
-
-    }
-
-    .subtitle {
-
-      margin-top: 8px;
-
-      color: #888;
-
-      font-size: 13px;
+      letter-spacing: 3px;
 
     }
 
@@ -144,7 +132,7 @@ or commercial use of original assets is prohibited.
 
       min-height: 52px;
 
-      margin-top: 20px;
+      margin-top: 18px;
 
       border: 0;
 
@@ -155,8 +143,6 @@ or commercial use of original assets is prohibited.
       color: #000;
 
       font-weight: bold;
-
-      cursor: pointer;
 
     }
 
@@ -168,256 +154,21 @@ or commercial use of original assets is prohibited.
 
       margin-top: 12px;
 
-      border: 1px solid #666;
+      border: 1px solid #777;
 
       border-radius: 8px;
 
-      background: transparent;
+      background: rgba(0, 0, 0, 0.65);
 
       color: #fff;
 
       font-weight: bold;
-
-      cursor: pointer;
-
-    }
-
-    #titleScreen {
-
-      justify-content: center;
-
-      background-image: url("images/doa-title.PNG");
-
-      background-size: contain;
-
-      background-position: center;
-
-      background-repeat: no-repeat;
-
-      background-color: #000;
-
-    }
-
-    #settingsScreen {
-
-      background-image: url("images/doa-setting.PNG");
-
-    }
-
-    #gameScreen {
-
-      justify-content: flex-start;
-
-      position: relative;
-
-      background-image: url("images/doa-play-back.PNG");
-
-    }
-
-    #resultScreen {
-
-      justify-content: center;
-
-      background-image: url("images/doa-play-back.PNG");
-
-    }
-
-    #titleScreen .main-button,
-
-    #titleScreen .secondary-button {
-
-      background: rgba(0, 0, 0, 0.60);
-
-      color: #fff;
-
-      border: 1px solid #fff;
-
-    }
-
-    #settingsScreen .main-button {
-
-      background: #fff;
-
-      color: #000;
-
-      border: 0;
-
-    }
-
-    #settingsScreen .secondary-button {
-
-      background: #1c1c1c;
-
-      color: #fff;
-
-      border: 1px solid #666;
-
-    }
-
-    .title-wrap {
-
-      width: 100%;
-
-      max-width: 420px;
-
-      min-height: 100vh;
-
-      position: relative;
-
-      text-align: center;
-
-    } 
-
-    #titleScreen #dbSelectButton {
-
-      position: absolute;
-
-      top: 57%;
-
-      left: 50%;
-
-      transform: translate(-50%, -50%);
-
-      width: calc(100% - 60px);
-
-      margin: 0;
-
-      padding: 8px 0;
-
-      font-size: clamp(24px, 7vw, 38px);
-
-      font-weight: 900;
-
-      letter-spacing: 3px;
-
-      color: #c00000;
-
-      -webkit-text-stroke: 1.5px #000;
-
-      text-shadow:
-
-        0 0 2px #000,
-
-        0 0 6px rgba(0, 0, 0, 0.9);
-
-      cursor: pointer;
-
-    }
-
-    .title-wrap .subtitle {
-
-      position: absolute;
-
-      top: 40%;
-
-      left: 50%;
-
-      transform: translate(-50%, -50%);
-
-      margin: 0;
-
-      width: 100%;
-
-    }
-
-    #titleStartButton {
-
-      position: absolute;
-
-      top: 68%;
-
-      left: 50%;
-
-      transform: translateX(-50%);
-
-      width: calc(100% - 60px);
-
-      margin-top: 0;
-
-      font-size: clamp(24px, 7vw, 38px);
-
-letter-spacing: 0px;
-
-white-space: nowrap;
-
-      color: #fff;
-
-      -webkit-text-stroke: 1px #000;
-
-      text-shadow:
-
-        0 0 2px #000,
-
-        0 0 5px rgba(0, 0, 0, 0.9);
-
-    }
-    
-
-#supportButton {
-
-  position: absolute;
-
-  top: 86%;
-
-  left: 50%;
-
-  transform: translateX(-50%);
-
-  width: calc(100% - 100px);
-
-  min-height: 44px;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  padding: 10px 12px;
-
-  border: 1px solid rgba(215, 185, 130, 0.65);
-
-  border-radius: 8px;
-
-  background: rgba(0, 0, 0, 0.65);
-
-  color: #d9ba83;
-
-  font-size: clamp(13px, 3.8vw, 18px);
-
-  font-weight: bold;
-
-  letter-spacing: 0.5px;
-
-  text-decoration: none;
-
-  white-space: nowrap;
-
-  cursor: pointer;
-
-}
-    
-    .settings-section-title {
-
-      margin: 22px 0 12px;
-
-      text-align: left;
-
-      font-size: 13px;
-
-      font-weight: bold;
-
-      letter-spacing: 2px;
-
-      color: #2b2b2b;
-
-      text-shadow: 0 1px 1px rgba(255, 255, 255, 0.35);
 
     }
 
     .setting-box {
 
-      margin-bottom: 18px;
+      margin-top: 28px;
 
       text-align: left;
 
@@ -427,15 +178,13 @@ white-space: nowrap;
 
       display: block;
 
-      margin-bottom: 7px;
+      margin-bottom: 8px;
 
-      font-size: 14px;
-
-      color: #4a4a4a;
+      color: #fff;
 
       font-weight: bold;
 
-      text-shadow: 0 1px 1px rgba(255, 255, 255, 0.35);
+      text-shadow: 0 1px 3px #000;
 
     }
 
@@ -443,11 +192,11 @@ white-space: nowrap;
 
       width: 100%;
 
-      height: 48px;
+      height: 50px;
 
       padding: 0 12px;
 
-      border: 1px solid #555;
+      border: 1px solid #666;
 
       border-radius: 8px;
 
@@ -457,115 +206,75 @@ white-space: nowrap;
 
     }
 
-    #settingError {
+    #setupScreen {
 
-      min-height: 24px;
-
-      margin-top: 12px;
-
-      color: #ff5555;
-
-      font-size: 14px;
+      justify-content: center;
 
     }
 
-    .game-header {
+    #setupCards {
 
-      margin-bottom: 18px;
+      --setup-count: 5;
 
-    }
+      display: flex;
 
-    .game-title {
+      flex-wrap: nowrap;
 
-      margin: 0;
+      justify-content: center;
 
-      font-size: 26px;
-
-      letter-spacing: 3px;
-
-    }
-
-    #status {
-
-  min-height: 38px;
-
-  margin-top: 12px;
-
-  font-size: clamp(28px, 7vw, 46px);
-
-  font-weight: 900;
-
-  letter-spacing: 2px;
-
-  color: #fff;
-
-  text-shadow:
-
-    0 2px 5px #000,
-
-    0 0 12px rgba(0, 0, 0, 0.8);
-
-}
-
-#status.turn-pop {
-
-  animation: turnPop 0.45s ease-out;
-
-}
-
-@keyframes turnPop {
-
-  0% {
-
-    transform: scale(0.85);
-
-    opacity: 0.5;
-
-  }
-
-  55% {
-
-    transform: scale(1.13);
-
-    opacity: 1;
-
-  }
-
-  100% {
-
-    transform: scale(1);
-
-    opacity: 1;
-
-  }
-
-}
-    
-    #gameInfo {
-
-      color: #888;
-
-      font-size: 12px;
-
-    }
-
-    #board {
-
-      display: grid;
-
-      width: 100%;
+      align-items: flex-end;
 
       gap: 8px;
 
-      margin: 12px auto 0;
+      width: 100%;
+
+      margin-top: 28px;
+
+      overflow-x: auto;
+
+      padding: 8px 0 16px;
 
     }
 
-    .card {
+    .setup-card {
+
+      flex: 0 0 auto;
+
+      width: min(
+
+        90px,
+
+        calc(
+
+          (
+
+            100vw
+
+            - 52px
+
+            - (
+
+              (var(--setup-count) - 1)
+
+              * 8px
+
+            )
+
+          )
+
+          / var(--setup-count)
+
+        )
+
+      );
+
+      min-width: 34px;
+
+      aspect-ratio: 63 / 88;
 
       padding: 0;
 
-      border: 0;
+      border: 2px solid transparent;
 
       border-radius: 8px;
 
@@ -573,53 +282,23 @@ white-space: nowrap;
 
       background: transparent;
 
-      aspect-ratio: 63 / 88;
+      transition:
 
-      cursor: pointer;
+        transform 0.18s ease,
 
-      transition: transform 0.12s ease;
-
-    }
-
-    .card.dealing {
-
-      animation: dealIn 0.14s ease-out;
+        border-color 0.18s ease;
 
     }
 
-    @keyframes dealIn {
+    .setup-card.selected {
 
-      from {
+      border-color: #d00000;
 
-        opacity: 0;
-
-        transform: translateY(-10px);
-
-      }
-
-      to {
-
-        opacity: 1;
-
-        transform: translateY(0);
-
-      }
+      transform: translateY(-7px);
 
     }
 
-    .card:active {
-
-      transform: scale(0.96);
-
-    }
-
-    .card:disabled {
-
-      cursor: default;
-
-    }
-
-    .card img {
+    .setup-card img {
 
       display: block;
 
@@ -631,6 +310,562 @@ white-space: nowrap;
 
     }
 
+    .setup-actions {
+
+      display: grid;
+
+      grid-template-columns: 1fr 1fr;
+
+      gap: 10px;
+
+      margin-top: 10px;
+
+    }
+
+    .setup-actions button {
+
+      min-height: 48px;
+
+      border: 1px solid #777;
+
+      border-radius: 8px;
+
+      background: rgba(0, 0, 0, 0.72);
+
+      color: #fff;
+
+      font-weight: bold;
+
+    }
+
+    #blindStatus {
+
+      min-height: 24px;
+
+      margin-top: 8px;
+
+      color: #ddd;
+
+      font-size: 13px;
+
+      letter-spacing: 1px;
+
+    }
+
+    #gameScreen {
+
+      position: relative;
+
+      justify-content: center;
+
+      overflow: hidden;
+
+    }
+
+    /* DTG GAME BACKGROUND */
+
+#gameScreen {
+
+  background-image: url("../images/doa-tate-back.PNG");
+
+  background-size: cover;
+
+  background-position: center;
+
+  background-repeat: no-repeat;
+
+}
+
+@media (orientation: landscape) {
+
+  #gameScreen {
+
+    background-image: url("../images/doa-yoko-back.PNG");
+
+  }
+
+}
+    
+    .game-wrap {
+
+      width: 100%;
+
+      max-width: 1180px;
+
+      position: relative;
+
+      z-index: 3;
+
+    }
+
+    .player-label {
+
+      margin: 4px 0 8px;
+
+      font-size: 15px;
+
+      font-weight: bold;
+
+      letter-spacing: 2px;
+
+      text-shadow: 0 1px 4px #000;
+
+    }
+
+    .card-row {
+
+      display: flex;
+
+      justify-content: center;
+
+      gap: 8px;
+
+      width: 100%;
+
+      min-height: 130px;
+
+      perspective: 900px;
+
+    }
+
+    .game-card {
+
+  width: min(
+
+    110px,
+
+    calc(
+
+      (
+
+        100vw
+
+        - 52px
+
+        - (
+
+          (var(--card-count) - 1)
+
+          * 8px
+
+        )
+
+      )
+
+      / var(--card-count)
+
+    )
+
+  );
+
+  aspect-ratio: 63 / 88;
+
+  padding: 0;
+
+  border: 0;
+
+  border-radius: 8px;
+
+  overflow: hidden;
+
+  background: transparent;
+
+  transition:
+
+    transform 0.38s ease,
+
+    opacity 0.38s ease,
+
+    filter 0.2s ease;
+
+  transform-style: preserve-3d;
+
+}
+
+    .game-card img {
+
+      display: block;
+
+      width: 100%;
+
+      height: 100%;
+
+      object-fit: cover;
+
+    }
+
+    .game-card.selectable {
+
+      outline: 2px solid rgba(255, 255, 255, 0.8);
+
+      animation: cardPulse 0.8s ease-in-out infinite alternate;
+
+    }
+
+    @keyframes cardPulse {
+
+      from {
+
+        filter: brightness(1);
+
+      }
+
+      to {
+
+        filter: brightness(1.45);
+
+      }
+
+    }
+
+    .cpu-card.opened {
+
+      transform:
+
+        perspective(700px)
+
+        rotateX(58deg)
+
+        translateY(20px);
+
+      transform-origin: bottom center;
+
+    }
+    .cpu-card.opened img {
+
+  transform: rotate(180deg);
+
+}
+    .player-card.opened {
+
+      transform:
+
+        perspective(800px)
+
+        translateY(-16px)
+
+        rotateX(32deg);
+
+      transform-origin: bottom center;
+
+    }
+
+    
+
+/* DTG STANDING CARDS */
+
+/* CPU：テーブル奥側 */
+
+.cpu-card:not(.opened) {
+
+  transform:
+
+    perspective(900px)
+
+    rotateX(-13deg);
+
+  transform-origin: center bottom;
+
+  box-shadow:
+
+    0 9px 8px rgba(0, 0, 0, 0.5),
+
+    0 18px 14px rgba(0, 0, 0, 0.3);
+
+}
+
+/* YOU：テーブル手前側 */
+
+.player-card:not(.opened) {
+
+  transform:
+
+    perspective(900px)
+
+    rotateX(-13deg);
+
+  transform-origin: center bottom;
+
+  box-shadow:
+
+    0 8px 7px rgba(0, 0, 0, 0.5),
+
+    0 15px 12px rgba(0, 0, 0, 0.3);
+
+}
+    
+    .dice-zone {
+
+      display: grid;
+
+      grid-template-columns: 1fr auto 1fr;
+
+      align-items: center;
+
+      gap: 18px;
+
+      margin: 18px auto;
+
+      width: 100%;
+
+      max-width: 760px;
+
+      min-height: 150px;
+
+    }
+
+    .roll-result {
+
+      display: flex;
+
+      flex-direction: column;
+
+      justify-content: center;
+
+      min-height: 92px;
+
+      padding: 12px;
+
+      border: 1px solid rgba(255, 255, 255, 0.45);
+
+      border-radius: 10px;
+
+      background: rgba(0, 0, 0, 0.55);
+
+    }
+
+    .roll-label {
+
+      font-size: 12px;
+
+      letter-spacing: 2px;
+
+      color: #bbb;
+
+    }
+
+    .roll-number {
+
+      margin-top: 5px;
+
+      font-size: 42px;
+
+      font-weight: bold;
+
+    }
+
+    .center-dice-area {
+
+      display: flex;
+
+      flex-direction: column;
+
+      align-items: center;
+
+      min-width: 140px;
+
+    }
+
+    #centerDice {
+
+      position: relative;
+      
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      width: 92px;
+
+      height: 92px;
+
+      border: 3px solid #ddd;
+
+      border-radius: 18px;
+
+      background: #f7f3e8;
+
+      color: #111;
+
+      font-size: 52px;
+
+      font-weight: bold;
+
+      box-shadow:
+
+        0 6px 14px rgba(0, 0, 0, 0.45),
+
+        inset 0 0 12px rgba(0, 0, 0, 0.15);
+
+    }
+
+    #centerDice .pip {
+
+  position: absolute;
+
+  width: 17%;
+
+  height: 17%;
+
+  border-radius: 50%;
+
+  background: #111;
+
+  transform: translate(-50%, -50%);
+
+}
+
+#centerDice .pip.red {
+
+  width: 23%;
+
+  height: 23%;
+
+  background: #c00000;
+
+}
+    
+    #centerDice.rolling {
+
+      animation: diceRoll 0.16s linear infinite;
+
+    }
+
+    @keyframes diceRoll {
+
+      0% {
+
+        transform: rotate(0deg) translateY(0);
+
+      }
+
+      25% {
+
+        transform: rotate(90deg) translateY(-8px);
+
+      }
+
+      50% {
+
+        transform: rotate(180deg) translateY(0);
+
+      }
+
+      75% {
+
+        transform: rotate(270deg) translateY(-5px);
+
+      }
+
+      100% {
+
+        transform: rotate(360deg) translateY(0);
+
+      }
+
+    }
+
+    #rollButton {
+
+      width: 140px;
+
+      min-height: 44px;
+
+      margin-top: 10px;
+
+      border: 1px solid #fff;
+
+      border-radius: 8px;
+
+      background: rgba(0, 0, 0, 0.7);
+
+      color: #fff;
+
+      font-weight: bold;
+
+    }
+
+    #rollButton:disabled {
+
+      opacity: 0.35;
+
+      cursor: default;
+
+    }
+
+    #status {
+
+      min-height: 32px;
+
+      margin-top: 8px;
+
+      font-size: 19px;
+
+      font-weight: bold;
+
+      letter-spacing: 1px;
+
+      text-shadow: 0 1px 4px #000;
+
+    }
+
+    #dangerOverlay {
+
+      position: absolute;
+
+      inset: 0;
+
+      z-index: 1;
+
+      background: rgba(150, 0, 0, 0);
+
+      pointer-events: none;
+
+      transition: background 0.4s ease;
+
+    }
+
+    #dangerOverlay.active {
+
+      background: rgba(150, 0, 0, 0.20);
+
+    }
+
+/* DTG ECG — continuous monitor */
+
+#ecgLayer {
+
+  display: none;
+
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 4;
+
+  overflow: hidden;
+
+  pointer-events: none;
+
+}
+
+#ecgLayer.active {
+
+  display: block;
+
+}
+
+#ecgCanvas {
+
+  display: block;
+
+  width: 100%;
+
+  height: 100%;
+
+}
+    
     #deadFxOverlay {
 
       display: none;
@@ -639,7 +874,7 @@ white-space: nowrap;
 
       inset: 0;
 
-      z-index: 2000;
+      z-index: 5000;
 
       overflow: hidden;
 
@@ -653,47 +888,21 @@ white-space: nowrap;
 
     }
 
-    #deadFxOverlay.running {
-
-      pointer-events: auto;
-
-    }
-
-    #deadFxBlack {
-
-      position: absolute;
-
-      inset: 0;
-
-      z-index: 20;
-
-      background: #000;
-
-      opacity: 0;
-
-      transition: opacity 0.18s linear;
-
-    }
-
-    #deadFxBlack.show {
-
-      opacity: 1;
-
-    }
-
     #deadFxRed {
 
       position: absolute;
 
       inset: 0;
 
-      z-index: 2;
+      z-index: 1;
 
       background: rgba(150, 0, 0, 0.42);
 
       opacity: 0;
 
-      transition: opacity 0.18s linear;
+      transition:
+
+        opacity 0.35s linear;
 
     }
 
@@ -703,99 +912,203 @@ white-space: nowrap;
 
     }
 
-    .dead-fx-image {
+    #deadFxCard {
 
       position: absolute;
 
-      inset: 0;
+      z-index: 2;
 
-      width: 100%;
+      object-fit: cover;
 
-      height: 100%;
+      border-radius: 8px;
 
-      object-fit: contain;
+      transition:
 
-      opacity: 0;
+        left 0.7s ease-out,
 
-      pointer-events: none;
+        top 0.7s ease-out,
 
-      user-select: none;
+        width 0.7s ease-out,
 
-      -webkit-user-drag: none;
+        height 0.7s ease-out,
 
-    }
-
-    #deadFxSkull1 {
-
-      z-index: 10;
+        transform 0.7s ease-out;
 
     }
 
     #deadFxBullet {
 
-      z-index: 30;
+      position: absolute;
+
+      z-index: 3;
+
+      width: 140vmax;
+
+height: 140vmax;
+
+object-fit: contain;
+
+      opacity: 0;
+
+      transform:
+
+        translate(-50%, -50%)
+
+        scale(0.7);
+
+      transition:
+
+        opacity 0.08s linear,
+
+        transform 0.12s ease-out;
 
     }
 
-    #deadFxBlood {
+    #deadFxBullet.show {
 
-      z-index: 31;
+      opacity: 1;
 
-    }
+      transform:
 
-    #deadFxSkull2 {
+        translate(-50%, -50%)
 
-      z-index: 5;
-
-    }
-
-    #deadFxLogo {
-
-      z-index: 6;
+        scale(1);
 
     }
 
-    #deadTapLayer {
+    #deadFxResultText {
 
-      display: none;
+      position: absolute;
 
-      position: fixed;
+      left: 50%;
 
-      inset: 0;
+      top: 50%;
 
-      z-index: 3000;
+      z-index: 4;
 
-      background: transparent;
+      transform:
 
-      cursor: pointer;
+        translate(-50%, -50%)
 
-    }
+        scale(0.8);
 
-    #deadTapLayer.active {
+      opacity: 0;
 
-      display: flex;
+      font-size: clamp(64px, 13vw, 150px);
 
-      align-items: flex-end;
+      font-weight: 900;
 
-      justify-content: center;
-
-      padding-bottom: 32px;
-
-    }
-
-    #deadTapText {
-
-      padding: 10px 18px;
-
-      border-radius: 20px;
-
-      background: rgba(0, 0, 0, 0.65);
+      letter-spacing: 8px;
 
       color: #fff;
 
-      font-size: 13px;
+      -webkit-text-stroke: 2px #000;
 
-      letter-spacing: 2px;
+      text-shadow:
+
+        0 0 3px #000,
+
+        0 0 10px rgba(0, 0, 0, 0.9);
+
+      transition:
+
+        opacity 0.22s ease,
+
+        transform 0.22s ease;
+
+    }
+
+    #deadFxResultText.show {
+
+      opacity: 1;
+
+      transform:
+
+        translate(-50%, -50%)
+
+        scale(1);
+
+    }
+
+    #deadFxResultText.lose {
+
+      color: #d00000;
+
+    }
+
+    #deadFxResultText.win {
+
+      color: #fff;
+
+    }
+
+    
+
+/* DEAD / WIN RESULT LOGOS */
+
+#deadFxResultText {
+
+  width: 100vw;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  pointer-events: none;
+
+}
+
+#deadFxResultText img {
+
+  display: block;
+
+  width: 90vw;
+
+  max-height: 44svh;
+
+  height: auto;
+
+  object-fit: contain;
+
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.8));
+
+}
+
+#deadFxResultText.lose img {
+
+  flex: 0 0 auto;
+
+  width: 130vw;
+
+  max-height: 80svh;
+
+}
+
+@media (orientation: landscape) {
+
+  #deadFxResultText img {
+
+    width: 80vw;
+
+    max-height: 60svh;
+
+  }
+
+  #deadFxResultText.lose img {
+
+  width: 120vw;
+
+  max-height: 85svh;
+
+}
+
+}
+    
+    #resultScreen {
+
+      justify-content: center;
 
     }
 
@@ -803,446 +1116,853 @@ white-space: nowrap;
 
       width: 100%;
 
-      max-width: 420px;
+      max-width: 430px;
 
-      padding: 26px 20px;
+      padding: 28px 22px;
 
-      border: 1px solid #444;
+      border: 1px solid #555;
 
       border-radius: 12px;
 
-      background: #191919;
-
-      text-align: center;
+      background: rgba(20, 20, 20, 0.94);
 
     }
 
     #resultTitle {
 
-      margin-bottom: 22px;
-
-      color: #d00000;
-
-      font-size: 32px;
-
-      font-weight: bold;
-
-    }
-
-    .result-line {
-
-      margin: 10px 0;
-
-      font-size: 20px;
-
-    }
-
-    .total-shots {
-
-      margin: 22px 0;
-
       font-size: 34px;
 
       font-weight: bold;
 
+      color: #d00000;
+
     }
 
-/* DB SETTINGS ACCORDIONS */
+    #resultPenalty {
 
-.settings-accordion {
+      margin-top: 24px;
 
-  width: 100%;
+      font-size: 38px;
 
-  margin: 12px 0;
+      font-weight: bold;
 
-  border: 1px solid rgba(55, 35, 19, 0.35);
+    }
 
-  border-radius: 10px;
+    #resultDetail {
 
-  overflow: hidden;
+      margin-top: 14px;
 
-  background: rgba(255, 246, 222, 0.13);
+      color: #ccc;
+
+      line-height: 1.7;
+
+    }
+
+    .landscape-note {
+
+      display: none;
+
+      margin-bottom: 10px;
+
+      color: #ddd;
+
+      font-size: 12px;
+
+      letter-spacing: 1px;
+
+    }
+
+    @media (orientation: portrait) {
+
+  .landscape-note {
+
+    display: block;
+
+  }
+
+  .card-row {
+
+    display: grid;
+
+    grid-template-columns:
+
+      repeat(
+
+        var(--card-count),
+
+        minmax(0, 1fr)
+
+      );
+
+    gap: 5px;
+
+    width: 100%;
+
+    min-height: 110px;
+
+  }
+
+  .game-card {
+
+    width: 100%;
+
+    max-width: 110px;
+
+    height: auto;
+
+    justify-self: center;
+
+  }
+
+  .dice-zone {
+
+    gap: 8px;
+
+    margin: 10px auto;
+
+  }
+
+  .center-dice-area {
+
+    min-width: 100px;
+
+  }
+
+  #centerDice {
+
+    width: 72px;
+
+    height: 72px;
+
+    font-size: 40px;
+
+  }
+
+  #rollButton {
+
+    width: 100px;
+
+    font-size: 13px;
+
+  }
+
+  .roll-number {
+
+    font-size: 32px;
+
+  }
 
 }
 
-.settings-toggle {
+@media (orientation: landscape) {
 
-  width: 100%;
+  #gameScreen {
+
+    height: 100svh;
+
+    min-height: 0;
+
+    padding:
+
+      max(6px, env(safe-area-inset-top))
+
+      clamp(8px, 1.8vw, 22px)
+
+      max(6px, env(safe-area-inset-bottom));
+
+    justify-content: center;
+
+    overflow: hidden;
+
+  }
+
+  .game-wrap {
+
+    width: 100%;
+
+    height: auto;
+
+    max-height: 100%;
+
+  }
+
+  .player-label {
+
+    margin:
+
+      clamp(1px, 0.4svh, 5px)
+
+      0;
+
+    font-size:
+
+      clamp(11px, 2svh, 15px);
+
+  }
+
+  .card-row {
+
+    display: grid;
+
+    grid-template-columns:
+
+      repeat(
+
+        var(--card-count),
+
+        minmax(0, 1fr)
+
+      );
+
+    align-items: center;
+
+    gap:
+
+      clamp(4px, 0.8vw, 10px);
+
+    width: 100%;
+
+    min-height: 0;
+
+  }
+
+  .game-card {
+
+    width: 100%;
+
+    max-width:
+
+      clamp(
+
+        70px,
+
+        9vw,
+
+        110px
+
+      );
+
+    height: auto;
+
+    justify-self: center;
+
+  }
+
+  .dice-zone {
+
+    min-height: 0;
+
+    margin:
+
+      clamp(3px, 0.8svh, 10px)
+
+      auto;
+
+    gap:
+
+      clamp(8px, 1.5vw, 20px);
+
+  }
+
+  .roll-result {
+
+    min-height:
+
+      clamp(
+
+        58px,
+
+        15svh,
+
+        105px
+
+      );
+
+    padding:
+
+      clamp(5px, 1svh, 12px);
+
+  }
+
+  .roll-number {
+
+    font-size:
+
+      clamp(
+
+        25px,
+
+        7svh,
+
+        42px
+
+      );
+
+  }
+
+  .center-dice-area {
+
+    min-width:
+
+      clamp(
+
+        80px,
+
+        14vw,
+
+        140px
+
+      );
+
+  }
+
+  #centerDice {
+
+    width:
+
+      clamp(
+
+        58px,
+
+        14svh,
+
+        92px
+
+      );
+
+    height:
+
+      clamp(
+
+        58px,
+
+        14svh,
+
+        92px
+
+      );
+
+    font-size:
+
+      clamp(
+
+        30px,
+
+        8svh,
+
+        52px
+
+      );
+
+  }
+
+  #rollButton {
+
+    width:
+
+      clamp(
+
+        90px,
+
+        16vw,
+
+        140px
+
+      );
+
+    min-height:
+
+      clamp(
+
+        30px,
+
+        7svh,
+
+        44px
+
+      );
+
+    margin-top:
+
+      clamp(
+
+        3px,
+
+        0.8svh,
+
+        10px
+
+      );
+
+  }
+
+  #status {
+
+    min-height:
+
+      clamp(
+
+        18px,
+
+        4svh,
+
+        32px
+
+      );
+
+    margin-top:
+
+      clamp(
+
+        1px,
+
+        0.5svh,
+
+        6px
+
+      );
+
+    font-size:
+
+      clamp(
+
+        13px,
+
+        3.4svh,
+
+        19px
+
+      );
+
+  }
+}
+    
+/* DTG LANDSCAPE DICE UI */
+
+@media (orientation: landscape) {
+
+  .dice-zone {
+
+    width: fit-content;
+
+    max-width: 100%;
+
+    grid-template-columns: auto auto auto;
+
+    gap: clamp(8px, 1.5vw, 16px);
+
+  }
+
+  .roll-result {
+
+    width: 110px;
+
+  }
+
+}
+
+/* DTG PORTRAIT DICE UI */
+
+@media (orientation: portrait) {
+
+  .dice-zone {
+
+    width: fit-content;
+
+    max-width: 100%;
+
+    grid-template-columns: auto auto auto;
+
+    gap: 8px;
+
+  }
+
+  .roll-result {
+
+    width: 74px;
+
+    padding: 8px;
+
+  }
+
+}
+
+/* DTG DICE RESULT NUMBER ALIGN */
+
+.roll-number {
+
+  text-align: center;
+
+}
+  
+/* VS standalone background — shared repository image */
+#settingsScreen, #setupScreen, #gameScreen.vs-mode, #resultScreen {
+  background-image: url("../images/doa-vs-back.PNG");
+  background-position: center;
+  background-size: cover;
+}
+/* VS MODE: top seat faces the opposite player */
+#gameScreen.vs-mode .game-wrap { width: 100%; }
+#gameScreen.vs-mode .vs-top-seat { transform: rotate(180deg); }
+#gameScreen.vs-mode .vs-top-seat .cpu-card.opened img { transform: none; }
+#gameScreen.vs-mode .vs-top-seat .cpu-card:not(.opened) { transform: none; }
+#gameScreen.vs-mode .player-card:not(.opened) { transform: none; }
+#gameScreen.vs-mode .game-wrap { display:flex; flex-direction:column; justify-content:space-between; min-height: min(88svh, 900px); }
+#gameScreen.vs-mode .card-row { min-height: 0; }
+#gameScreen.vs-mode .dice-zone { margin: 12px auto; }
+#gameScreen.vs-mode .game-card { width:min(110px, calc((100vw - 52px - (var(--card-count) - 1)*8px)/var(--card-count))); }
+#gameScreen.vs-mode .vs-bottom-seat { text-align:center; }
+#gameScreen.vs-mode .vs-top-seat { text-align:center; }
+#gameScreen.vs-mode .landscape-note { display:none; }
+#handoffScreen { justify-content:center; background:#000; text-align:center; }
+#handoffScreen .container { max-width:500px; }
+#handoffText { font-size: clamp(24px,6vw,40px); letter-spacing:2px; }
+#handoffScreen .main-button { margin-top:35px; }
+@media (orientation: landscape) {
+  #gameScreen.vs-mode .game-wrap { min-height:0; height:100%; }
+}
+  
+/* DTG VS - TWO INDEPENDENT ROLL CONTROLS */
+
+#gameScreen.vs-mode .dice-zone {
 
   display: flex;
 
-  justify-content: space-between;
+  flex-direction: column;
 
   align-items: center;
 
-  padding: 15px 13px;
+  justify-content: center;
 
-  border: 0;
+  width: 100%;
 
-  background: rgba(45, 30, 20, 0.15);
+  min-height: 0;
 
-  color: #29211b;
+  gap: 10px;
 
-  font: 700 15px Arial, sans-serif;
+  margin: 12px auto;
 
-  letter-spacing: 2px;
+}
 
-  text-align: left;
+/* Independent player controls */
+
+#gameScreen.vs-mode .vs-roll-row {
+
+  position: relative;
+
+  width: 268px;
+
+  height: 84px;
+
+  flex: none;
+
+}
+
+/* P2 faces the opposite direction */
+
+#gameScreen.vs-mode .vs-roll-row.p2-row {
+
+  transform: rotate(180deg);
+
+}
+
+/* Result UI */
+
+#gameScreen.vs-mode .vs-roll-row .roll-result {
+
+  position: absolute;
+
+  top: 0;
+
+  left: 79px;
+
+  width: 110px;
+
+  min-height: 76px;
+
+  padding: 8px;
+
+  text-align: center;
+
+}
+
+#gameScreen.vs-mode .vs-roll-row .roll-number {
+
+  font-size: 32px;
+
+}
+
+/* ROLL button to the right of each result */
+
+#gameScreen.vs-mode .vs-roll-row .vs-roll-button {
+
+  position: absolute;
+
+  top: 9px;
+
+  left: 199px;
+
+  width: 66px;
+
+  height: 58px;
+
+  margin: 0;
+
+  padding: 0 4px;
+
+  border: 1px solid #fff;
+
+  border-radius: 8px;
+
+  background: rgba(0, 0, 0, 0.70);
+
+  color: #fff;
+
+  font-size: 13px;
+
+  font-weight: bold;
 
   cursor: pointer;
 
 }
 
-.settings-toggle::after {
+#gameScreen.vs-mode .vs-roll-button:disabled {
 
-  content: "＋";
+  opacity: 0.35;
 
-  font-size: 18px;
-
-}
-
-.settings-toggle[aria-expanded="true"]::after {
-
-  content: "－";
+  cursor: default;
 
 }
 
-.settings-panel {
+/* Shared central dice */
 
-  padding: 15px 13px 4px;
-
-}
-
-.settings-panel[hidden] {
-
-  display: none;
-
-}
-
-.settings-panel .setting-box {
-
-  margin-bottom: 15px;
-
-}
-
-.name-input {
-
-  width: 100%;
-
-  height: 44px;
-
-  padding: 0 12px;
-
-  border: 1px solid #666;
-
-  border-radius: 7px;
-
-  background: #1c1c1c;
-
-  color: #fff;
-
-  font: inherit;
-
-}
-
-.name-note {
-
-  color: #4a4039;
-
-  font-size: 12px;
-
-  margin: 0 0 13px;
-
-}
-
-/* DB TURN ORDER PANEL */
-
-#turnOrderPanel {
-
-  position: absolute;
-
-  top: 12px;
-
-  right: 10px;
-
-  z-index: 10;
-
-  width: clamp(145px, 34vw, 205px);
-
-  padding: 9px 8px;
-
-  border: 1px solid rgba(255, 255, 255, 0.16);
-
-  border-radius: 8px;
-
-  background: rgba(0, 0, 0, 0.28);
-
-  color: rgba(255, 255, 255, 0.78);
-
-  pointer-events: none;
-
-  font-size: clamp(9px, 2.4vw, 12px);
-
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
-
-}
-
-.turn-order-heading {
-
-  font-size: 0.85em;
-
-  letter-spacing: 1px;
-
-  margin-bottom: 5px;
-
-}
-
-.turn-order-entry {
+#gameScreen.vs-mode .center-dice-area {
 
   display: flex;
 
   align-items: center;
 
-  gap: 5px;
-
-  padding: 4px 3px;
-
-  border-radius: 4px;
+  justify-content: center;
 
   min-width: 0;
 
-}
-
-.turn-order-entry.current {
-
-  background: rgba(175, 34, 27, 0.50);
-
-  color: #fff;
-
-  font-weight: bold;
+  width: 100%;
 
 }
 
-.turn-order-name {
+#gameScreen.vs-mode #centerDice {
 
-  overflow: hidden;
+  flex: none;
 
-  text-overflow: ellipsis;
+}
+ 
+/* DTG VS - OPENED CARDS FLAT */
 
-  white-space: nowrap;
+#gameScreen.vs-mode .game-card.opened {
+
+  transform: none;
 
 }
 
-.turn-order-num {
+/* DTG VS - PLAYER 2 LOSE EFFECT */
 
-  opacity: 0.75;
+#deadFxOverlay.p2-loss {
 
-  flex: 0 0 auto;
+  transform: rotate(180deg);
 
-}
+  transform-origin: center center;
+
+}   
   
-/* DB CUSTOM PENALTY */
+/* DTG VS - P2 RESULT ROTATION */
 
-#randomPenaltySettings[hidden],
+#resultScreen.p2-lose .result-box {
 
-#levelPenaltySettings[hidden],
+  transform: rotate(180deg);
 
-#drinkPenaltySettings[hidden],
+  transform-origin: center center;
 
-#customPenaltyResult[hidden] {
+}    
+
+/* CPU BATTLE dice display */
+
+#gameScreen:not(.vs-mode) .dice-zone {
+
+  display: grid;
+
+  grid-template-columns:
+
+    minmax(0, 1fr) auto minmax(0, 1fr);
+
+  align-items: center;
+
+  width: 100%;
+
+  max-width: 760px;
+
+}
+
+#gameScreen:not(.vs-mode) .vs-roll-row {
+
+  position: static;
+
+  width: auto;
+
+  height: auto;
+
+  transform: none;
+
+}
+
+#gameScreen:not(.vs-mode) .vs-roll-row.p1-row {
+
+  grid-column: 1;
+
+  grid-row: 1;
+
+}
+
+#gameScreen:not(.vs-mode) .center-dice-area {
+
+  grid-column: 2;
+
+  grid-row: 1;
+
+}
+
+#gameScreen:not(.vs-mode) .vs-roll-row.p2-row {
+
+  grid-column: 3;
+
+  grid-row: 1;
+
+}
+
+#gameScreen:not(.vs-mode) .vs-roll-row .roll-result {
+
+  position: static;
+
+  width: 100%;
+
+  min-height: 76px;
+
+  padding: 8px;
+
+}
+
+#gameScreen:not(.vs-mode) .vs-roll-button {
 
   display: none;
 
 }
 
-.penalty-note {
+#gameScreen.vs-mode #rollButton {
 
-  margin: 6px 0 14px;
-
-  color: #493b32;
-
-  font-size: 12px;
-
-  text-align: left;
+  display: none;
 
 }
 
-.penalty-level-heading {
+#rollButton {
 
-  margin: 18px 0 9px;
-
-  color: #35251c;
-
-  font-weight: bold;
-
-  text-align: left;
-
-}
-
-.penalty-input {
-
-  display: block;
-
-  width: 100%;
+  width: 120px;
 
   min-height: 44px;
 
-  margin: 7px 0;
+  margin-top: 10px;
 
-  padding: 9px 12px;
+  border: 1px solid #fff;
 
-  border: 1px solid #666;
+  border-radius: 8px;
 
-  border-radius: 7px;
-
-  background: #1c1c1c;
+  background: rgba(0, 0, 0, .7);
 
   color: #fff;
-
-  font: inherit;
-
-}
-
-#customPenaltyResult {
-
-  margin: 22px 0;
-
-  color: #fff;
-
-}
-
-.custom-penalty-heading {
-
-  margin: 10px 0;
-
-  font-size: 26px;
 
   font-weight: bold;
 
 }
 
-.custom-penalty-item {
+#rollButton:disabled {
 
-  padding: 10px;
+  opacity: .35;
 
-  margin: 7px 0;
-
-  border: 1px solid #555;
-
-  border-radius: 7px;
-
-  overflow-wrap: anywhere;
-
-  background: rgba(0, 0, 0, 0.3);
-
-}
-  
-    /* DB MULTI DEAD ADDITIONS */
-
-.turn-order-stock {
-
-  margin-left: auto;
-
-  flex: 0 0 auto;
-
-  color: #e8c38d;
-
-  font-weight: bold;
-
-  font-size: 0.9em;
-
-  white-space: nowrap;
-
-}
-
-.card.interim-dead {
-
-  position: relative;
-
-}
-
-.card.interim-dead::after {
-
-  content: "";
-
-  position: absolute;
-
-  inset: 12%;
-
-  background:
-
-    url("images/doa-dankon.PNG")
-
-    center / contain no-repeat;
-
-  pointer-events: none;
+  cursor: default;
 
 }
     
+
+/* ONLINE additions: original phone portrait presentation stays flexible. */
+#settingsScreen .setting-box:has(#gameMode){display:none;}
+#modeScreen .container { max-width: 780px; }
+#modeScreen .setting-box {margin-top:30px;}
+#onlineScreen .online-container {max-width:700px;}
+#onlineContents {padding:24px 18px;border-radius:12px;background:rgba(10,10,10,.83);color:#fff;}
+#onlineContents label {display:block;margin:16px 0 6px;text-align:left;font-weight:bold;}
+#onlineContents input {box-sizing:border-box;display:block;width:100%;min-height:48px;padding:10px;border:1px solid #888;border-radius:7px;background:#1c1c1c;color:#fff;font-size:16px;}
+#onlineContents button[hidden], .online-only-control[hidden], #onlineIndicator[hidden] { display:none!important; }
+#onlineContents p {margin:13px 0;white-space:pre-line;}
+#onlineContents .online-small {font-size:13px;color:#ddd;}
+#onlineMessage {color:#ff7777;font-weight:bold;margin-top:15px;white-space:pre-line;}
+#onlineIndicator {position:fixed;top:8px;left:50%;transform:translateX(-50%);z-index:100;max-width:min(96vw,680px);padding:5px 12px;border-radius:6px;background:rgba(0,0,0,.85);color:white;font-size:12px;pointer-events:none;text-align:center;}
+#gameScreen {position:relative;}
+body.dtg-online-connected #setupBackButton {display:none;}
+#onlineLeaveGame {position:absolute;bottom:10px;right:12px;width:auto;min-height:38px;margin:0;padding:5px 16px;z-index:20;font-size:12px;}
+.online-only-control {max-width:700px;}
+#settingsScreen .container {text-align:center;}
+@media (min-width:660px) and (orientation:landscape) {
+  #settingsScreen {height:100dvh;min-height:0;overflow:hidden;}
+  #settingsScreen .container {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 22px;align-content:center;max-height:calc(100dvh - 36px);overflow:hidden;margin:auto;}
+  #settingsScreen .container > h1,#settingsScreen .container > h2,#settingsScreen .container > button {grid-column:1/-1;}
+  #settingsScreen .setting-box {margin-top:5px;min-width:0;}
+  #settingsScreen .dtg-accordion {min-width:0;max-height:55dvh;overflow-y:auto;}
+  #dtgRandomSettings,#dtgLevelSettings {max-height:38dvh;overflow-y:auto;background:transparent;}
+  #setupScreen {height:100dvh;min-height:0;overflow:hidden;}
+  #setupCards {max-width:100%;overflow-x:auto;overflow-y:hidden;}
+}
+@media (min-width:760px) and (orientation:landscape) {
+  #settingsScreen .container {grid-template-columns:repeat(3,minmax(0,1fr));}
+  #dtgRandomSettings,#dtgLevelSettings {max-height:45dvh;}
+}
+@media (max-width:659px) and (orientation:portrait) {
+  #settingsScreen {min-height:100dvh;height:auto;overflow-y:visible;}
+  #settingsScreen .container {display:block;max-height:none;overflow:visible;}
+  #dtgRandomSettings,#dtgLevelSettings {max-height:48dvh;overflow-y:auto;background:transparent;}
+}
+
   </style>
 
 </head>
 
 <body>
 
-  <section
+  <section id="modeScreen" class="screen active">
+    <div class="container">
+      <h1>GAME SETTINGS</h1>
+      <div class="setting-box">
 
-    id="titleScreen"
+  <label for="modeChoice">GAME MODE</label>
 
-    class="screen active"
+  <select id="modeChoice">
 
-  >
+    <option value="CPU" selected>CPU BATTLE</option>
 
-    <div class="title-wrap">
+    <option value="VS">VS MODE (2 PLAYERS)</option>
+    <option value="ONLINE">ONLINE MODE</option>
 
-      <button
+  </select>
 
-        id="dbSelectButton"
-
-        class="main-button"
-
-        type="button"
-
-      >
-
-        DOA BINGO
-
-      </button>
-
-      <button
-
-        id="titleStartButton"
-
-        class="main-button"
-
-        type="button"
-
-      >
-
-        DOA TARGET GUESS
-
-      </button>
-
-<a
-
-  id="supportButton"
-
-  href="https://buymeacoffee.com/shiro.lab"
-
-  target="_blank"
-
-  rel="noopener noreferrer"
-
->
-
-  ☕ BUY ME A COFFEE ☕
-
-</a>
-      
+</div>
+      <button id="modeSettingsButton" class="main-button" type="button">SETTINGS</button>
+      <button id="modeTitleButton" class="secondary-button" type="button">TITLE</button>
     </div>
-
   </section>
-
+  <section id="onlineScreen" class="screen">
+    <div class="container online-container">
+      <div id="onlineContents"></div>
+      <div id="onlineMessage" role="status" aria-live="polite"></div>
+    </div>
+  </section>
+  <div id="onlineIndicator" hidden role="status" aria-live="polite"></div>
   <section
 
     id="settingsScreen"
@@ -1251,83 +1971,39 @@ white-space: nowrap;
 
   >
 
-    <div class="container">
+    <div class="container">    
 
-      <h2>GAME SETTINGS</h2>
+<h1>DOA TARGET GUESS</h1>
+<div class="setting-box"><label for="gameMode">GAME MODE</label>
+<select id="gameMode"><option value="CPU" selected>CPU BATTLE</option>
+<option value="VS">VS MODE (2 PLAYERS)</option>
+<option value="ONLINE">ONLINE MODE</option></select></div>
 
-      <div class="settings-section-title">
 
-        GAME
-
-      </div>
-
-      <div class="setting-box">
-
-        <label for="humanCount">
-
-          HUMAN PLAYERS
-
-        </label>
-
-        <select id="humanCount">
-
-  <option value="1" selected>1</option>
-
-  <option value="2">2</option>
-
-  <option value="3">3</option>
-
-  <option value="4">4</option>
-
-  <option value="5">5</option>
-
-  <option value="6">6</option>
-
-  <option value="7">7</option>
-
-  <option value="8">8</option>
-
-        </select>
-
-      </div>
 
       <div class="setting-box">
 
-        <label for="cpuCount">
+        <label for="aliveCount">
 
-          CPU PLAYERS
+          ALIVE CARDS
 
         </label>
 
-        <select id="cpuCount">
+        <select id="aliveCount">
 
-          <option value="0">0</option>
-
-          <option value="1" selected>1</option>
+          <option value="1">1</option>
 
           <option value="2">2</option>
 
           <option value="3">3</option>
 
-        </select>
+          <option value="4" selected>4</option>
 
-      </div>
+          <option value="5">5</option>
 
-      <div class="setting-box">
+          <option value="6">6</option>
 
-        <label for="boardSize">
-
-          GRID SIZE
-
-        </label>
-
-        <select id="boardSize">
-
-          <option value="3" selected>3 × 3</option>
-
-          <option value="4">4 × 4</option>
-
-          <option value="5">5 × 5</option>
+          <option value="7">7</option>
 
         </select>
 
@@ -1335,238 +2011,167 @@ white-space: nowrap;
 
       <div class="setting-box">
 
-        <label for="deadCount">
+        <label for="diceMode">
 
-          DEAD CARDS
+          DICE MODE
 
         </label>
 
-        <select id="deadCount"></select>
+        <select id="diceMode">
 
-      </div>
+          <option value="1" selected>1 ROLL</option>
 
-      <div class="setting-box" id="deadShuffleSetting" hidden>
+          <option value="2">2 ROLL</option>
 
-  <label for="deadShuffleSelect">
+        </select>
 
-    SHUFFLE AFTER DEAD
+       </div>
+
+<h2 style="text-align:left; margin-top:30px; font-size:20px;">
+
+  PENALTY
+
+</h2>
+
+<div class="setting-box">
+
+  <label for="deadPenalty">
+
+    DEAD CARD（DEADを引いた罰杯数）
 
   </label>
 
-  <select id="deadShuffleSelect">
+  <select id="deadPenalty">
 
-    <option value="OFF" selected>OFF</option>
+    <option value="1" selected>1 SHOT</option>
 
-    <option value="ON">ON</option>
+    <option value="2">2 SHOTS</option>
+
+    <option value="3">3 SHOTS</option>
 
   </select>
-
-</div>
-      
-      <div class="settings-section-title">
-
-  PENALTY
 
 </div>
 
 <div class="setting-box">
 
-  <label for="penaltyType">PENALTY TYPE</label>
+  <label for="openedPenalty">
 
-  <select id="penaltyType">
+    PER OPENED CARD（開封1枚あたりの罰杯数）
 
-    <option value="SHOT" selected>SHOT</option>
+  </label>
 
-    <option value="IKKI">IKKI</option>
+  <select id="openedPenalty">
+    
+    <option value="0">0 SHOT</option>
+    
+    <option value="0.5">0.5 SHOT</option>
 
-    <option value="RANDOM">RANDOM PENALTY</option>
+    <option value="1" selected>1 SHOT</option>
 
-    <option value="LEVEL">LEVEL PENALTY</option>
+    <option value="2">2 SHOTS</option>
+
+    <option value="3">3 SHOTS</option>
 
   </select>
 
 </div>
-
-<div id="drinkPenaltySettings">
-
-  <div class="setting-box">
-
-    <label for="deadPenalty">DEAD CARD</label>
-
-    <select id="deadPenalty">
-
-      <option value="1" selected>1</option>
-
-      <option value="2">2</option>
-
-      <option value="3">3</option>
-
-    </select>
-
-  </div>
-
-  <div class="setting-box">
-
-    <label for="bingoPenalty">PER BINGO</label>
-
-    <select id="bingoPenalty">
-
-      <option value="0">0</option>
-
-      <option value="0.5">0.5</option>
-
-      <option value="1" selected>1</option>
-
-      <option value="2">2</option>
-
-      <option value="3">3</option>
-
-    </select>
-
-  </div>
-
-</div>
-
-<div id="randomPenaltySettings" hidden>
-
-  <div class="setting-box">
-
-    <label for="randomDeadPenalty">
-
-      DEAD CARD（抽選回数）
-
-    </label>
-
-    <select id="randomDeadPenalty">
-
-      <option value="1" selected>1</option>
-
-      <option value="2">2</option>
-
-      <option value="3">3</option>
-
-    </select>
-
-  </div>
-
-  <div class="setting-box">
-
-    <label for="randomBingoPenalty">
-
-      PER BINGO（追加抽選回数）
-
-    </label>
-
-    <select id="randomBingoPenalty">
-
-      <option value="0">0</option>
-
-      <option value="1" selected>1</option>
-
-      <option value="2">2</option>
-
-      <option value="3">3</option>
-
-    </select>
-
-  </div>
-
-  <p class="penalty-note">
-
-    最大8種類から罰数分抽選・重複あり。
-
-    空欄は抽選対象外。
-
-  </p>
-
-  <div id="randomPenaltyInputs"></div>
-
-</div>
-
-<div id="levelPenaltySettings" hidden>
-
-  <p class="penalty-note">
-
-    DEAD 1＋BINGO数でLEVELを判定。
-
-    各LEVEL最大3種類から1つ抽選。
-
-  </p>
-
-  <div id="levelPenaltyInputs"></div>
-
-</div>
-
-      <div class="settings-section-title">
-
-        SOUND
-
-      </div>
-
-      <div class="setting-box">
-
-        <label for="bgmSetting">
-
-          BGM
-
-        </label>
-
-        <select id="bgmSetting">
-
-          <option value="ON" selected>ON</option>
-
-          <option value="OFF">OFF</option>
-
-        </select>
-
-      </div>
-
-      <div class="setting-box">
-
-        <label for="seSetting">
-
-          SE
-
-        </label>
-
-        <select id="seSetting">
-
-          <option value="ON" selected>ON</option>
-
-          <option value="OFF">OFF</option>
-
-        </select>
-
-      </div>
-
-      <div id="settingError"></div>
-
+      
       <button
 
-        id="gameStartButton"
+        id="setupStartButton"
 
         class="main-button"
 
       >
 
-        START GAME
+        SET DEAD
 
       </button>
-
+    
       <button
 
         id="backTitleButton"
 
         class="secondary-button"
 
+        type="button"
+
       >
 
-        TITLE
+        BACK
+
+      </button>
+      
+    </div>
+
+  </section>
+
+  <section
+
+    id="setupScreen"
+
+    class="screen"
+
+  >
+
+    <div class="container">
+
+      <h2 id="setupTitle">SET YOUR DEAD</h2>
+
+      <div id="setupCards"></div>
+
+      <div class="setup-actions">
+
+        <button id="randomButton">
+
+          RANDOM
+
+        </button>
+
+        <button id="blindRandomButton">
+
+          BLIND RANDOM
+
+        </button>
+
+      </div>
+
+      <div id="blindStatus"></div>
+
+      <button
+
+        id="confirmSetupButton"
+
+        class="main-button"
+
+      >
+
+        SET
+
+      </button>
+
+      <button
+
+        id="setupBackButton"
+
+        class="secondary-button"
+
+      >
+
+        SETTINGS
 
       </button>
 
     </div>
 
+  </section>
+
+  <section id="handoffScreen" class="screen">
+    <div class="container">
+      <h2 id="handoffText">PASS TO PLAYER 2</h2>
+      <button id="handoffButton" class="main-button">TAP TO CONTINUE</button>
+    </div>
   </section>
 
   <section
@@ -1577,29 +2182,96 @@ white-space: nowrap;
 
   >
 
-    <div id="turnOrderPanel" aria-label="TURN ORDER"></div>
-    
-    <div class="container">
+    <div id="dangerOverlay"></div>
 
-      <div class="game-header">
+    <div id="ecgLayer">
 
-        <div class="game-title">
+  <canvas id="ecgCanvas" aria-hidden="true"></canvas>
 
-          DOA BINGO
+</div>
+    <div class="game-wrap">
 
-        </div>
+      <div class="landscape-note">
 
-        <div id="status">
-
-          PLAYER 1 TURN
-
-        </div>
-
-        <div id="gameInfo"></div>
+        LANDSCAPE MODE RECOMMENDED
 
       </div>
 
-      <div id="board"></div>
+      <div class="vs-top-seat">
+      <div class="player-label" id="topPlayerLabel">CPU</div>
+      <div
+
+        id="cpuCards"
+
+        class="card-row"
+
+      ></div>
+      </div>
+
+<div class="dice-zone">
+
+  <div class="vs-roll-row p2-row">
+
+    <div class="roll-result">
+
+      <div class="roll-label" id="rightRollLabel">P2</div>
+
+      <div id="cpuRollDisplay" class="roll-number">-</div>
+
+    </div>
+
+    <button id="p2RollButton"
+
+            class="vs-roll-button"
+
+            type="button">ROLL</button>
+
+  </div>
+
+  <div class="center-dice-area">
+
+    <div id="centerDice"></div>
+
+    <button id="rollButton" type="button">ROLL</button>
+
+  </div>
+
+  <div class="vs-roll-row p1-row">
+
+    <div class="roll-result">
+
+      <div class="roll-label" id="leftRollLabel">P1</div>
+
+      <div id="playerRollDisplay" class="roll-number">-</div>
+
+    </div>
+
+    <button id="p1RollButton"
+
+            class="vs-roll-button"
+
+            type="button">ROLL</button>
+
+  </div>
+
+</div>
+
+      <div id="status">
+
+        ROLL THE DICE
+
+      </div>
+
+      <div class="vs-bottom-seat">
+      <div class="player-label" id="bottomPlayerLabel">YOU</div>
+      <div
+
+        id="playerCards"
+
+        class="card-row"
+
+      ></div>
+      </div>
 
     </div>
 
@@ -1617,42 +2289,18 @@ white-space: nowrap;
 
       <div id="resultTitle">
 
-        PLAYER 1 LOSE
+        YOU WIN
 
       </div>
 
-      <div class="result-line">
+      <div id="resultPenalty">
 
-        DEAD：
-
-        <span id="resultDead">1</span>
+        1 SHOT
 
       </div>
 
-      <div class="result-line">
+      <div id="resultDetail"></div>
 
-        BINGO：
-
-        <span id="resultBingo">0</span>
-
-        ×
-
-        <span id="resultBingoPenalty">1</span>
-
-      </div>
-
-      <div class="total-shots">
-
-        TOTAL：
-
-        <span id="resultShots">1</span>
-
-        <span id="resultDrinkType">SHOT</span>
-
-      </div>
-
-      <div id="customPenaltyResult" hidden></div>
-      
       <button
 
         id="retryButton"
@@ -1667,7 +2315,7 @@ white-space: nowrap;
 
       <button
 
-        id="resultSettingsButton"
+        id="settingsButton"
 
         class="secondary-button"
 
@@ -1687,73 +2335,27 @@ white-space: nowrap;
 
     <img
 
-      id="deadFxSkull1"
+      id="deadFxCard"
 
-      class="dead-fx-image"
+      src="../images/doa-dead.PNG"
 
-      src="images/doa-dokuro-1.PNG"
-
-      alt=""
+      alt="DEAD"
 
     >
-
-    <img
-
-      id="deadFxSkull2"
-
-      class="dead-fx-image"
-
-      src="images/doa-dokuro-2.PNG"
-
-      alt=""
-
-    >
-
-    <img
-
-      id="deadFxLogo"
-
-      class="dead-fx-image"
-
-      src="images/doa-d-rogo.PNG"
-
-      alt=""
-
-    >
-
-    <div id="deadFxBlack"></div>
 
     <img
 
       id="deadFxBullet"
 
-      class="dead-fx-image"
+      src="../images/doa-dankon.PNG"
 
-      src="images/doa-dankon.PNG"
-
-      alt=""
+      alt="BULLET HOLE"
 
     >
 
-    <img
+    <div id="deadFxResultText">
 
-      id="deadFxBlood"
-
-      class="dead-fx-image"
-
-      src="images/doa-chi.PNG"
-
-      alt=""
-
-    >
-
-  </div>
-
-  <div id="deadTapLayer">
-
-    <div id="deadTapText">
-
-      TAP TO RESULT
+      DEAD
 
     </div>
 
@@ -1771,9 +2373,9 @@ white-space: nowrap;
 
   <audio
 
-    id="cardFlickSound"
+    id="cardSound"
 
-    src="audio/doa-card-flick.wav"
+    src="../audio/doa-card-flick.wav"
 
     preload="auto"
 
@@ -1783,7 +2385,7 @@ white-space: nowrap;
 
     id="gunClickSound"
 
-    src="audio/doa-gun-click.mp3"
+    src="../audio/doa-gun-click.mp3"
 
     preload="auto"
 
@@ -1793,67 +2395,74 @@ white-space: nowrap;
 
     id="gunShotSound"
 
-    src="audio/doa-gun-shot.wav"
+    src="../audio/doa-gun-shot.wav"
 
     preload="auto"
 
   ></audio>
- 
-  <script src="assets/bgm-loader.js"></script>
+
+<audio
+
+  id="diceRollSound"
+
+  src="../audio/doa-dice-roll.wav"
+
+  preload="auto"
+
+></audio>
+
+<audio
+
+  id="heartbeatSound"
+
+  src="../audio/doa-heartbeat.wav"
+
+  preload="auto"
+
+  loop
+
+></audio>
+
+<audio
+
+  id="heartMonitorSound"
+
+  src="../audio/doa-heart-monitor.wav"
+
+  preload="auto"
+
+></audio>
+  
+  <script src="../assets/bgm-loader.js"></script>
   
   <script>
 
     const IMAGE_BACK =
 
-      "images/doa-back.PNG";
+      "../images/doa-back.PNG";
 
     const IMAGE_ALIVE =
 
-      "images/doa-alive.PNG";
+      "../images/doa-alive.PNG";
 
     const IMAGE_DEAD =
 
-      "images/doa-dead.PNG";
+      "../images/doa-dead.PNG";
 
-    const DEAL_SOUND_URL =
-
-      "audio/doa-card-placement.wav";
-
-    const GAME_START_DEAL_DELAY_MS = 400;
-
-    const DEAL_ANIMATION_MS = 140;
-
-    const DEAL_GAP_MS = 95;
-
-    const FLIP_DELAY_MS = 350;
-
-    const DEAD_SKULL_MOVE_MS = 650;
-
-    const DEAD_BLACKOUT_MS = 1000;
-
-    const DEAD_CLICK_TO_SHOT_MS = 1000;
-
-    const DEAD_SHOT_TO_BULLET_MS = 150;
-
-    const DEAD_BULLET_TO_BLOOD_MS = 350;
-
-    const DEAD_BLACK_HOLD_MS = 1400;
-
-    const DEAD_BROKEN_TO_LOGO_MS = 700;
-
-    const titleScreen =
-
-      document.getElementById(
-
-        "titleScreen"
-
-      );
-
+    const modeScreen = document.getElementById('modeScreen');
     const settingsScreen =
 
       document.getElementById(
 
         "settingsScreen"
+
+      );
+
+    const setupScreen =
+
+      document.getElementById(
+
+        "setupScreen"
 
       );
 
@@ -1873,167 +2482,119 @@ white-space: nowrap;
 
       );
 
-    const titleStartButton =
+    const aliveCountSelect =
 
       document.getElementById(
 
-        "titleStartButton"
+        "aliveCount"
 
       );
 
-    const gameStartButton =
+    const diceModeSelect =
 
       document.getElementById(
 
-        "gameStartButton"
+        "diceMode"
 
       );
 
-    const backTitleButton =
+    const setupStartButton =
 
       document.getElementById(
 
-        "backTitleButton"
+        "setupStartButton"
 
       );
 
-    const retryButton =
+    const setupCards =
 
       document.getElementById(
 
-        "retryButton"
+        "setupCards"
 
       );
 
-    const resultSettingsButton =
+    const randomButton =
 
       document.getElementById(
 
-        "resultSettingsButton"
+        "randomButton"
 
       );
 
-    const humanCountSelect =
+    const blindRandomButton =
 
       document.getElementById(
 
-        "humanCount"
+        "blindRandomButton"
 
       );
 
-    const cpuCountSelect =
+    const blindStatus =
 
       document.getElementById(
 
-        "cpuCount"
+        "blindStatus"
 
       );
 
-    const boardSizeSelect =
+    const confirmSetupButton =
 
       document.getElementById(
 
-        "boardSize"
+        "confirmSetupButton"
 
       );
 
-    const deadCountSelect =
+    const setupBackButton =
 
       document.getElementById(
 
-        "deadCount"
+        "setupBackButton"
 
       );
 
-    const deadShuffleSetting =
-
-  document.getElementById("deadShuffleSetting");
-
-const deadShuffleSelect =
-
-  document.getElementById("deadShuffleSelect");
-    
-    const deadPenaltySelect =
+    const cpuCards =
 
       document.getElementById(
 
-        "deadPenalty"
+        "cpuCards"
 
       );
 
-    const bingoPenaltySelect =
+    const playerCards =
 
       document.getElementById(
 
-        "bingoPenalty"
+        "playerCards"
 
       );
 
-const penaltyTypeSelect =
-
-  document.getElementById("penaltyType");
-
-const drinkPenaltySettings =
-
-  document.getElementById("drinkPenaltySettings");
-
-const randomPenaltySettings =
-
-  document.getElementById("randomPenaltySettings");
-
-const levelPenaltySettings =
-
-  document.getElementById("levelPenaltySettings");
-
-const randomDeadPenaltySelect =
-
-  document.getElementById("randomDeadPenalty");
-
-const randomBingoPenaltySelect =
-
-  document.getElementById("randomBingoPenalty");
-
-const randomPenaltyInputs =
-
-  document.getElementById("randomPenaltyInputs");
-
-const levelPenaltyInputs =
-
-  document.getElementById("levelPenaltyInputs");
-
-const customPenaltyResult =
-
-  document.getElementById("customPenaltyResult");
-
-    const bgmSettingSelect =
+    const centerDice =
 
       document.getElementById(
 
-        "bgmSetting"
+        "centerDice"
 
       );
 
-    const seSettingSelect =
+    const p1RollButton = document.getElementById("p1RollButton");
+
+    const p2RollButton = document.getElementById("p2RollButton");
+
+    const playerRollDisplay =
 
       document.getElementById(
 
-        "seSetting"
+        "playerRollDisplay"
 
       );
 
-    const settingError =
+    const cpuRollDisplay =
 
       document.getElementById(
 
-        "settingError"
-
-      );
-
-    const board =
-
-      document.getElementById(
-
-        "board"
+        "cpuRollDisplay"
 
       );
 
@@ -2045,11 +2606,59 @@ const customPenaltyResult =
 
       );
 
-    const gameInfo =
+    const dangerOverlay =
 
       document.getElementById(
 
-        "gameInfo"
+        "dangerOverlay"
+
+      );
+
+    const ecgLayer =
+
+      document.getElementById(
+
+        "ecgLayer"
+
+      );
+
+    const deadFxOverlay =
+
+      document.getElementById(
+
+        "deadFxOverlay"
+
+      );
+
+    const deadFxRed =
+
+      document.getElementById(
+
+        "deadFxRed"
+
+      );
+
+    const deadFxCard =
+
+      document.getElementById(
+
+        "deadFxCard"
+
+      );
+
+    const deadFxBullet =
+
+      document.getElementById(
+
+        "deadFxBullet"
+
+      );
+
+    const deadFxResultText =
+
+      document.getElementById(
+
+        "deadFxResultText"
 
       );
 
@@ -2061,43 +2670,35 @@ const customPenaltyResult =
 
       );
 
-    const resultDead =
+    const resultPenalty =
 
       document.getElementById(
 
-        "resultDead"
+        "resultPenalty"
 
       );
 
-    const resultBingo =
+    const resultDetail =
 
       document.getElementById(
 
-        "resultBingo"
+        "resultDetail"
 
       );
 
-    const resultBingoPenalty =
+    const retryButton =
 
       document.getElementById(
 
-        "resultBingoPenalty"
+        "retryButton"
 
       );
 
-    const resultShots =
+    const settingsButton =
 
       document.getElementById(
 
-        "resultShots"
-
-      );
-
-    const resultDrinkType =
-
-      document.getElementById(
-
-        "resultDrinkType"
+        "settingsButton"
 
       );
 
@@ -2109,11 +2710,11 @@ const customPenaltyResult =
 
       );
 
-    const cardFlickSound =
+    const cardSound =
 
       document.getElementById(
 
-        "cardFlickSound"
+        "cardSound"
 
       );
 
@@ -2132,369 +2733,114 @@ const customPenaltyResult =
         "gunShotSound"
 
       );
-
-    const deadFxOverlay =
-
-      document.getElementById(
-
-        "deadFxOverlay"
-
-      );
-
-    const deadFxBlack =
-
-      document.getElementById(
-
-        "deadFxBlack"
-
-      );
-
-    const deadFxRed =
-
-      document.getElementById(
-
-        "deadFxRed"
-
-      );
-
-    const deadFxSkull1 =
-
-      document.getElementById(
-
-        "deadFxSkull1"
-
-      );
-
-    const deadFxSkull2 =
-
-      document.getElementById(
-
-        "deadFxSkull2"
-
-      );
-
-    const deadFxLogo =
-
-      document.getElementById(
-
-        "deadFxLogo"
-
-      );
-
-    const deadFxBullet =
-
-      document.getElementById(
-
-        "deadFxBullet"
-
-      );
-
-    const deadFxBlood =
-
-      document.getElementById(
-
-        "deadFxBlood"
-
-      );
-
-    const deadTapLayer =
-
-      document.getElementById(
-
-        "deadTapLayer"
-
-      );
-
-    let dealAudioContext = null;
-
-    let dealAudioBuffer = null;
-
-    let players = [];
-
-    let cards = [];
-
-    let currentPlayerIndex = 0;
-
-    let boardSize = 3;
-
-    let deadCardCount = 1;
-
-    let deadShuffleEnabled = false;
-
-let deadRecords = [];
     
-    let deadPenalty = 1;
+const diceRollSound = document.getElementById("diceRollSound");
+    const heartbeatSound =
 
-    let bingoPenalty = 1;
+  document.getElementById("heartbeatSound");
 
-    let drinkType = "SHOT";
+const heartMonitorSound =
+
+  document.getElementById("heartMonitorSound");
     
-let penaltyType = "SHOT";
+    const gameModeSelect = document.getElementById("gameMode");
 
-let randomPenaltyEntries = [];
+const rollButton = document.getElementById("rollButton");
+    const handoffScreen = document.getElementById("handoffScreen");
+    const handoffText = document.getElementById("handoffText");
+    const handoffButton = document.getElementById("handoffButton");
+    const setupTitle = document.getElementById("setupTitle");
+    const topPlayerLabel = document.getElementById("topPlayerLabel");
+    const bottomPlayerLabel = document.getElementById("bottomPlayerLabel");
+    const leftRollLabel = document.getElementById("leftRollLabel");
+    const rightRollLabel = document.getElementById("rightRollLabel");
+    let gameMode = "CPU";
+    let setupPlayer = 1;
+    let p1DeadIndex = 0;
+    let p1BlindMode = false;
+    let p2DeadIndex = 0;
+    let p2BlindMode = false;
+    let handoffAction = null;
 
-let levelPenaltyEntries = Array.from(
+    function showHandoff(message, action) {
+      handoffText.textContent = message;
+      handoffAction = action;
+      showScreen(handoffScreen);
+    }
+    handoffButton.addEventListener("click", () => {
+      const action = handoffAction;
+      handoffAction = null;
+      if (action) action();
+    });
 
-  { length: 5 },
+    function applyGameMode() {
+      gameMode = gameModeSelect.value;
+      const vs = gameMode === "VS" || gameMode === "ONLINE";
+      gameScreen.classList.toggle("vs-mode", vs);
+      topPlayerLabel.textContent = vs ? "PLAYER 2" : "CPU";
+      bottomPlayerLabel.textContent = vs ? "PLAYER 1" : "YOU";
+      leftRollLabel.textContent = vs ? "P1" : "YOU";
+      rightRollLabel.textContent = vs ? "P2" : "CPU";
+    }
 
-  () => []
+    let aliveCount = 4;
 
-);
+    let totalCards = 5;
+
+    let diceRollCount = 1;
+
+    let selectedDeadIndex = 0;
+
+    let blindMode = false;
+
+    let playerDeck = [];
+
+    let cpuDeck = [];
+
+    let playerRoll = 0;
+
+    let cpuRoll = 0;
+
+    let rolling = false;
+　　
+    let rollPhase = "rolling";
+
+    let p1RollsDone = 0;
+
+　　　let p2RollsDone = 0;
     
-    let bgmEnabled = true;
+    let playerOpenedCount = 0;
 
-    let seEnabled = true;
+    let cpuOpenedCount = 0;
+
+    let dangerMode = false;
 
     let gameOver = false;
 
-    let inputLocked = false;
+let heartMonitorTimer = null;
 
-    let cpuTimer = null;
+let heartbeatFrame = null;
 
-    let dealTimer = null;
+let ecgPulseTimer = null;
 
-    let flipTimer = null;
+let heartbeatIndex = 0;
 
-    let awaitingResult = false;
+let previousHeartbeatTime = 0;
 
-    let pendingLoser = null;
+heartbeatSound.volume = 1.00;
 
-    let deadFxRunning = false;
-
-    let deadFxRunId = 0;
-
+heartMonitorSound.volume = 0.02;
+    
     bgm.volume = 0.35;
 
-    cardFlickSound.volume = 1;
+    cardSound.volume = 1;
 
     gunClickSound.volume = 1;
 
     gunShotSound.volume = 1;
 
-    async function loadDealSound() {
-
-      try {
-
-        const AudioContextClass =
-
-          window.AudioContext
-
-          || window.webkitAudioContext;
-
-        if (!AudioContextClass) {
-
-          return;
-
-        }
-
-        if (!dealAudioContext) {
-
-          dealAudioContext =
-
-            new AudioContextClass();
-
-        }
-
-        const response =
-
-          await fetch(
-
-            DEAL_SOUND_URL
-
-          );
-
-        const arrayBuffer =
-
-          await response.arrayBuffer();
-
-        dealAudioBuffer =
-
-          await dealAudioContext
-
-            .decodeAudioData(
-
-              arrayBuffer
-
-            );
-
-      } catch (error) {
-
-        console.error(
-
-          error
-
-        );
-
-      }
-
-    }
-
-    async function resumeDealAudio() {
-
-      if (!dealAudioContext) {
-
-        await loadDealSound();
-
-      }
-
-      if (
-
-        dealAudioContext
-
-        && dealAudioContext.state
-
-        === "suspended"
-
-      ) {
-
-        try {
-
-          await dealAudioContext.resume();
-
-        } catch (error) {
-
-          console.error(
-
-            error
-
-          );
-
-        }
-
-      }
-
-    }
-
-    function playDealSound() {
-
-      if (!seEnabled) {
-
-        return;
-
-      }
-
-      if (
-
-        !dealAudioContext
-
-        || !dealAudioBuffer
-
-      ) {
-
-        return;
-
-      }
-
-      const source =
-
-        dealAudioContext
-
-          .createBufferSource();
-
-      source.buffer =
-
-        dealAudioBuffer;
-
-      source.connect(
-
-        dealAudioContext.destination
-
-      );
-
-      source.start(0);
-
-    }
-
-    function playSound(
-
-      sound
-
-    ) {
-
-      if (!seEnabled) {
-
-        return;
-
-      }
-
-      sound.pause();
-
-      sound.currentTime = 0;
-
-      const playPromise =
-
-        sound.play();
-
-      if (
-
-        playPromise
-
-        && typeof playPromise.catch
-
-        === "function"
-
-      ) {
-
-        playPromise.catch(
-
-          () => {}
-
-        );
-
-      }
-
-    }
-
-    let bgmPlayToken = 0;
-
-    function startBgm() {
-
-      if (!bgmEnabled) return;
-
-      const token = ++bgmPlayToken;
-
-      loadProtectedBgm(bgm, "db").then(() => {
-
-        if (token === bgmPlayToken && bgmEnabled) {
-
-          bgm.play().catch(() => {});
-
-        }
-
-      }).catch(console.error);
-
-    }
-
-    function pauseBgm() {
-
-      ++bgmPlayToken;
-
-      bgm.pause();
-
-    }
-
-    function wait(
-
-      ms
-
-    ) {
-
-      return new Promise(
-
-        resolve =>
-
-          setTimeout(
-
-            resolve,
-
-            ms
-
-          )
-
-      );
-
-    }
-
+    diceRollSound.volume = 1;
+   
     function showScreen(
 
       screen
@@ -2503,9 +2849,11 @@ let levelPenaltyEntries = Array.from(
 
       [
 
-        titleScreen,
-
+        modeScreen,
+        document.getElementById('onlineScreen'),
         settingsScreen,
+        handoffScreen,
+        setupScreen,
 
         gameScreen,
 
@@ -2531,1076 +2879,123 @@ let levelPenaltyEntries = Array.from(
 
     }
 
-    function updateDeadOptions() {
+    function wait(
 
-      const size =
+      ms
 
-        Number(
+    ) {
 
-          boardSizeSelect.value
+      return new Promise(
+
+        resolve =>
+
+          setTimeout(
+
+            resolve,
+
+            ms
+
+          )
+
+      );
+
+    }
+
+    function playSound(
+
+      sound
+
+    ) {
+
+      sound.pause();
+
+      sound.currentTime = 0;
+
+      const promise =
+
+        sound.play();
+
+      if (
+
+        promise
+
+        && typeof promise.catch
+
+        === "function"
+
+      ) {
+
+        promise.catch(
+
+          () => {}
 
         );
 
-      const totalCards =
+      }
 
-        size * size;
+    }
 
-      const previousValue =
+    let bgmPlayToken = 0;
 
-        Number(
+    function startBgm() {
 
-          deadCountSelect.value
+      const token = ++bgmPlayToken;
 
-        ) || 1;
+      loadProtectedBgm(bgm, "dtg").then(() => {
 
-      deadCountSelect.innerHTML =
+        if (token === bgmPlayToken) {
+
+          bgm.play().catch(() => {});
+
+        }
+
+      }).catch(console.error);
+
+    }
+
+    function stopBgm() {
+
+      ++bgmPlayToken;
+
+      bgm.pause();
+
+    }
+
+    function randomDeadIndex() {
+
+      return Math.floor(
+
+        Math.random()
+
+        * totalCards
+
+      );
+
+    }
+
+    function renderSetupCards() {
+
+      setupCards.innerHTML =
 
         "";
 
+      setupCards.style.setProperty(
+
+        "--setup-count",
+
+        totalCards
+
+      );
+
       for (
 
-        let i = 1;
+        let i = 0;
 
         i < totalCards;
 
         i++
 
       ) {
-
-        const option =
-
-          document.createElement(
-
-            "option"
-
-          );
-
-        option.value =
-
-          i;
-
-        option.textContent =
-
-          i;
-
-        deadCountSelect.appendChild(
-
-          option
-
-        );
-
-      }
-
-      deadCountSelect.value =
-
-        Math.min(
-
-          previousValue,
-
-          totalCards - 1
-
-        );
-
-      updateDeadShuffleVisibility();
-      
-    }
-
-    function updateDeadShuffleVisibility() {
-
-  const multiple =
-
-    Number(deadCountSelect.value) > 1;
-
-  deadShuffleSetting.hidden = !multiple;
-
-  if (!multiple) {
-
-    deadShuffleSelect.value = "OFF";
-
-  }
-
-}
-    
-    function createPlayers(
-
-      humanCount,
-
-      cpuCount
-
-    ) {
-
-      players =
-
-        [];
-
-      let playerNumber =
-
-        1;
-
-      for (
-
-        let i = 0;
-
-        i < humanCount;
-
-        i++
-
-      ) {
-
-        players.push({
-
-          number: playerNumber,
-
-          type: "HUMAN",
-          seat: i,
-　　　　　　 name: seatNames.HUMAN[i].trim()
-        
-        });
-
-        playerNumber++;
-
-      }
-
-      for (
-
-        let i = 0;
-
-        i < cpuCount;
-
-        i++
-
-      ) {
-
-        players.push({
-
-          number: playerNumber,
-
-          type: "CPU",
-          seat: i,
-          name: seatNames.CPU[i].trim()
-        
-        });
-
-        playerNumber++;
-
-      }
-
-    }
-
-/* DB SETTINGS / PLAYER NAMES / TURN ORDER */
-
-const seatNames = {
-
-  HUMAN: Array(8).fill(""),
-
-  CPU: Array(3).fill("")
-
-};
-
-let shuffleTurnOrder = false;
-
-const turnOrderPanel =
-
-  document.getElementById("turnOrderPanel");
-
-const settingsContainer =
-
-  settingsScreen.querySelector(".container");
-
-function initializeSettingSections() {
-
-  const titles = [
-
-    ...settingsContainer.querySelectorAll(
-
-      ".settings-section-title"
-
-    )
-
-  ];
-
-  const nameTitle = document.createElement("div");
-
-  nameTitle.className = "settings-section-title";
-
-  nameTitle.textContent = "PLAYER NAMES";
-
-  titles[1].before(nameTitle);
-
-  const nameFields = document.createElement("div");
-
-  nameFields.id = "playerNameFields";
-
-  nameTitle.after(nameFields);
-
-  const shuffleBox = document.createElement("div");
-
-  shuffleBox.className = "setting-box";
-
-  const shuffleLabel = document.createElement("label");
-
-  shuffleLabel.htmlFor = "turnShuffleSelect";
-
-  shuffleLabel.textContent = "TURN ORDER SHUFFLE";
-
-  const shuffleSelect = document.createElement("select");
-
-  shuffleSelect.id = "turnShuffleSelect";
-
-  shuffleSelect.innerHTML =
-
-    '<option value="OFF" selected>OFF</option>' +
-
-    '<option value="ON">ON</option>';
-
-  shuffleSelect.addEventListener("change", () => {
-
-    shuffleTurnOrder = shuffleSelect.value === "ON";
-
-  });
-
-  shuffleBox.append(shuffleLabel, shuffleSelect);
-
-  cpuCountSelect
-
-    .closest(".setting-box")
-
-    .after(shuffleBox);
-
-  [
-
-    ...settingsContainer.querySelectorAll(
-
-      ".settings-section-title"
-
-    )
-
-  ].forEach((title, index) => {
-
-    const wrapper = document.createElement("div");
-
-    wrapper.className = "settings-accordion";
-
-    const button = document.createElement("button");
-
-    button.type = "button";
-
-    button.className = "settings-toggle";
-
-    button.textContent = title.textContent.trim();
-
-    button.setAttribute(
-
-      "aria-expanded",
-
-      String(index === 0)
-
-    );
-
-    const panel = document.createElement("div");
-
-    panel.className = "settings-panel";
-
-    panel.hidden = index !== 0;
-
-    title.before(wrapper);
-
-    wrapper.append(button, panel);
-
-    let next = title.nextSibling;
-
-    title.remove();
-
-    while (
-
-      next &&
-
-      !(
-
-        next.nodeType === 1 &&
-
-        (
-
-          next.classList.contains("settings-accordion") ||
-
-          next.classList.contains("settings-section-title")
-
-        )
-
-      ) &&
-
-      !(
-
-        next.nodeType === 1 &&
-
-        next.id === "settingError"
-
-      )
-
-    ) {
-
-      const current = next;
-
-      next = next.nextSibling;
-
-      panel.appendChild(current);
-
-    }
-
-    button.addEventListener("click", () => {
-
-      panel.hidden = !panel.hidden;
-
-      button.setAttribute(
-
-        "aria-expanded",
-
-        String(!panel.hidden)
-
-      );
-
-    });
-
-  });
-
-  humanCountSelect.addEventListener(
-
-    "change",
-
-    renderNameFields
-
-  );
-
-  cpuCountSelect.addEventListener(
-
-    "change",
-
-    renderNameFields
-
-  );
-
-  renderNameFields();
-
-}
-
-function renderNameFields() {
-
-  const fields =
-
-    document.getElementById("playerNameFields");
-
-  fields.replaceChildren();
-
-  const note = document.createElement("p");
-
-  note.className = "name-note";
-
-  note.textContent =
-
-    "未入力の場合はPLAYER番号を表示。人数を戻すと名前も復元。";
-
-  fields.appendChild(note);
-
-  let number = 1;
-
-  for (const type of ["HUMAN", "CPU"]) {
-
-    const count = Number(
-
-      (type === "HUMAN"
-
-        ? humanCountSelect
-
-        : cpuCountSelect).value
-
-    );
-
-    for (
-
-      let seat = 0;
-
-      seat < count;
-
-      seat++, number++
-
-    ) {
-
-      const wrap = document.createElement("div");
-
-      wrap.className = "setting-box";
-
-      const label = document.createElement("label");
-
-      const input = document.createElement("input");
-
-      const id = `name-${type}-${seat}`;
-
-      label.htmlFor = id;
-
-      label.textContent =
-
-        `PLAYER ${number} (${type})`;
-
-      input.id = id;
-
-      input.className = "name-input";
-
-      input.type = "text";
-
-      input.maxLength = 24;
-
-      input.placeholder = `PLAYER ${number}`;
-
-      input.value = seatNames[type][seat];
-
-      input.addEventListener("input", () => {
-
-        seatNames[type][seat] = input.value;
-
-      });
-
-      wrap.append(label, input);
-
-      fields.appendChild(wrap);
-
-    }
-
-  }
-
-}
-
-function displayPlayerName(player) {
-
-  return player.name ||
-
-    `PLAYER ${player.number}`;
-
-}
-
-function renderTurnOrder() {
-
-  turnOrderPanel.replaceChildren();
-
-  const heading = document.createElement("div");
-
-  heading.className = "turn-order-heading";
-
-  heading.textContent = "TURN ORDER";
-
-  turnOrderPanel.appendChild(heading);
-
-  players.forEach((player, index) => {
-
-    const item = document.createElement("div");
-
-    item.className = "turn-order-entry";
-
-    if (index === currentPlayerIndex) {
-
-      item.classList.add("current");
-
-    }
-
-    const number = document.createElement("span");
-
-    number.className = "turn-order-num";
-
-    number.textContent = `${index + 1}.`;
-
-    const name = document.createElement("span");
-
-    name.className = "turn-order-name";
-
-    name.textContent = displayPlayerName(player);
-
-    item.append(number, name);
-
-    if (deadCardCount > 1) {
-
-  const records = deadRecords.filter(
-
-    record => record.playerNumber === player.number
-
-  );
-
-  const stock = document.createElement("span");
-
-  stock.className = "turn-order-stock";
-
-  if (penaltyType === "LEVEL") {
-
-    stock.textContent = `${records.length} PEN`;
-
-  } else {
-
-    const total = records.reduce(
-
-      (sum, record) => sum + record.amount,
-
-      0
-
-    );
-
-    stock.textContent = penaltyType === "RANDOM"
-
-      ? `${total} DRAW`
-
-      : `${total} ${drinkType}`;
-
-  }
-
-  item.appendChild(stock);
-
-}
-    
-    turnOrderPanel.appendChild(item);
-
-  });
-
-}
-    
-/* DB CUSTOM PENALTY */
-
-const DB_LEVEL_RANGES = [
-
-  [1, 3],
-
-  [4, 6],
-
-  [7, 9],
-
-  [10, 11],
-
-  [12, 13]
-
-];
-
-function getDbLevel(count) {
-
-  return DB_LEVEL_RANGES.findIndex(
-
-    ([min, max]) => count >= min && count <= max
-
-  ) + 1;
-
-}
-
-function createPenaltyInput(container, placeholder) {
-
-  const input = document.createElement("input");
-
-  input.type = "text";
-
-  input.className = "penalty-input";
-
-  input.maxLength = 120;
-
-  input.placeholder = placeholder;
-
-  container.appendChild(input);
-
-  return input;
-
-}
-
-function initializeCustomPenaltyInputs() {
-
-  for (let i = 0; i < 8; i++) {
-
-    createPenaltyInput(
-
-      randomPenaltyInputs,
-
-      `PENALTY ${i + 1}`
-
-    );
-
-  }
-
-  for (let level = 1; level <= 5; level++) {
-
-    const title = document.createElement("div");
-
-    title.className = "penalty-level-heading";
-
-    const [min, max] = DB_LEVEL_RANGES[level - 1];
-
-    title.textContent = `LEVEL ${level}（${min}〜${max}）`;
-
-    levelPenaltyInputs.appendChild(title);
-
-    for (let i = 1; i <= 3; i++) {
-
-      const input = createPenaltyInput(
-
-        levelPenaltyInputs,
-
-        `LEVEL ${level} - ${i}`
-
-      );
-
-      input.dataset.level = String(level);
-
-    }
-
-  }
-
-}
-
-function updatePenaltySettings() {
-
-  const mode = penaltyTypeSelect.value;
-
-  drinkPenaltySettings.hidden =
-
-    mode !== "SHOT" && mode !== "IKKI";
-
-  randomPenaltySettings.hidden = mode !== "RANDOM";
-
-  levelPenaltySettings.hidden = mode !== "LEVEL";
-
-  settingError.textContent = "";
-
-}
-
-function collectPenaltyEntries() {
-
-  randomPenaltyEntries = Array.from(
-
-    randomPenaltyInputs.querySelectorAll("input"),
-
-    input => input.value.trim()
-
-  ).filter(Boolean);
-
-  levelPenaltyEntries = Array.from(
-
-    { length: 5 },
-
-    (_, index) => Array.from(
-
-      levelPenaltyInputs.querySelectorAll(
-
-        `input[data-level="${index + 1}"]`
-
-      ),
-
-      input => input.value.trim()
-
-    ).filter(Boolean)
-
-  );
-
-}
-
-function validateCustomPenalties() {
-
-  collectPenaltyEntries();
-
-  if (
-
-    penaltyType === "RANDOM" &&
-
-    !randomPenaltyEntries.length
-
-  ) {
-
-    return "RANDOM PENALTYは最低1種類入力してください。";
-
-  }
-
-  if (penaltyType === "LEVEL") {
-
-    const maximumLevel = getDbLevel(2 * boardSize + 3);
-
-    for (let i = 0; i < maximumLevel; i++) {
-
-      if (!levelPenaltyEntries[i].length) {
-
-        return `LEVEL ${i + 1}の罰ゲームを最低1種類入力してください。`;
-
-      }
-
-    }
-
-  }
-
-  return "";
-
-}
-
-function drawCustomPenalty(pool) {
-
-  return pool[Math.floor(Math.random() * pool.length)];
-
-}
-
-function addCustomPenaltyText(parent, value, className) {
-
-  const div = document.createElement("div");
-
-  div.className = className;
-
-  div.textContent = value;
-
-  parent.appendChild(div);
-
-}
-    
-    function startGameFromSettings() {
-
-      const humanCount =
-
-        Number(
-
-          humanCountSelect.value
-
-        );
-
-      const cpuCount =
-
-        Number(
-
-          cpuCountSelect.value
-
-        );
-
-      const totalPlayers =
-
-        humanCount
-
-        + cpuCount;
-
-      if (
-
-  totalPlayers < 1
-
-  || totalPlayers > 8
-
-) {
-
-  settingError.textContent =
-
-    "プレイヤー合計人数は1〜8人にしてください。";
-
-  return;
-
-}
-
-      settingError.textContent =
-
-        "";
-
-      boardSize =
-
-        Number(
-
-          boardSizeSelect.value
-
-        );
-
-      deadCardCount =
-
-        Number(
-
-          deadCountSelect.value
-
-        );
-deadShuffleEnabled =
-
-  deadCardCount > 1 &&
-
-  deadShuffleSelect.value === "ON";
-      
-      deadPenalty =
-
-        Number(
-
-          deadPenaltySelect.value
-
-        );
-
-      bingoPenalty =
-
-        Number(
-
-          bingoPenaltySelect.value
-
-        );
-
-penaltyType = penaltyTypeSelect.value;
-
-drinkType = penaltyType === "IKKI" ? "IKKI" : "SHOT";
-
-if (penaltyType === "RANDOM") {
-
-  deadPenalty = Number(randomDeadPenaltySelect.value);
-
-  bingoPenalty = Number(randomBingoPenaltySelect.value);
-
-}
-
-const penaltyError = validateCustomPenalties();
-
-if (penaltyError) {
-
-  settingError.textContent = penaltyError;
-
-  return;
-
-}
-
-      bgmEnabled =
-
-        bgmSettingSelect.value
-
-        === "ON";
-
-      seEnabled =
-
-        seSettingSelect.value
-
-        === "ON";
-
-      createPlayers(
-
-        humanCount,
-
-        cpuCount
-
-      );
-
-      startGame();
-
-    }
-
-    function startGame() {
-
-      clearTimeout(
-
-        cpuTimer
-
-      );
-
-      clearTimeout(
-
-        dealTimer
-
-      );
-
-      clearTimeout(
-
-        flipTimer
-
-      );
-
-      resetDeadFx();
-
-      deadRecords = [];
-      
-      gameOver =
-
-        false;
-
-      inputLocked =
-
-        true;
-
-      awaitingResult =
-
-        false;
-
-      pendingLoser =
-
-        null;
-
-      currentPlayerIndex =
-
-        0;
-
-      players.sort((a, b) =>
-
-  a.number - b.number
-
-);
-
-if (shuffleTurnOrder) shuffle(players);
-
-renderTurnOrder();
-
-      createCards();
-
-      prepareBoard();
-
-      status.textContent =
-
-        "DEALING...";
-
-      gameInfo.textContent =
-
-        `${boardSize}×${boardSize} / DEAD ${deadCardCount}`;
-
-      showScreen(
-
-        gameScreen
-
-      );
-
-      dealTimer =
-
-        setTimeout(
-
-          dealCards,
-
-          GAME_START_DEAL_DELAY_MS
-
-        );
-
-    }
-
-    function createCards() {
-
-      const totalCards =
-
-        boardSize
-
-        * boardSize;
-
-      cards =
-
-        [];
-
-      for (
-
-        let i = 0;
-
-        i < deadCardCount;
-
-        i++
-
-      ) {
-
-        cards.push({
-
-          type: "DEAD",
-
-          opened: false
-
-        });
-
-      }
-
-      while (
-
-        cards.length
-
-        < totalCards
-
-      ) {
-
-        cards.push({
-
-          type: "ALIVE",
-
-          opened: false
-
-        });
-
-      }
-
-      shuffle(
-
-        cards
-
-      );
-
-    }
-
-    function shuffle(
-
-      array
-
-    ) {
-
-      for (
-
-        let i =
-
-          array.length - 1;
-
-        i > 0;
-
-        i--
-
-      ) {
-
-        const j =
-
-          Math.floor(
-
-            Math.random()
-
-            * (i + 1)
-
-          );
-
-        [
-
-          array[i],
-
-          array[j]
-
-        ] = [
-
-          array[j],
-
-          array[i]
-
-        ];
-
-      }
-
-    }
-
-    function prepareBoard() {
-
-      board.innerHTML =
-
-        "";
-
-      board.style
-
-        .gridTemplateColumns =
-
-        `repeat(${boardSize}, 1fr)`;
-
-    }
-
-    function dealCards() {
-
-      let index =
-
-        0;
-
-      function dealNextCard() {
-
-        if (
-
-          index
-
-          >= cards.length
-
-        ) {
-
-          inputLocked =
-
-            false;
-
-          updateTurn();
-
-          return;
-
-        }
 
         const button =
 
@@ -3612,121 +3007,995 @@ renderTurnOrder();
 
         button.className =
 
-          "card dealing";
+          "setup-card";
 
         button.dataset.index =
 
-          index;
+          i;
 
-        const cardIndex =
+        const image =
 
-          index;
+  document.createElement(
+
+    "img"
+
+  );
+
+if (
+
+  blindMode
+
+) {
+
+  image.src =
+
+    IMAGE_BACK;
+
+  image.alt =
+
+    "BACK";
+
+} else if (
+
+  i
+
+  === selectedDeadIndex
+
+) {
+
+  image.src =
+
+    IMAGE_DEAD;
+
+  image.alt =
+
+    "DEAD";
+
+  button.classList.add(
+
+    "selected"
+
+  );
+
+} else {
+
+  image.src =
+
+    IMAGE_ALIVE;
+
+  image.alt =
+
+    "ALIVE";
+
+}
+
+button.appendChild(
+
+  image
+
+);
 
         button.addEventListener(
 
           "click",
 
-          () =>
+          () => {
 
-            selectCard(
+            blindMode =
 
-              cardIndex
+              false;
 
-            )
+            selectedDeadIndex =
 
-        );
+              i;
 
-        const image =
+            blindStatus.textContent =
 
-          document.createElement(
+              "";
 
-            "img"
+            renderSetupCards();
 
-          );
-
-        image.src =
-
-          IMAGE_BACK;
-
-        image.alt =
-
-          "CARD BACK";
-
-        button.appendChild(
-
-          image
+          }
 
         );
 
-        playDealSound();
-
-        board.appendChild(
+        setupCards.appendChild(
 
           button
 
         );
 
-        index++;
-
-        dealTimer =
-
-          setTimeout(
-
-            () => {
-
-              dealTimer =
-
-                setTimeout(
-
-                  dealNextCard,
-
-                  DEAL_GAP_MS
-
-                );
-
-            },
-
-            DEAL_ANIMATION_MS
-
-          );
-
       }
-
-      dealNextCard();
 
     }
 
-    function selectCard(
+    function buildSetupCards() {
 
-      index
+      blindMode =
+
+        false;
+
+      selectedDeadIndex =
+
+        randomDeadIndex();
+
+      blindStatus.textContent =
+
+        "";
+
+      renderSetupCards();
+
+    }
+
+    function setVisibleRandom() {
+
+      blindMode =
+
+        false;
+
+      selectedDeadIndex =
+
+        randomDeadIndex();
+
+      blindStatus.textContent =
+
+        "";
+
+      renderSetupCards();
+
+    }
+
+    function setBlindRandom() {
+
+      blindMode =
+
+        true;
+
+      selectedDeadIndex =
+
+        randomDeadIndex();
+
+      blindStatus.textContent =
+
+        "DEAD LOCATION HIDDEN";
+
+      renderSetupCards();
+
+    }
+
+    function buildDecks() {
+
+      playerDeck =
+
+        [];
+
+      cpuDeck =
+
+        [];
+
+      for (
+
+        let i = 0;
+
+        i < totalCards;
+
+        i++
+
+      ) {
+
+        playerDeck.push({
+
+          type:
+
+            i
+
+            === selectedDeadIndex
+
+              ? "DEAD"
+
+              : "ALIVE",
+
+          opened: false
+
+        });
+
+      }
+
+      const cpuDeadIndex =
+        gameMode === "VS" ? p2DeadIndex : randomDeadIndex();
+
+      for (
+
+        let i = 0;
+
+        i < totalCards;
+
+        i++
+
+      ) {
+
+        cpuDeck.push({
+
+          type:
+
+            i
+
+            === cpuDeadIndex
+
+              ? "DEAD"
+
+              : "ALIVE",
+
+          opened: false
+
+        });
+
+      }
+
+    }
+
+    
+  
+function renderGameCards() {
+
+  cpuCards.innerHTML =
+
+    "";
+
+  playerCards.innerHTML =
+
+    "";
+
+  cpuCards.style.setProperty(
+
+    "--card-count",
+
+    totalCards
+
+  );
+
+  playerCards.style.setProperty(
+
+    "--card-count",
+
+    totalCards
+
+  );
+      cpuDeck.forEach(
+
+        (
+
+          card,
+
+          index
+
+        ) => {
+
+          const button =
+
+            document.createElement(
+
+              "button"
+
+            );
+
+          button.className =
+
+            "game-card cpu-card";
+
+          button.dataset.index =
+
+            index;
+
+          const image =
+
+            document.createElement(
+
+              "img"
+
+            );
+
+          if (
+
+            card.opened
+
+          ) {
+
+            if (
+
+              card.type
+
+              === "DEAD"
+
+            ) {
+
+              image.src =
+
+                IMAGE_DEAD;
+
+              image.alt =
+
+                "DEAD";
+
+            } else {
+
+              image.src =
+
+                IMAGE_ALIVE;
+
+              image.alt =
+
+                "ALIVE";
+
+            }
+
+          } else {
+
+            image.src =
+
+              IMAGE_BACK;
+
+            image.alt =
+
+              "BACK";
+
+          }
+
+          button.appendChild(
+
+            image
+
+          );
+
+          if (
+
+            card.opened
+
+          ) {
+
+            button.classList.add(
+
+              "opened"
+
+            );
+
+          }
+
+          cpuCards.appendChild(
+
+            button
+
+          );
+
+        }
+
+      );
+
+      playerDeck.forEach(
+
+        (
+
+          card,
+
+          index
+
+        ) => {
+
+          const button =
+
+            document.createElement(
+
+              "button"
+
+            );
+
+          button.className =
+
+            "game-card player-card";
+
+          button.dataset.index =
+
+            index;
+
+          const image =
+
+            document.createElement(
+
+              "img"
+
+            );
+
+          if (
+            (gameMode === "VS" || blindMode) && !card.opened
+          ) {
+
+            image.src =
+
+              IMAGE_BACK;
+
+            image.alt =
+
+              "BACK";
+
+          } else if (
+
+            card.type
+
+            === "DEAD"
+
+          ) {
+
+            image.src =
+
+              IMAGE_DEAD;
+
+            image.alt =
+
+              "DEAD";
+
+          } else {
+
+            image.src =
+
+              IMAGE_ALIVE;
+
+            image.alt =
+
+              "ALIVE";
+
+          }
+
+          button.appendChild(
+
+            image
+
+          );
+
+          if (
+
+            card.opened
+
+          ) {
+
+            button.classList.add(
+
+              "opened"
+
+            );
+
+          }
+
+          playerCards.appendChild(
+
+            button
+
+          );
+
+        }
+
+      );
+
+    }
+
+function updateOpenedCard(container, deck, index) {
+
+  const button = container.querySelector(
+
+    `.game-card[data-index="${index}"]`
+
+  );
+
+  if (!button) return;
+
+  const card = deck[index];
+
+  const image = button.querySelector("img");
+
+  if (!card || !image) return;
+
+  image.src = card.type === "DEAD"
+
+    ? IMAGE_DEAD
+
+    : IMAGE_ALIVE;
+
+  image.alt = card.type;
+
+  button.classList.remove("selectable");
+
+  button.classList.add("opened");
+
+}
+    
+function prepareGame() {
+
+  stopDangerAudio();
+
+  stopEcgCanvas();
+
+  gameOver = false;
+
+  rolling = false;
+
+  playerOpenedCount = 0;
+
+  cpuOpenedCount = 0;
+
+  dangerMode = false;
+
+  dangerOverlay.classList.remove("active");
+
+  ecgLayer.classList.remove("active");
+
+  resetVsRollTurn();
+
+  renderDiceFace(1);
+
+  rollButton.disabled = false;
+
+  buildDecks();
+
+  renderGameCards();
+
+  showScreen(gameScreen);
+
+  startBgm();
+
+}
+
+    function randomDice() {
+
+      return Math.floor(
+
+        Math.random()
+
+        * 6
+
+      ) + 1;
+
+    }
+    
+   function renderDiceFace(value) {
+
+  const positions = {
+
+    1: [[50, 50]],
+
+    2: [[25, 25], [75, 75]],
+
+    3: [[25, 25], [50, 50], [75, 75]],
+
+    4: [[25, 25], [75, 25], [25, 75], [75, 75]],
+
+    5: [[25, 25], [75, 25], [50, 50], [25, 75], [75, 75]],
+
+    6: [[25, 22], [75, 22], [25, 50], [75, 50], [25, 78], [75, 78]]
+
+  };
+
+  centerDice.innerHTML = "";
+
+  const dots = positions[value] || positions[1];
+
+  dots.forEach(([x, y]) => {
+
+    const pip = document.createElement("span");
+
+    pip.className =
+
+      value === 1 ? "pip red" : "pip";
+
+    pip.style.left = `${x}%`;
+
+    pip.style.top = `${y}%`;
+
+    centerDice.appendChild(pip);
+
+  });
+
+}
+    
+    async function animateDice(
+
+  finalValue
+
+) {
+playSound(diceRollSound);
+  
+      centerDice
+
+    .classList
+
+    .add(
+
+      "rolling"
+
+    );
+
+  const start =
+
+    Date.now();
+
+  while (
+
+    Date.now()
+
+    - start
+
+    < 700
+
+  ) {
+
+    const tempValue =
+
+      randomDice();
+
+    renderDiceFace(tempValue);
+
+    await wait(
+
+      70
+
+    );
+
+  }
+
+  centerDice
+
+    .classList
+
+    .remove(
+
+      "rolling"
+
+    );
+
+  renderDiceFace(finalValue);
+}
+
+async function rollRound() {
+
+  if (gameMode !== "CPU" || rolling || gameOver) return;
+
+  rolling = true;
+
+  rollButton.disabled = true;
+
+  clearCpuSelection();
+
+  playerRollDisplay.textContent = "-";
+
+  cpuRollDisplay.textContent = "-";
+
+  playerRoll = 0;
+
+  cpuRoll = 0;
+
+  for (let i = 1; i <= diceRollCount; i++) {
+
+    status.textContent = diceRollCount === 1
+
+      ? "YOU ROLL"
+
+      : `YOU ROLL ${i}/2`;
+
+    renderDiceFace(1);
+
+    const roll = randomDice();
+
+    await animateDice(roll);
+
+    playerRoll += roll;
+
+    playerRollDisplay.textContent = playerRoll;
+
+    if (i < diceRollCount) await wait(550);
+
+  }
+
+  await wait(600);
+
+  for (let i = 1; i <= diceRollCount; i++) {
+
+    status.textContent = diceRollCount === 1
+
+      ? "CPU ROLL"
+
+      : `CPU ROLL ${i}/2`;
+
+    renderDiceFace(1);
+
+    const roll = randomDice();
+
+    await animateDice(roll);
+
+    cpuRoll += roll;
+
+    cpuRollDisplay.textContent = cpuRoll;
+
+    if (i < diceRollCount) await wait(550);
+
+  }
+
+  await wait(500);
+
+  if (playerRoll === cpuRoll) {
+
+    status.textContent = "DRAW - ROLL AGAIN";
+
+    rolling = false;
+
+    rollButton.disabled = false;
+
+    return;
+
+  }
+
+  if (playerRoll > cpuRoll) {
+
+    status.textContent = "CHOOSE CPU CARD";
+
+    rolling = false;
+
+    enableCpuSelection();
+
+    return;
+
+  }
+
+  status.textContent = "CPU CHOOSES";
+
+  if (dangerMode) stopDangerMode();
+
+  await wait(650);
+
+  cpuChoosePlayerCard();
+
+  rolling = false;
+
+}
+    
+function updateVsRollButtons() {
+
+  const canRoll = !gameOver && !rolling && rollPhase === "rolling";
+
+  p1RollButton.disabled = !canRoll || p1RollsDone >= diceRollCount;
+
+  p2RollButton.disabled = !canRoll || p2RollsDone >= diceRollCount;
+
+}
+
+function resetVsRollTurn() {
+
+  playerRoll = 0;
+
+  cpuRoll = 0;
+
+  p1RollsDone = 0;
+
+  p2RollsDone = 0;
+
+  rolling = false;
+
+  rollPhase = "rolling";
+
+  playerRollDisplay.textContent = "-";
+
+  cpuRollDisplay.textContent = "-";
+
+  status.textContent = "ROLL THE DICE";
+
+  updateVsRollButtons();
+
+}
+
+async function rollForPlayer(playerNumber) {
+
+  if (gameOver || rolling || rollPhase !== "rolling") return;
+
+  const isP1 = playerNumber === 1;
+
+  if (isP1 ? p1RollsDone >= diceRollCount : p2RollsDone >= diceRollCount) {
+
+    return;
+
+  }
+
+  rolling = true;
+
+  updateVsRollButtons();
+
+  clearCpuSelection();
+
+  clearPlayerSelection();
+
+  const nextRoll = (isP1 ? p1RollsDone : p2RollsDone) + 1;
+
+  status.textContent = diceRollCount === 1
+
+    ? `PLAYER ${playerNumber} ROLL`
+
+    : `PLAYER ${playerNumber} ROLL ${nextRoll}/${diceRollCount}`;
+
+  renderDiceFace(1);
+
+  const value = randomDice();
+
+  await animateDice(value);
+
+  if (isP1) {
+
+    playerRoll += value;
+
+    p1RollsDone++;
+
+    playerRollDisplay.textContent = String(playerRoll);
+
+  } else {
+
+    cpuRoll += value;
+
+    p2RollsDone++;
+
+    cpuRollDisplay.textContent = String(cpuRoll);
+
+  }
+
+  const p1Finished = p1RollsDone >= diceRollCount;
+
+  const p2Finished = p2RollsDone >= diceRollCount;
+
+  if (p1Finished && p2Finished) {
+
+    rollPhase = "choosing";
+
+    updateVsRollButtons();
+
+    await wait(500);
+
+    if (playerRoll === cpuRoll) {
+
+      status.textContent = "DRAW - ROLL AGAIN";
+
+      await wait(550);
+
+      resetVsRollTurn();
+
+      return;
+
+    }
+
+    rolling = false;
+
+    updateVsRollButtons();
+
+    if (playerRoll > cpuRoll) {
+
+      status.textContent = "PLAYER 1: CHOOSE P2 CARD";
+
+      enableCpuSelection();
+
+    } else {
+
+      status.textContent = "PLAYER 2: CHOOSE P1 CARD";
+
+      enablePlayerSelection();
+
+    }
+
+    return;
+
+  }
+
+  rolling = false;
+
+  status.textContent = "ROLL THE DICE";
+
+  updateVsRollButtons();
+
+}
+
+    function enableCpuSelection() {
+
+      const buttons =
+
+        cpuCards.querySelectorAll(
+
+          ".game-card"
+
+        );
+
+      buttons.forEach(
+
+        button => {
+
+          const index =
+
+            Number(
+
+              button.dataset.index
+
+            );
+
+          if (
+
+            cpuDeck[index].opened
+
+          ) {
+
+            return;
+
+          }
+
+          button.classList.add(
+
+            "selectable"
+
+          );
+
+          button.addEventListener(
+
+            "click",
+
+            handleCpuCardClick,
+
+            {
+
+              once: true
+
+            }
+
+          );
+
+        }
+
+      );
+
+    }
+
+    function clearCpuSelection() {
+
+      const buttons =
+
+        cpuCards.querySelectorAll(
+
+          ".game-card"
+
+        );
+
+      buttons.forEach(
+
+        button => {
+
+          button.classList.remove(
+
+            "selectable"
+
+          );
+
+          button.removeEventListener(
+
+            "click",
+
+            handleCpuCardClick
+
+          );
+
+        }
+
+      );
+
+    }
+
+    function handleCpuCardClick(
+
+      event
 
     ) {
 
-      if (gameOver) {
-
-        return;
-
-      }
-
-      if (inputLocked) {
-
-        return;
-
-      }
-
-      const player =
-
-        players[
-
-          currentPlayerIndex
-
-        ];
-
       if (
 
-        player.type
-
-        !== "HUMAN"
+        gameOver
 
       ) {
 
@@ -3734,7 +4003,21 @@ renderTurnOrder();
 
       }
 
-      openCard(
+      const button =
+
+        event.currentTarget;
+
+      const index =
+
+        Number(
+
+          button.dataset.index
+
+        );
+
+      clearCpuSelection();
+
+      openCpuCard(
 
         index
 
@@ -3742,782 +4025,163 @@ renderTurnOrder();
 
     }
 
-    function openCard(
+    async function openCpuCard(
 
       index
 
     ) {
 
-      if (gameOver) {
-
-        return;
-
-      }
-
-      if (inputLocked) {
-
-        return;
-
-      }
-
-      if (
-
-        cards[index].opened
-
-      ) {
-
-        return;
-
-      }
-
-      inputLocked =
+      cpuDeck[index].opened =
 
         true;
 
-      refreshBoard();
+      cpuOpenedCount++;
 
       playSound(
 
-        cardFlickSound
+        cardSound
 
       );
 
-      flipTimer =
+      updateOpenedCard(cpuCards, cpuDeck, index);
 
-        setTimeout(
+      await wait(
 
-          () => {
+        420
 
-            cards[index].opened =
+      );
 
-              true;
+      if (
 
-            refreshBoard();
+        cpuDeck[index].type
 
-            if (
+        === "DEAD"
 
-              cards[index].type
+      ) {
 
-              === "DEAD"
+        const cardElement =
 
-            ) {
+          cpuCards.querySelector(
 
-              if (deadCardCount > 1) {
+            `.game-card[data-index="${index}"]`
 
-  const player = players[currentPlayerIndex];
+          );
 
-  const bingo = countBingo();
+        await startDeadEffect(
 
-  const amount = penaltyType === "LEVEL"
+          cardElement,
 
-    ? 1 + bingo
+          "PLAYER"
 
-    : deadPenalty + bingo * bingoPenalty;
+        );
 
-  deadRecords.push({
+        return;
 
-    playerNumber: player.number,
+      } 
 
-    bingo,
+if (gameMode === "VS") {
 
-    amount
+  const remainingCards = cpuDeck.filter(
 
-  });
+    card => !card.opened
 
-  renderTurnOrder();
+  );
 
-  if (deadRecords.length < deadCardCount) {
+  if (
 
-    status.textContent =
+    remainingCards.length === 1 &&
 
-      `${displayPlayerName(player)} DEAD`;
+    remainingCards[0].type === "DEAD"
 
-    flipTimer = setTimeout(() => {
+  ) {
 
-      if (deadShuffleEnabled) {
-
-        shuffle(cards);
-
-      }
-
-      refreshBoard();
-
-      nextTurn();
-
-    }, 750);
-
-    return;
+    startDangerMode();
 
   }
 
 }
+      
+　　　const remainingCards = cpuDeck.filter(
 
-pauseBgm();
-
-prepareDeadResult(
-
-  players[currentPlayerIndex],
-
-  index
+  card => !card.opened
 
 );
 
-return;
-              
+if (
 
-            }
+  remainingCards.length === 1 &&
 
-            nextTurn();
+  remainingCards[0].type === "DEAD"
 
-          },
+) {
 
-          FLIP_DELAY_MS
+  startDangerMode();
 
-        );
-
-    }
-
-    function resetDeadFx() {
-
-      deadFxRunId++;
-
-      deadFxRunning =
-
-        false;
-
-      deadFxOverlay.classList.remove(
-
-        "active",
-
-        "running"
-
-      );
-
-      deadFxBlack.classList.remove(
-
-        "show"
-
-      );
-
-      deadFxRed.classList.remove(
-
-        "show"
-
-      );
-
-      deadTapLayer.classList.remove(
-
-        "active"
-
-      );
-
-      [
-
-        deadFxSkull1,
-
-        deadFxSkull2,
-
-        deadFxLogo,
-
-        deadFxBullet,
-
-        deadFxBlood
-
-      ].forEach(
-
-        element => {
-
-          element.style.opacity =
-
-            "0";
-
-          element.style.transform =
-
-            "";
-
-          element.style.transition =
-
-            "";
-
-        }
-
-      );
-
-    }
-
-    function showDeadFinalScene() {
-
-      deadFxBlack.classList.remove(
-
-        "show"
-
-      );
-
-      deadFxSkull1.style.opacity =
-
-        "0";
-
-      deadFxBullet.style.opacity =
-
-        "0";
-
-      deadFxBlood.style.opacity =
-
-        "0";
-
-      deadFxSkull2.style.transition =
-
-        "none";
-
-      deadFxSkull2.style.transform =
-
-        "translate(0, 0) scale(1)";
-
-      deadFxSkull2.style.opacity =
-
-        "1";
-
-      deadFxLogo.style.transition =
-
-        "none";
-
-      deadFxLogo.style.transform =
-
-        "translate(0, 0) scale(1)";
-
-      deadFxLogo.style.opacity =
-
-        "1";
-
-      deadFxRed.classList.add(
-
-        "show"
-
-      );
-
-      deadFxRunning =
-
-        false;
-
-      deadFxOverlay.classList.remove(
-
-        "running"
-
-      );
-
-      deadTapLayer.classList.add(
-
-        "active"
-
-      );
-
-    }
-
-    async function runDeadFx(
-
-      cardIndex
-
-    ) {
-
-      const runId =
-
-        ++deadFxRunId;
-
-      deadFxRunning =
-
-        true;
-
-      deadFxOverlay.classList.add(
-
-        "active",
-
-        "running"
-
-      );
-
-      const cardButton =
-
-        board.querySelector(
-
-          `.card[data-index="${cardIndex}"]`
-
-        );
-
-      const rect =
-
-        cardButton
-
-          .getBoundingClientRect();
-
-      const centerX =
-
-        window.innerWidth / 2;
-
-      const centerY =
-
-        window.innerHeight / 2;
-
-      const cardX =
-
-        rect.left
-
-        + rect.width / 2;
-
-      const cardY =
-
-        rect.top
-
-        + rect.height / 2;
-
-      const offsetX =
-
-        cardX
-
-        - centerX;
-
-      const offsetY =
-
-        cardY
-
-        - centerY;
-
-      deadFxSkull1.style.transition =
-
-        "none";
-
-      deadFxSkull1.style.opacity =
-
-        "1";
-
-      deadFxSkull1.style.transform =
-
-        `translate(${offsetX}px, ${offsetY}px) scale(0.28)`;
-
-      await wait(
-
-        30
-
-      );
-
-      if (
-
-        runId
-
-        !== deadFxRunId
-
-      ) {
-
-        return;
-
-      }
-
-      deadFxSkull1.style.transition =
-
-        `transform ${DEAD_SKULL_MOVE_MS}ms ease-out`;
-
-      deadFxSkull1.style.transform =
-
-        "translate(0, 0) scale(1)";
-
-      await wait(
-
-        DEAD_SKULL_MOVE_MS
-
-      );
-
-      if (
-
-        runId
-
-        !== deadFxRunId
-
-      ) {
-
-        return;
-
-      }
-
-      deadFxBlack.classList.add(
-
-        "show"
-
-      );
-
-      await wait(
-
-        DEAD_BLACKOUT_MS
-
-      );
-
-      if (
-
-        runId
-
-        !== deadFxRunId
-
-      ) {
-
-        return;
-
-      }
-
-      playSound(
-
-        gunClickSound
-
-      );
-
-      await wait(
-
-        DEAD_CLICK_TO_SHOT_MS
-
-      );
-
-      if (
-
-        runId
-
-        !== deadFxRunId
-
-      ) {
-
-        return;
-
-      }
-
-      playSound(
-
-        gunShotSound
-
-      );
-
-      await wait(
-
-        DEAD_SHOT_TO_BULLET_MS
-
-      );
-
-      if (
-
-        runId
-
-        !== deadFxRunId
-
-      ) {
-
-        return;
-
-      }
-
-      deadFxBullet.style.transform =
-
-        "translate(4vw, -3vh)";
-
-      deadFxBullet.style.opacity =
-
-        "1";
-
-      await wait(
-
-        DEAD_BULLET_TO_BLOOD_MS
-
-      );
-
-      if (
-
-        runId
-
-        !== deadFxRunId
-
-      ) {
-
-        return;
-
-      }
-
-      deadFxBlood.style.transform =
-
-        "translate(4vw, -3vh)";
-
-      deadFxBlood.style.opacity =
-
-        "1";
-
-      await wait(
-
-        DEAD_BLACK_HOLD_MS
-
-      );
-
-      if (
-
-        runId
-
-        !== deadFxRunId
-
-      ) {
-
-        return;
-
-      }
-
-      deadFxBlack.classList.remove(
-
-        "show"
-
-      );
-
-      deadFxSkull1.style.opacity =
-
-        "0";
-
-      deadFxBullet.style.opacity =
-
-        "0";
-
-      deadFxBlood.style.opacity =
-
-        "0";
-
-      deadFxSkull2.style.opacity =
-
-        "1";
-
-      await wait(
-
-        DEAD_BROKEN_TO_LOGO_MS
-
-      );
-
-      if (
-
-        runId
-
-        !== deadFxRunId
-
-      ) {
-
-        return;
-
-      }
-
-      deadFxLogo.style.opacity =
-
-        "1";
-
-      deadFxRed.classList.add(
-
-        "show"
-
-      );
-
-      deadFxRunning =
-
-        false;
-
-      deadFxOverlay.classList.remove(
-
-        "running"
-
-      );
-
-      deadTapLayer.classList.add(
-
-        "active"
-
-      );
-
-    }
-
-    function prepareDeadResult(
-
-      loser,
-
-      cardIndex
-
-    ) {
-
-      gameOver =
-
-        true;
-
-      inputLocked =
-
-        true;
-
-      awaitingResult =
-
-        true;
-
-      pendingLoser =
-
-        loser;
-
-      clearTimeout(
-
-        cpuTimer
-
-      );
-
+}
       status.textContent =
 
-      `${displayPlayerName(loser)} DIED`;
+        "ALIVE";
 
-      gameInfo.textContent =
+      await wait(
 
-        "";
-
-      refreshBoard();
-
-  deadFxLogo.src =
-
-    deadCardCount === 1 &&
-    
-  players.length === 2 &&
-
-  loser.type === "CPU" &&
-
-  players.some(player => player.type === "HUMAN")
-
-    ? "images/doa-w-rogo.PNG"
-
-    : "images/doa-d-rogo.PNG";
-      
-      runDeadFx(
-
-        cardIndex
+        500
 
       );
 
+      status.textContent = "ROLL THE DICE";
+
+if (gameMode === "VS") resetVsRollTurn();
+
+else rollButton.disabled = false;
+
+}
+
+    function enablePlayerSelection() {
+      playerCards.querySelectorAll(".game-card").forEach(button => {
+        const index = Number(button.dataset.index);
+        if (playerDeck[index].opened) return;
+        button.classList.add("selectable");
+        button.addEventListener("click", handlePlayerCardClick, {once: true});
+      });
     }
-
-    deadFxOverlay.addEventListener(
-
-      "click",
-
-      () => {
-
-        if (
-
-          !deadFxRunning
-
-        ) {
-
-          return;
-
-        }
-
-        deadFxRunId++;
-
-        showDeadFinalScene();
-
-      }
-
-    );
-
-    function nextTurn() {
-
-      currentPlayerIndex++;
-
-      if (
-
-        currentPlayerIndex
-
-        >= players.length
-
-      ) {
-
-        currentPlayerIndex =
-
-          0;
-
-      }
-
-      updateTurn();
-
+    function clearPlayerSelection() {
+      playerCards.querySelectorAll(".game-card").forEach(button => {
+        button.classList.remove("selectable");
+        button.removeEventListener("click", handlePlayerCardClick);
+      });
     }
-
-    function updateTurn() {
-
-      if (gameOver) {
-
+    async function handlePlayerCardClick(event) {
+      if (gameOver) return;
+      const index = Number(event.currentTarget.dataset.index);
+      clearPlayerSelection();
+      await openPlayerCardVS(index);
+    }
+    async function openPlayerCardVS(index) {
+      playerDeck[index].opened = true;
+      playerOpenedCount++;
+      playSound(cardSound);
+      updateOpenedCard(playerCards, playerDeck, index);
+      await wait(420);
+      if (playerDeck[index].type === "DEAD") {
+        const cardElement = playerCards.querySelector(`.game-card[data-index="${index}"]`);
+        await startDeadEffect(cardElement, "CPU");
         return;
-
       }
-      status.classList.remove("turn-pop");
-
-void status.offsetWidth;
-
-status.classList.add("turn-pop");
-      
-      const player =
-
-        players[
-
-          currentPlayerIndex
-
-        ];
-
-      if (
-
-        player.type
-
-        === "CPU"
-
-      ) {
-
-        status.textContent = 
-
-      `${displayPlayerName(player)} CPU TURN`;
-        
-        inputLocked =
-
-          true;
-
-        refreshBoard();
-
-        cpuTimer =
-
-          setTimeout(
-
-            cpuPlay,
-
-            700
-
-          );
-
-      } else {
-
-        status.textContent =   
-
-      `${displayPlayerName(player)} TURN`;
-
-        inputLocked =
-
-          false;
-
-        refreshBoard();
-
+      const remainingCards = playerDeck.filter(card => !card.opened);
+      if (remainingCards.length === 1 && remainingCards[0].type === "DEAD") {
+        startDangerMode();
       }
-
-      gameInfo.textContent =
-
-        `${boardSize}×${boardSize} / DEAD ${deadCardCount}`;
-
-       renderTurnOrder();
+      status.textContent = "ALIVE";
+      await wait(500);
+      status.textContent = "ROLL THE DICE";
+      resetVsRollTurn();
     }
 
-    function cpuPlay() {
+    async function cpuChoosePlayerCard() {
 
-      if (gameOver) {
+      const unopened =
 
-        return;
-
-      }
-
-      const unopenedIndexes =
-
-        cards
+        playerDeck
 
           .map(
 
@@ -4547,7 +4211,7 @@ status.classList.add("turn-pop");
 
       if (
 
-        unopenedIndexes.length
+        unopened.length
 
         === 0
 
@@ -4557,796 +4221,1876 @@ status.classList.add("turn-pop");
 
       }
 
-      const randomIndex =
+      const index =
 
-        unopenedIndexes[
+        unopened[
 
           Math.floor(
 
             Math.random()
 
-            * unopenedIndexes.length
+            * unopened.length
 
           )
 
         ];
 
-      inputLocked =
+      playerDeck[index].opened =
 
-        false;
+        true;
 
-      openCard(
+      playerOpenedCount++;
 
-        randomIndex
+      playSound(
+
+        cardSound
 
       );
 
-    }
+      updateOpenedCard(playerCards, playerDeck, index);
 
-    function refreshBoard() {
+      await wait(
 
-      const buttons =
+        420
 
-        board.querySelectorAll(
+      );
 
-          ".card"
+      if (
 
-        );
+        playerDeck[index].type
 
-      buttons.forEach(
+        === "DEAD"
 
-        button => {
+      ) {
 
-          const index =
+        const cardElement =
 
-            Number(
+          playerCards.querySelector(
 
-              button.dataset.index
-
-            );
-
-          const card =
-
-            cards[index];
-
-          button.innerHTML =
-
-            "";
-
-          const image =
-
-            document.createElement(
-
-              "img"
-
-            );
-
-          if (
-
-            !card.opened
-
-          ) {
-
-            image.src =
-
-              IMAGE_BACK;
-
-            image.alt =
-
-              "CARD BACK";
-
-          } else if (
-
-            card.type
-
-            === "ALIVE"
-
-          ) {
-
-            image.src =
-
-              IMAGE_ALIVE;
-
-            image.alt =
-
-              "ALIVE";
-
-          } else {
-
-            image.src =
-
-              IMAGE_DEAD;
-
-            image.alt =
-
-              "DEAD";
-
-          }
-
-          button.appendChild(
-
-            image
+            `.game-card[data-index="${index}"]`
 
           );
 
-          button.classList.toggle(
+        await startDeadEffect(
 
-  "interim-dead",
+          cardElement,
 
-  deadCardCount > 1 &&
+          "CPU"
 
-  deadRecords.length < deadCardCount &&
+        );
 
-  card.opened &&
+        return;
 
-  card.type === "DEAD"
+      }
+
+      const remainingCards = playerDeck.filter(
+
+  card => !card.opened
 
 );
-          
-          button.disabled =
 
-            gameOver
+if (
 
-            || inputLocked
+  remainingCards.length === 1 &&
 
-            || card.opened;
+  remainingCards[0].type === "DEAD"
 
-        }
+) {
 
-      );
-
-    }
-
-    function countBingo() {
-
-      const lines =
-
-        [];
-
-      for (
-
-        let row = 0;
-
-        row < boardSize;
-
-        row++
-
-      ) {
-
-        const line =
-
-          [];
-
-        for (
-
-          let col = 0;
-
-          col < boardSize;
-
-          col++
-
-        ) {
-
-          line.push(
-
-            row
-
-            * boardSize
-
-            + col
-
-          );
-
-        }
-
-        lines.push(
-
-          line
-
-        );
-
-      }
-
-      for (
-
-        let col = 0;
-
-        col < boardSize;
-
-        col++
-
-      ) {
-
-        const line =
-
-          [];
-
-        for (
-
-          let row = 0;
-
-          row < boardSize;
-
-          row++
-
-        ) {
-
-          line.push(
-
-            row
-
-            * boardSize
-
-            + col
-
-          );
-
-        }
-
-        lines.push(
-
-          line
-
-        );
-
-      }
-
-      const diagonal1 =
-
-        [];
-
-      for (
-
-        let i = 0;
-
-        i < boardSize;
-
-        i++
-
-      ) {
-
-        diagonal1.push(
-
-          i
-
-          * boardSize
-
-          + i
-
-        );
-
-      }
-
-      lines.push(
-
-        diagonal1
-
-      );
-
-      const diagonal2 =
-
-        [];
-
-      for (
-
-        let i = 0;
-
-        i < boardSize;
-
-        i++
-
-      ) {
-
-        diagonal2.push(
-
-          i
-
-          * boardSize
-
-          + (
-
-            boardSize
-
-            - 1
-
-            - i
-
-          )
-
-        );
-
-      }
-
-      lines.push(
-
-        diagonal2
-
-      );
-
-      let bingoCount =
-
-        0;
-
-      lines.forEach(
-
-        line => {
-
-          const complete =
-
-            line.every(
-
-              index =>
-
-                cards[index].opened
-
-            );
-
-          if (
-
-            complete
-
-          ) {
-
-            bingoCount++;
-
-          }
-
-        }
-
-      );
-
-      return bingoCount;
-
-    }
-
-    function finishMultipleDeadGame() {
-
-  resultTitle.textContent = "PENALTY RESULTS";
-
-  resultDead.closest(".result-line").hidden = true;
-
-  resultBingo.closest(".result-line").hidden = true;
-
-  resultShots.closest(".total-shots").hidden = true;
-
-  customPenaltyResult.hidden = false;
-
-  customPenaltyResult.replaceChildren();
-
-  players.forEach(player => {
-
-    const records = deadRecords.filter(
-
-      record => record.playerNumber === player.number
-
-    );
-
-    if (!records.length) return;
-
-    const total = records.reduce(
-
-      (sum, record) => sum + record.amount,
-
-      0
-
-    );
-
-    addCustomPenaltyText(
-
-      customPenaltyResult,
-
-      `${displayPlayerName(player)} — DEAD ${records.length}`,
-
-      "custom-penalty-heading"
-
-    );
-
-    records.forEach((record, index) => {
-
-      const label = penaltyType === "LEVEL"
-
-        ? `DEAD ${index + 1}: BINGO ${record.bingo} / LEVEL ${getDbLevel(record.amount)}`
-
-        : `DEAD ${index + 1}: BINGO ${record.bingo} / +${record.amount}`;
-
-      addCustomPenaltyText(
-
-        customPenaltyResult,
-
-        label,
-
-        "custom-penalty-item"
-
-      );
-
-    });
-
-    if (penaltyType === "LEVEL") {
-
-      records.forEach((record, index) => {
-
-        const level = getDbLevel(record.amount);
-
-        addCustomPenaltyText(
-
-          customPenaltyResult,
-
-          `LEVEL ${level} (${index + 1}回目): ${drawCustomPenalty(levelPenaltyEntries[level - 1])}`,
-
-          "custom-penalty-item"
-
-        );
-
-      });
-
-    } else if (penaltyType === "RANDOM") {
-
-      addCustomPenaltyText(
-
-        customPenaltyResult,
-
-        `TOTAL: ${total} DRAWS`,
-
-        "custom-penalty-heading"
-
-      );
-
-      for (let i = 0; i < total; i++) {
-
-        addCustomPenaltyText(
-
-          customPenaltyResult,
-
-          `${i + 1}. ${drawCustomPenalty(randomPenaltyEntries)}`,
-
-          "custom-penalty-item"
-
-        );
-
-      }
-
-    } else {
-
-      addCustomPenaltyText(
-
-        customPenaltyResult,
-
-        `TOTAL: ${total} ${drinkType}`,
-
-        "custom-penalty-heading"
-
-      );
-
-    }
-
-  });
-
-  awaitingResult = false;
-
-  pendingLoser = null;
-
-  resetDeadFx();
-
-  showScreen(resultScreen);
-
-  startBgm();
+  startDangerMode();
 
 }
-    
-    function finishGame(
 
-      loser
+      status.textContent =
 
-    ) {
+        "ALIVE";
 
-      if (deadCardCount > 1) {
+      await wait(
 
-  finishMultipleDeadGame();
+        500
 
-  return;
+      );
+
+      status.textContent = "ROLL THE DICE";
+
+if (gameMode === "VS") resetVsRollTurn();
+
+else rollButton.disabled = false;
+
+    }
+
+/* DTG HEARTBEAT TIMING */
+
+const heartbeatTimes = [
+
+  0.26, 0.62,
+
+  1.64, 2.01,
+
+  3.10, 3.46,
+
+  4.58, 5.00,
+
+  6.14, 6.53,
+
+  7.67, 8.05,
+
+  9.35, 9.69,
+
+  10.99, 11.37,
+
+  12.60, 13.04,
+
+  14.19, 14.60,
+
+  15.83, 16.27
+
+];
+
+/* DTG CANVAS ECG */
+
+const ecgCanvas = document.getElementById("ecgCanvas");
+
+const ecgCtx = ecgCanvas.getContext("2d");
+
+let ecgAnimationFrame = null;
+
+let ecgLastFrame = 0;
+
+let ecgScroll = 0;
+
+let ecgPulseStart = -1000;
+
+let ecgPulsePower = 0;
+
+function ecgVariation(index) {
+
+  const v = Math.sin(index * 127.1 + 19.19) * 43758.5453;
+
+  return v - Math.floor(v);
 
 }
-      
-      const bingo =
 
-        countBingo();
+function ecgNormalWave(position) {
 
-      const isLevel = penaltyType === "LEVEL";
+  const beat = Math.floor(position / 92);
 
-const penaltyCount = isLevel
+  const phase = ((position % 92) + 92) % 92;
 
-  ? 1 + bingo
+  const scale = 0.65 + ecgVariation(beat) * 0.6;
 
-  : deadPenalty + bingo * bingoPenalty;
+  const points = [
 
-resultTitle.textContent =
+    [0, 0], [15, 0], [22, -4], [28, 0],
 
-  `${displayPlayerName(loser)} LOSE`;
+    [38, 0], [43, 5], [48, -17], [53, 19],
 
-resultDead.closest(".result-line").hidden = isLevel;
+    [59, 0], [92, 0]
 
-resultBingo.closest(".result-line").hidden = isLevel;
+  ];
 
-resultShots.closest(".total-shots").hidden = isLevel;
+  for (let i = 1; i < points.length; i++) {
 
-customPenaltyResult.hidden =
+    if (phase <= points[i][0]) {
 
-  penaltyType !== "RANDOM" && !isLevel;
+      const [x0, y0] = points[i - 1];
 
-customPenaltyResult.replaceChildren();
+      const [x1, y1] = points[i];
 
-resultDead.textContent = deadPenalty;
+      return (
 
-resultBingo.textContent = bingo;
+        y0 + (y1 - y0) *
 
-resultBingoPenalty.textContent = bingoPenalty;
+        (phase - x0) / (x1 - x0)
 
-resultShots.textContent = penaltyCount;
+      ) * scale;
 
-resultDrinkType.textContent =
-
-  penaltyType === "RANDOM" ? "PENALTIES" : drinkType;
-
-if (penaltyType === "RANDOM") {
-
-  addCustomPenaltyText(
-
-    customPenaltyResult,
-
-    "RANDOM PENALTY",
-
-    "custom-penalty-heading"
-
-  );
-
-  for (let i = 0; i < penaltyCount; i++) {
-
-    addCustomPenaltyText(
-
-      customPenaltyResult,
-
-      `${i + 1}. ${drawCustomPenalty(randomPenaltyEntries)}`,
-
-      "custom-penalty-item"
-
-    );
+    }
 
   }
 
-} else if (isLevel) {
+  return 0;
 
-  const level = getDbLevel(penaltyCount);
+}
 
-  addCustomPenaltyText(
+function ecgCenterWave(dx) {
 
-    customPenaltyResult,
+  const points = [
 
-    `LEVEL ${level}（${penaltyCount}）`,
+    [-90, 0], [-60, 0], [-35, -0.06],
 
-    "custom-penalty-heading"
+    [-21, 0.10], [-10, -0.18],
+
+    [0, -1], [17, 1], [32, 0], [90, 0]
+
+  ];
+
+  if (dx < -90 || dx > 90) return 0;
+
+  for (let i = 1; i < points.length; i++) {
+
+    if (dx <= points[i][0]) {
+
+      const [x0, y0] = points[i - 1];
+
+      const [x1, y1] = points[i];
+
+      return y0 + (y1 - y0) *
+
+        (dx - x0) / (x1 - x0);
+
+    }
+
+  }
+
+  return 0;
+
+}
+
+function drawEcg(now) {
+
+  if (!dangerMode || gameOver) {
+
+    ecgAnimationFrame = null;
+
+    return;
+
+  }
+
+  const elapsed = ecgLastFrame
+
+    ? Math.min(now - ecgLastFrame, 50)
+
+    : 0;
+
+  ecgLastFrame = now;
+
+  ecgScroll += elapsed * 0.09;
+
+  const bounds = ecgCanvas.getBoundingClientRect();
+
+  const w = bounds.width;
+
+  const h = bounds.height;
+
+  if (w && h) {
+
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    const pw = Math.round(w * dpr);
+
+    const ph = Math.round(h * dpr);
+
+    if (ecgCanvas.width !== pw || ecgCanvas.height !== ph) {
+
+      ecgCanvas.width = pw;
+
+      ecgCanvas.height = ph;
+
+    }
+
+    ecgCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    ecgCtx.clearRect(0, 0, w, h);
+
+    const age = now - ecgPulseStart;
+
+    const envelope = age >= 0 && age < 280
+
+      ? Math.pow(Math.sin(Math.PI * age / 280), 0.75)
+
+      : 0;
+
+    const strength = ecgPulsePower * envelope;
+
+    const bigAmplitude = Math.min(h * 0.38, 260);
+
+    const center = w / 2;
+
+    ecgCtx.beginPath();
+
+    for (let x = 0; x <= w + 2; x += 2) {
+
+      const dx = x - center;
+
+      const normal = ecgNormalWave(x + ecgScroll);
+
+      const nearCenter = Math.max(0, 1 - Math.abs(dx) / 90);
+
+      const weight = strength * nearCenter;
+
+      const y = h / 2
+
+        + normal * (1 - weight)
+
+        + ecgCenterWave(dx) * bigAmplitude * strength;
+
+      if (x === 0) ecgCtx.moveTo(x, y);
+
+      else ecgCtx.lineTo(x, y);
+
+    }
+
+    ecgCtx.strokeStyle = "#e00000";
+
+    ecgCtx.lineWidth = 2.5;
+
+    ecgCtx.lineJoin = "round";
+
+    ecgCtx.shadowColor = "#ff2020";
+
+    ecgCtx.shadowBlur = 7;
+
+    ecgCtx.stroke();
+
+  }
+
+  ecgAnimationFrame = requestAnimationFrame(drawEcg);
+
+}
+
+function startEcgCanvas() {
+
+  if (ecgAnimationFrame !== null) {
+
+    cancelAnimationFrame(ecgAnimationFrame);
+
+  }
+
+  ecgLastFrame = 0;
+
+  ecgScroll = 0;
+
+  ecgPulsePower = 0;
+
+  ecgAnimationFrame = requestAnimationFrame(drawEcg);
+
+}
+
+function stopEcgCanvas() {
+
+  if (ecgAnimationFrame !== null) {
+
+    cancelAnimationFrame(ecgAnimationFrame);
+
+  }
+
+  ecgAnimationFrame = null;
+
+  ecgLastFrame = 0;
+
+  ecgCtx.clearRect(0, 0, ecgCanvas.width, ecgCanvas.height);
+
+}
+
+function pulseEcg(strong) {
+
+  ecgPulsePower = strong ? 1 : 0.28;
+
+  ecgPulseStart = performance.now();
+
+}
+
+function syncHeartbeat() {
+
+  if (!dangerMode || gameOver) {
+
+    return;
+
+  }
+
+  const time = heartbeatSound.currentTime;
+
+  if (time < previousHeartbeatTime - 0.5) {
+
+    heartbeatIndex = 0;
+
+  }
+
+  previousHeartbeatTime = time;
+
+  while (
+
+    heartbeatIndex < heartbeatTimes.length &&
+
+    time >= heartbeatTimes[heartbeatIndex]
+
+  ) {
+
+    const beatTime =
+
+      heartbeatTimes[heartbeatIndex];
+
+    if (time - beatTime < 0.12) {
+
+      pulseEcg(heartbeatIndex % 2 === 1);
+
+    }
+
+    heartbeatIndex++;
+
+  }
+
+  heartbeatFrame =
+
+    requestAnimationFrame(syncHeartbeat);
+
+}
+
+function startDangerAudio() {
+
+  stopDangerAudio();
+
+  heartbeatIndex = 0;
+
+  previousHeartbeatTime = 0;
+
+  heartbeatSound.currentTime = 0;
+
+  const promise = heartbeatSound.play();
+
+  if (promise && typeof promise.catch === "function") {
+
+    promise.catch(() => {});
+
+  }
+
+  heartbeatFrame =
+
+    requestAnimationFrame(syncHeartbeat);
+
+  playSound(heartMonitorSound);
+
+  heartMonitorTimer = setInterval(() => {
+
+    if (dangerMode && !gameOver) {
+
+      playSound(heartMonitorSound);
+
+    }
+
+  }, 1000);
+
+}
+
+function stopDangerAudio() {
+
+  clearInterval(heartMonitorTimer);
+
+  cancelAnimationFrame(heartbeatFrame);
+
+  clearTimeout(ecgPulseTimer);
+
+  heartMonitorTimer = null;
+
+  heartbeatFrame = null;
+
+  ecgPulseTimer = null;
+
+  heartbeatSound.pause();
+
+  heartMonitorSound.pause();
+
+  ecgLayer.classList.remove(
+
+    "beat-small",
+
+    "beat-large"
 
   );
 
-  addCustomPenaltyText(
+}
+    
+  function startDangerMode() {
 
-    customPenaltyResult,
+  if (dangerMode) {
 
-    drawCustomPenalty(levelPenaltyEntries[level - 1]),
+    return;
 
-    "custom-penalty-item"
+  }
+
+  dangerMode = true;
+
+  stopBgm();
+
+  dangerOverlay.classList.add("active");
+  
+  startEcgCanvas();
+    
+  ecgLayer.classList.add("active");
+
+  startDangerAudio();
+    
+}
+
+  function stopDangerMode() {
+
+  dangerMode = false;
+
+  stopDangerAudio();
+  stopEcgCanvas();
+  dangerOverlay.classList.remove("active");
+
+  ecgLayer.classList.remove("active");
+
+  if (!gameOver) {
+
+    startBgm();
+
+  }
+
+}
+    
+    function resetDeadEffect() {
+
+      deadFxOverlay.style.pointerEvents = "none";
+      
+      deadFxOverlay.classList.remove("p2-loss");
+      
+      deadFxOverlay
+
+        .classList
+
+        .remove(
+
+          "active"
+
+        );
+
+      deadFxRed
+
+        .classList
+
+        .remove(
+
+          "show"
+
+        );
+
+      deadFxBullet
+
+        .classList
+
+        .remove(
+
+          "show"
+
+        );
+
+      deadFxResultText
+
+        .classList
+
+        .remove(
+
+          "show",
+
+          "lose",
+
+          "win"
+
+        );
+
+      deadFxCard.style.transition =
+
+        "none";
+
+      deadFxCard.style.left =
+
+        "";
+
+      deadFxCard.style.top =
+
+        "";
+
+      deadFxCard.style.width =
+
+        "";
+
+      deadFxCard.style.height =
+
+        "";
+
+      deadFxCard.style.transform =
+
+        "";
+
+      deadFxBullet.style.left =
+
+        "";
+
+      deadFxBullet.style.top =
+
+        "";
+
+    }
+    
+     function updateDeadFxLayout(animate = false) {
+
+  if (!deadFxOverlay.classList.contains("active")) {
+
+    return;
+
+  }
+
+  const viewWidth = deadFxOverlay.clientWidth;
+
+  const viewHeight = deadFxOverlay.clientHeight;
+
+  const isPortrait = viewHeight > viewWidth;
+
+  const targetWidth = Math.min(
+
+    viewWidth * (isPortrait ? 0.68 : 0.90),
+
+    viewHeight * (isPortrait ? 0.70 : 0.85) * 63 / 88
+
+  );
+
+  const targetHeight = targetWidth * 88 / 63;
+
+  const targetLeft = (viewWidth - targetWidth) / 2;
+
+  const margin = viewHeight * 0.04;
+
+  const preferredTop =
+
+    viewHeight * (isPortrait ? 0.42 : 0.50)
+
+    - targetHeight / 2;
+
+  const targetTop = Math.max(
+
+    margin,
+
+    Math.min(
+
+      preferredTop,
+
+      viewHeight - targetHeight - margin
+
+    )
+
+  );
+
+  deadFxCard.style.transition = animate
+
+    ? "left 700ms ease-out, top 700ms ease-out, width 700ms ease-out, height 700ms ease-out, transform 700ms ease-out"
+
+    : "none";
+
+  deadFxCard.style.left = `${targetLeft}px`;
+
+  deadFxCard.style.top = `${targetTop}px`;
+
+  deadFxCard.style.width = `${targetWidth}px`;
+
+  deadFxCard.style.height = `${targetHeight}px`;
+
+  deadFxCard.style.transform = "translate(0, 0)";
+
+  deadFxBullet.style.left =
+
+    `${targetLeft + targetWidth / 2}px`;
+
+  deadFxBullet.style.top =
+
+    `${targetTop + targetHeight / 2}px`;
+
+}
+    
+    async function startDeadEffect(
+
+      cardElement,
+
+      winner
+
+    ) {
+
+      gameOver =
+
+        true;
+
+      rollPhase = "choosing";
+
+　　　　updateVsRollButtons();
+
+      clearCpuSelection();
+
+      stopBgm();
+      stopDangerAudio();
+      stopEcgCanvas();
+      
+      dangerMode =
+
+        false;
+
+      dangerOverlay
+
+        .classList
+
+        .remove(
+
+          "active"
+
+        );
+
+      ecgLayer
+
+        .classList
+
+        .remove(
+
+          "active"
+
+        );
+
+      resetDeadEffect();
+
+  deadFxOverlay.classList.toggle(
+
+  "p2-loss",
+
+  gameMode === "VS" && winner === "PLAYER"
+
+);
+      
+      const rect =
+
+        cardElement
+
+          .getBoundingClientRect();
+
+      deadFxOverlay
+
+        .classList
+
+        .add(
+
+          "active"
+
+        );
+
+      const overlayBounds = deadFxOverlay.getBoundingClientRect();
+
+   const p2Loss = gameMode === "VS" && winner === "PLAYER";
+
+deadFxCard.style.left = p2Loss
+
+  ? `${overlayBounds.right - rect.right}px`
+
+  : `${rect.left - overlayBounds.left}px`;
+
+deadFxCard.style.top = p2Loss
+
+  ? `${overlayBounds.bottom - rect.bottom}px`
+
+  : `${rect.top - overlayBounds.top}px`;
+
+      deadFxCard.style.width =
+
+        `${rect.width}px`;
+
+      deadFxCard.style.height =
+
+        `${rect.height}px`;
+
+      deadFxCard.style.transform =
+
+        "translate(0, 0)";
+
+      await wait(
+
+        40
+
+      );
+
+      updateDeadFxLayout(true);
+      
+      await wait(
+
+        760
+
+      );
+
+      playSound(
+
+        gunClickSound
+
+      );
+
+      await wait(
+
+        1000
+
+      );
+
+     playSound(
+
+        gunShotSound
+
+      );
+
+      deadFxBullet
+
+        .classList
+
+        .add(
+
+          "show"
+
+        );
+
+      await wait(
+
+        350
+
+      );
+
+if (gameMode === "CPU" && winner === "PLAYER") {
+
+  deadFxResultText.innerHTML =
+
+    '<img src="../images/doa-w-rogo.PNG" alt="WIN">';
+
+  deadFxResultText.classList.add("win", "show");
+
+} else {
+
+  deadFxRed.classList.add("show");
+
+  deadFxResultText.innerHTML =
+
+    '<img src="../images/doa-d-rogo.PNG" alt="DEAD">';
+
+  deadFxResultText.classList.add("lose", "show");
+
+}
+      
+      await new Promise(resolve => {
+
+  deadFxOverlay.style.pointerEvents = "auto";
+
+  deadFxOverlay.addEventListener(
+
+    "click",
+
+    resolve,
+
+    { once: true }
+
+  );
+
+});
+
+resetDeadEffect();
+
+finishGame(winner);
+
+    }
+    
+    function syncDeadFxAfterRotation() {
+
+  if (!deadFxOverlay.classList.contains("active")) {
+
+    return;
+
+  }
+
+  requestAnimationFrame(() => {
+
+    updateDeadFxLayout(false);
+
+    setTimeout(() => {
+
+      updateDeadFxLayout(false);
+
+    }, 200);
+
+  });
+
+}
+
+window.addEventListener(
+
+  "resize",
+
+  syncDeadFxAfterRotation
+
+);
+
+window.addEventListener(
+
+  "orientationchange",
+
+  syncDeadFxAfterRotation
+
+);
+
+if (window.visualViewport) {
+
+  window.visualViewport.addEventListener(
+
+    "resize",
+
+    syncDeadFxAfterRotation
+
+  );
+
+}    
+
+function finishGame(winner) {
+
+  const openedBonus = winner === "PLAYER"
+
+    ? playerOpenedCount : cpuOpenedCount;
+
+  const vs = gameMode === "VS";
+
+  const loser = vs
+
+    ? (winner === "PLAYER" ? "PLAYER 2" : "PLAYER 1")
+
+    : (winner === "PLAYER" ? "CPU" : "YOU");
+
+  resultTitle.textContent = vs
+
+    ? `${loser} LOSE`
+
+    : (winner === "PLAYER" ? "YOU WIN" : "YOU LOSE");
+
+  resultTitle.style.color = (!vs && winner === "PLAYER")
+
+    ? "#fff" : "#d00000";
+
+  resultScreen.classList.toggle(
+
+    "p2-lose",
+
+    vs && winner === "PLAYER"
+
+  );
+
+  renderDtgPenalty(openedBonus, loser);
+
+  showScreen(resultScreen);
+
+}
+    
+    diceModeSelect
+      .addEventListener(
+
+        "change",
+
+        () => {
+
+          diceRollCount =
+
+            Number(
+
+              diceModeSelect.value
+
+            );
+
+        }
+
+      );
+
+    setupStartButton
+
+      .addEventListener(
+
+        "click",
+
+        () => {
+
+          aliveCount =
+
+            Number(
+
+              aliveCountSelect.value
+
+            );
+
+          totalCards =
+
+            aliveCount
+
+            + 1;
+
+          applyGameMode();
+          setupPlayer = 1;
+          setupTitle.textContent = gameMode === "VS" ? "PLAYER 1: SET YOUR DEAD" : "SET YOUR DEAD";
+          buildSetupCards();
+
+          showScreen(
+
+            setupScreen
+
+          );
+
+        }
+
+      );
+
+    randomButton
+
+      .addEventListener(
+
+        "click",
+
+        setVisibleRandom
+
+      );
+
+    blindRandomButton
+
+      .addEventListener(
+
+        "click",
+
+        setBlindRandom
+
+      );
+
+    confirmSetupButton
+      .addEventListener("click", () => {
+        if (gameMode !== "VS") {
+          prepareGame();
+          return;
+        }
+        if (setupPlayer === 1) {
+          p1DeadIndex = selectedDeadIndex;
+          p1BlindMode = blindMode;
+          showHandoff("PASS TO PLAYER 2", () => {
+            setupPlayer = 2;
+            setupTitle.textContent = "PLAYER 2: SET YOUR DEAD";
+            buildSetupCards();
+            showScreen(setupScreen);
+          });
+        } else {
+          p2DeadIndex = selectedDeadIndex;
+          p2BlindMode = blindMode;
+          selectedDeadIndex = p1DeadIndex;
+          blindMode = p1BlindMode;
+          showHandoff("PLACE PHONE BETWEEN PLAYERS", prepareGame);
+        }
+      });
+
+   setupBackButton.addEventListener("click", () => {
+
+  showScreen(settingsScreen);
+
+});
+    
+ rollButton.addEventListener("click", rollRound);
+    
+p1RollButton.addEventListener("click", () => rollForPlayer(1));
+
+p2RollButton.addEventListener("click", () => rollForPlayer(2));
+
+    retryButton
+
+      .addEventListener(
+
+        "click",
+
+        () => {
+
+          resetDeadEffect();
+          setupPlayer = 1;
+          setupTitle.textContent = gameMode === "VS" ? "PLAYER 1: SET YOUR DEAD" : "SET YOUR DEAD";
+          buildSetupCards();
+
+          showScreen(
+
+            setupScreen
+
+          );
+
+        }
+
+      );
+
+   settingsButton.addEventListener("click", () => {
+
+  stopDangerAudio();
+
+  stopEcgCanvas();
+
+  resetDeadEffect();
+
+  resultScreen.classList.remove("p2-lose");
+
+  showScreen(settingsScreen);
+
+  startBgm();
+
+});
+
+applyGameMode();
+  
+/* DTG PENALTY: shared by CPU and VS */
+
+const dtgPenaltyStorageKey = "dtg-penalty-settings-v1";
+
+const dtgPenaltyRanges = [[1, 2], [3, 4], [5, 6], [7, 7], [8, 8]];
+
+const dtgPenaltyBox = document.createElement("div");
+
+dtgPenaltyBox.innerHTML = `
+
+  <div class="setting-box">
+
+    <label for="dtgPenaltyType">PENALTY TYPE</label>
+
+    <select id="dtgPenaltyType">
+
+      <option value="SHOT">SHOT</option>
+
+      <option value="IKKI">IKKI</option>
+
+      <option value="RANDOM">RANDOM PENALTY</option>
+
+      <option value="LEVEL">LEVEL PENALTY</option>
+
+    </select>
+
+  </div>
+
+  <div id="dtgRandomSettings" hidden>
+
+    <div class="setting-box">
+
+      <label for="dtgRandomDead">DEAD CARD（抽選回数）</label>
+
+      <select id="dtgRandomDead">
+
+        <option value="1">1</option>
+
+        <option value="2">2</option>
+
+        <option value="3">3</option>
+
+      </select>
+
+    </div>
+
+     <p>最大8種類から罰数分抽選・重複あり。空欄は抽選対象外。</p>
+
+    <div id="dtgRandomInputs"></div>
+
+  </div>
+
+  <div id="dtgLevelSettings" hidden>
+
+    <p>DEAD 1＋勝者側の開封枚数でLEVEL判定。各LEVEL最大3種類から1つ抽選。</p>
+
+    <div id="dtgLevelInputs"></div>
+
+  </div>
+
+  <div id="dtgPenaltyError" style="color:#ff5555; margin:8px 0"></div>
+
+`;
+
+const dtgDeadBox = document.getElementById("deadPenalty").closest(".setting-box");
+
+const dtgOpenedBox = document.getElementById("openedPenalty").closest(".setting-box");
+
+dtgDeadBox.before(dtgPenaltyBox);
+
+const dtgPenaltyType = document.getElementById("dtgPenaltyType");
+
+const dtgRandomSettings = document.getElementById("dtgRandomSettings");
+
+const dtgLevelSettings = document.getElementById("dtgLevelSettings");
+
+const dtgRandomInputs = document.getElementById("dtgRandomInputs");
+
+const dtgLevelInputs = document.getElementById("dtgLevelInputs");
+
+const dtgPenaltyError = document.getElementById("dtgPenaltyError");
+
+function dtgCreateInput(parent, placeholder, level = 0) {
+
+  const input = document.createElement("input");
+
+  input.type = "text";
+
+  input.maxLength = 120;
+
+  input.placeholder = placeholder;
+
+  input.dataset.level = String(level);
+
+  input.style.cssText = "display:block;width:100%;min-height:44px;margin:7px 0;padding:9px 12px;border:1px solid #666;border-radius:7px;background:#1c1c1c;color:#fff;font:inherit";
+
+  parent.appendChild(input);
+
+}
+
+for (let i = 1; i <= 8; i++) {
+
+  dtgCreateInput(dtgRandomInputs, `PENALTY ${i}`);
+
+}
+
+for (let level = 1; level <= 5; level++) {
+
+  const heading = document.createElement("h3");
+
+  const [min, max] = dtgPenaltyRanges[level - 1];
+
+  heading.textContent = `LEVEL ${level}（${min}${min === max ? "" : "〜" + max}）`;
+
+  dtgLevelInputs.appendChild(heading);
+
+  for (let i = 1; i <= 3; i++) {
+
+    dtgCreateInput(dtgLevelInputs, `LEVEL ${level} - ${i}`, level);
+
+  }
+
+}
+
+function dtgUpdatePenaltyUI() {
+
+  const mode = dtgPenaltyType.value;
+
+  const drink = mode === "SHOT" || mode === "IKKI";
+
+  dtgDeadBox.hidden = !drink;
+
+  dtgOpenedBox.hidden = !drink;
+
+  dtgRandomSettings.hidden = mode !== "RANDOM";
+
+  dtgLevelSettings.hidden = mode !== "LEVEL";
+
+  dtgPenaltyError.textContent = "";
+
+}
+
+dtgPenaltyType.addEventListener("change", dtgUpdatePenaltyUI);
+
+function dtgInputValues(container) {
+
+  return Array.from(
+
+    container.querySelectorAll("input"),
+
+    input => input.value.trim()
 
   );
 
 }
 
-      awaitingResult =
+function dtgPenaltySnapshot() {
 
-        false;
+  return {
 
-      pendingLoser =
+    mode: dtgPenaltyType.value,
 
-        null;
+    randomDead: document.getElementById("dtgRandomDead").value,
 
-      resetDeadFx();
+    random: dtgInputValues(dtgRandomInputs),
 
-      showScreen(
+    level: dtgInputValues(dtgLevelInputs)
 
-        resultScreen
+  };
 
-      );
+}
 
-      startBgm();
+function dtgLoadPenaltySnapshot() {
+
+  try {
+
+    const saved = JSON.parse(
+
+      sessionStorage.getItem(dtgPenaltyStorageKey) || "null"
+
+    );
+
+    if (!saved) return;
+
+    if (["SHOT", "IKKI", "RANDOM", "LEVEL"].includes(saved.mode)) {
+
+      dtgPenaltyType.value = saved.mode;
 
     }
 
-    deadTapLayer.addEventListener(
+    if (["1", "2", "3"].includes(saved.randomDead)) {
 
-      "click",
+      document.getElementById("dtgRandomDead").value = saved.randomDead;
 
-      () => {
+    }
 
-        if (
+    [dtgRandomInputs, dtgLevelInputs].forEach((container, index) => {
 
-          !awaitingResult
+      const source = index === 0 ? saved.random : saved.level;
 
-          || !pendingLoser
+      if (!Array.isArray(source)) return;
 
-        ) {
+      container.querySelectorAll("input").forEach((input, i) => {
 
-          return;
+        input.value = typeof source[i] === "string"
 
+          ? source[i].slice(0, 120) : "";
+
+      });
+
+    });
+
+  } catch (error) {
+
+    console.warn("DTG penalty settings could not be restored", error);
+
+  }
+
+}
+
+dtgLoadPenaltySnapshot();
+
+dtgUpdatePenaltyUI();
+
+document.getElementById("backTitleButton").addEventListener("click", () => {
+
+  stopBgm();
+
+  window.location.href = "../";
+
+});
+    
+setupStartButton.addEventListener("click", event => {
+
+  const settings = dtgPenaltySnapshot();
+
+  const pool = settings.random.filter(Boolean);
+
+  if (settings.mode === "RANDOM" && pool.length === 0) {
+
+    dtgPenaltyError.textContent =
+
+      "RANDOM PENALTYは最低1種類入力してください。";
+
+  } else if (settings.mode === "LEVEL") {
+
+    const maxCount = Number(aliveCountSelect.value) + 1;
+
+    const maxLevel = dtgPenaltyRanges.findIndex(
+
+      ([min, max]) => maxCount <= max
+
+    ) + 1;
+
+    const missing = Array.from(
+
+      { length: maxLevel }, (_, i) => i
+
+    ).find(
+
+      i => !settings.level.slice(i * 3, i * 3 + 3).some(Boolean)
+
+    );
+
+    dtgPenaltyError.textContent = missing === undefined
+
+      ? ""
+
+      : `LEVEL ${missing + 1}の罰ゲームを最低1種類入力してください。`;
+
+  } else {
+
+    dtgPenaltyError.textContent = "";
+
+  }
+
+  if (dtgPenaltyError.textContent) {
+
+    event.preventDefault();
+
+    event.stopImmediatePropagation();
+
+    return;
+
+  }
+
+  try {
+
+    sessionStorage.setItem(
+
+      dtgPenaltyStorageKey,
+
+      JSON.stringify(settings)
+
+    );
+
+  } catch (error) {
+
+    console.warn("DTG penalty settings could not be saved", error);
+
+  }
+
+}, true);
+
+function dtgDrawPenalty(pool) {
+
+  return pool[Math.floor(Math.random() * pool.length)];
+
+}
+
+function renderDtgPenalty(openedBonus, loser) {
+
+  const settings = dtgPenaltySnapshot();
+
+  const dead = Number(document.getElementById("deadPenalty").value);
+
+  const opened = Number(document.getElementById("openedPenalty").value);
+
+  resultDetail.style.whiteSpace = "pre-line";
+
+  if (settings.mode === "RANDOM") {
+
+    const count = Number(settings.randomDead) + openedBonus; 
+
+    const pool = settings.random.filter(Boolean);
+
+    resultPenalty.textContent = "RANDOM PENALTY";
+
+    resultDetail.textContent = `TOTAL：${count}\n`
+
+      + Array.from(
+
+          { length: count },
+
+          (_, i) => `${i + 1}. ${dtgDrawPenalty(pool)}`
+
+        ).join("\n")
+
+      + `\nLOSER：${loser}`;
+
+  } else if (settings.mode === "LEVEL") {
+
+    const count = 1 + openedBonus;
+
+    const level = dtgPenaltyRanges.findIndex(
+
+      ([min, max]) => count >= min && count <= max
+
+    ) + 1;
+
+    const pool = settings.level
+
+      .slice((level - 1) * 3, level * 3)
+
+      .filter(Boolean);
+
+    resultPenalty.textContent = `LEVEL ${level}（${count}）`;
+
+    resultDetail.textContent =
+
+      `${dtgDrawPenalty(pool)}\nLOSER：${loser}`;
+
+  } else {
+
+    const count = dead + openedBonus * opened;
+
+    resultPenalty.textContent = settings.mode === "IKKI"
+
+      ? `${count} IKKI`
+
+      : `${count} SHOT${count === 1 ? "" : "S"}`;
+
+    resultDetail.textContent =
+
+      `DEAD：${dead}\nOPENED：${openedBonus} × ${opened}\nLOSER：${loser}`;
+
+  }
+
+}
+    
+
+/* DTG ONLINE ADDITION — existing CPU/VS gameplay remains unchanged. */
+(() => {
+  'use strict';
+  const byId = id => document.getElementById(id);
+  const ONLINE_API_URL = 'https://dtg-online.shiro-lab-base.workers.dev';
+  // Change the single URL above to your deployed Worker URL before publishing.
+  const API = ONLINE_API_URL.replace(/\/$/, '');
+  const identityKey = 'dtg-online-session-v3';
+  const nameKey = 'dtg-online-player-name';
+  const ms = 1000;
+  let identity = null, current = null, busy = false, timer = null;
+  let loading = false, disposed = false, pendingState = null, previous = null;
+  let lastBoard = '', lastGame = '', lastSetup = '', lastResult = '';
+  let animating = false, changedToOnline = false, reconnectMessage = false;
+  let pendingRequest = null;
+
+  const onlineScreen = byId('onlineScreen');
+  const onlineContents = byId('onlineContents');
+  const onlineMessage = byId('onlineMessage');
+  const onlineIndicator = byId('onlineIndicator');
+  const makeButton = (parent,id,label) => {
+    const b=document.createElement('button');b.id=id;b.textContent=label;
+    b.type='button';b.className='secondary-button online-only-control';b.hidden=true;
+    parent.appendChild(b);return b;
+  };
+  const onlineLeaveSetup=makeButton(setupScreen.querySelector('.container'),'onlineLeaveSetup','LEAVE ROOM');
+  const onlineKickSetup=makeButton(setupScreen.querySelector('.container'),'onlineKickSetup','KICK GUEST');
+  const onlineLeaveGame=makeButton(gameScreen,'onlineLeaveGame','LEAVE ROOM');
+  const onlineLeaveResult=makeButton(resultScreen.querySelector('.result-box'),'onlineLeaveResult','LEAVE ROOM');
+  const modeChoice=byId('modeChoice');
+  modeChoice.addEventListener('change',()=>{gameModeSelect.value=modeChoice.value;gameModeSelect.dispatchEvent(new Event('change',{bubbles:true}));});
+  const modeSettingsButton = byId('modeSettingsButton');
+  const modeTitleButton = byId('modeTitleButton');
+
+  const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  function say(message) { onlineMessage.textContent = String(message || ''); }
+  function showOnline(html) {
+    onlineContents.innerHTML = html;
+    delete onlineContents.dataset.signature;
+    say('');
+    showScreen(onlineScreen);
+    onlineIndicator.hidden = true;
+  }
+  function lockOfflineScreens(locked) { document.body.classList.toggle('dtg-online-connected', !!locked); }
+  function saveIdentity() { if(identity) sessionStorage.setItem(identityKey, JSON.stringify(identity)); }
+  function clearIdentity() { identity = null; sessionStorage.removeItem(identityKey); }
+  function dropTimers() { if(timer) clearInterval(timer); timer = null; }
+  function mySeat(s) { return s.seats[identity.role === 'host' ? 0 : 1]; }
+  function theirSeat(s) { return s.seats[identity.role === 'host' ? 1 : 0]; }
+  function myIndex() { return identity.role === 'host' ? 0 : 1; }
+  function isOnline() { return gameModeSelect.value === 'ONLINE'; }
+  function messageFor(error) {
+    const table={ROOM_NOT_FOUND:'部屋が見つかりません',ROOM_CLOSED:'部屋が解散しました',ROOM_UNAVAILABLE:'この部屋には参加できません',WRONG_PASSWORD:'パスワードが違います',UNAUTHORIZED:'部屋への参加権限がありません',CONNECTION_TIMEOUT:'復帰猶予120秒を過ぎたため終了しました',INVALID_SETTINGS:'設定を確認してください',INVALID_PASSWORD:'パスワードを確認してください',KICKED:'ホストにより退室されました',GUEST_LEFT:'ゲストが退出しました'};
+    return table[error] || String(error || '通信エラー');
+  }
+  async function api(op, data={}, method='POST') {
+    if(API.includes('REPLACE-WITH-YOUR-WORKER')) throw new Error('Cloudflare Worker のURLが未設定です');
+    const options={method,cache:'no-store',headers:{'content-type':'application/json'}};
+    if(method!=='GET')options.body=JSON.stringify(data);
+    const res=await fetch(API + '/api/' + op,options);
+    let body; try {body=await res.json();}catch {throw new Error('通信応答の形式が不正です');}
+    if(!res.ok) throw new Error(messageFor(body.error));
+    return body;
+  }
+  async function action(op, more={}) {
+    if(!identity || busy) return;
+    busy=true;
+    try {
+      const result=await api(op,{roomId:identity.roomId,token:identity.token,...more});
+      if(result.state) await receive(result.state);
+    } catch(e) {
+      say(e.message); onlineIndicator.textContent=e.message;
+    } finally {busy=false;}
+  }
+  function beginPolling() {
+    dropTimers();
+    timer=setInterval(()=>{if(identity&&!busy&&!animating&&!loading)refresh();},ms);
+  }
+  async function refresh() {
+    if(!identity||loading) return;
+    loading=true;
+    try {
+      const r=await api('state',{roomId:identity.roomId,token:identity.token});
+      reconnectMessage=false;
+      await receive(r.state);
+    }catch(e) {
+      if(/解散|権限|見つかり|120秒|退室/.test(e.message)){exitLocal(e.message);return;}
+      reconnectMessage=true;
+      onlineIndicator.textContent='通信再接続中 — 120秒以内に復帰してください';
+      onlineIndicator.hidden=false;
+    }finally{loading=false;}
+  }
+  function cleanEffects() {
+    try{stopDangerAudio();stopEcgCanvas();resetDeadEffect();stopBgm();}catch(e){console.warn('DTG effects cleanup',e);}
+    dangerMode=false;gameOver=false;rolling=false;
+    dangerOverlay.classList.remove('active');ecgLayer.classList.remove('active');
+  }
+  function exitLocal(reason) {
+    dropTimers();clearIdentity();current=null;previous=null;
+    lastBoard='';lastGame='';lastSetup='';lastResult='';animating=false;
+    lockOfflineScreens(false);cleanEffects();
+    [onlineLeaveSetup,onlineKickSetup,onlineLeaveGame,onlineLeaveResult].forEach(b=>b.hidden=true);
+    gameModeSelect.value='ONLINE';modeChoice.value='ONLINE';applyGameMode();
+    showScreen(modeScreen);
+    onlineIndicator.hidden=true;
+    if(reason)window.alert(reason);
+  }
+  async function leave() {
+    const copy=identity;
+    if(copy) {try{await api('leave',{roomId:copy.roomId,token:copy.token});}catch(e){console.warn(e);}}
+    exitLocal();
+  }
+  function getName(){ return (byId('onlinePlayerName')?.value||'').trim().slice(0,20); }
+  function saveName(n){localStorage.setItem(nameKey,n);}
+  function entryMenu(){
+    showOnline(`<h2>ONLINE ROOM</h2><button id="onlineCreateMenu" class="main-button">CREATE ROOM</button><button id="onlineJoinMenu" class="secondary-button">JOIN ROOM</button><button id="onlineMenuBack" class="secondary-button">BACK</button>`);
+    byId('onlineCreateMenu').onclick=createMenu;
+    byId('onlineJoinMenu').onclick=joinMenu;
+    byId('onlineMenuBack').onclick=()=>{showScreen(settingsScreen);startBgm();};
+  }
+  function settingsSnapshot() {
+    return {alive:Number(aliveCountSelect.value),rolls:Number(diceModeSelect.value),deadPenalty:Number(byId('deadPenalty').value),openedPenalty:Number(byId('openedPenalty').value),penalty:dtgPenaltySnapshot()};
+  }
+  function validateSnapshot(r) {
+    const p=r.penalty;
+    if(p.mode==='RANDOM'&&!p.random.some(Boolean))return 'RANDOM PENALTYを1種類以上入力してください';
+    if(p.mode==='LEVEL') {
+      const maxCount=r.alive+1;
+      const maxLevel=dtgPenaltyRanges.findIndex(([a,b])=>maxCount<=b)+1;
+      for(let i=0;i<maxLevel;i++)if(!p.level.slice(i*3,i*3+3).some(Boolean))return `LEVEL ${i+1}の罰ゲームを入力してください`;
+    }
+    return '';
+  }
+  function createMenu() {
+    showOnline(`<h2>CREATE ROOM</h2><label>PLAYER NAME（任意）</label><input id="onlinePlayerName" maxlength="20" autocomplete="nickname" placeholder="HOST"><label>ROOM PASSWORD（任意）</label><input id="onlinePassword" maxlength="64" type="text" autocomplete="off"><p class="online-small">ALIVE / DICE / PENALTYは現在のSETTINGSで指定した値を使用します</p><button id="onlineCreate" class="main-button">CREATE</button><button id="onlineBack" class="secondary-button">BACK</button>`);
+    byId('onlinePlayerName').value=localStorage.getItem(nameKey)||'';
+    byId('onlineBack').onclick=entryMenu;
+    byId('onlineCreate').onclick=async()=>{
+      const rules=settingsSnapshot(),problem=validateSnapshot(rules);
+      if(problem){say(problem);return;}
+      const playerName=getName()||'HOST', password=byId('onlinePassword').value;
+      const button=byId('onlineCreate');button.disabled=true;
+      try{
+        const r=await api('create',{name:playerName,password,rules});
+        identity={roomId:r.roomId,token:r.token,role:'host'};saveName(playerName);saveIdentity();beginPolling();await receive(r.state);
+      }catch(e){say(e.message);button.disabled=false;}
+    };
+  }
+  async function joinMenu() {
+    showOnline(`<h2>JOIN ROOM</h2><label>PLAYER NAME（任意）</label><input id="onlinePlayerName" maxlength="20" autocomplete="nickname" placeholder="GUEST"><label>ROOM ID</label><input id="onlineRoomId" maxlength="6" autocapitalize="characters" placeholder="選択または入力"><label>ROOM PASSWORD（必要な部屋のみ）</label><input id="onlinePassword" maxlength="64" type="text" autocomplete="off"><button id="onlineJoin" class="main-button">JOIN</button><h3>OPEN ROOMS</h3><div id="onlineRooms"></div><button id="onlineRefresh" class="secondary-button">REFRESH</button><button id="onlineBack" class="secondary-button">BACK</button>`);
+    byId('onlinePlayerName').value=localStorage.getItem(nameKey)||'';
+    byId('onlineBack').onclick=entryMenu;
+    byId('onlineRefresh').onclick=fetchRooms;
+    byId('onlineJoin').onclick=async()=>{
+      const name=getName()||'GUEST',roomId=byId('onlineRoomId').value.trim().toUpperCase(),password=byId('onlinePassword').value;
+      if(!/^[A-HJ-NP-Z2-9]{6}$/.test(roomId)){say('部屋を選択してください');return;}
+      const button=byId('onlineJoin');button.disabled=true;
+      try{
+        const r=await api('join',{name,roomId,password});
+        identity={roomId:r.roomId,token:r.token,role:'guest'};saveName(name);saveIdentity();beginPolling();await receive(r.state);
+      }catch(e){say(e.message);button.disabled=false;}
+    };
+    await fetchRooms();
+  }
+  async function fetchRooms() {
+    const box=byId('onlineRooms');if(!box)return;
+    try{
+      const data=await api('rooms',{},'GET');box.replaceChildren();
+      if(!data.rooms.length){box.textContent='募集中の部屋はありません';return;}
+      data.rooms.forEach(r=>{
+        const b=document.createElement('button');b.className='online-room-item secondary-button';
+        b.textContent=`${r.roomId} / ${r.hostName} ${r.locked?'🔒':''}`;
+        b.onclick=()=>{byId('onlineRoomId').value=r.roomId;};box.append(b);
+      });
+    }catch(e){box.textContent=e.message;}
+  }
+  function lobby(s) {
+    const host=identity.role==='host';
+    const guest=s.guestPresent ? s.seats[1].name : 'WAITING...';
+    const signature=`${s.phase}:${s.guestPresent}:${s.seats.map(x=>x.name).join(',')}:${host}`;
+    if(onlineContents.dataset.signature===signature&&onlineScreen.classList.contains('active'))return;
+    if(s.phase==='guest_left'){
+      if(host) {
+        showOnline('<h2>GUEST LEFT</h2><p>ゲストが退出しました</p><button id="onlineHostBack" class="main-button">BACK</button>');
+        byId('onlineHostBack').onclick=leave;
+      }else exitLocal('部屋から退出しました');
+      return;
+    }
+    showOnline(`<h2>ROOM ${escapeHtml(s.roomId)}</h2><p>HOST: ${escapeHtml(s.seats[0].name)}</p><p>GUEST: ${escapeHtml(guest)}</p><p class="online-small">DEADの配置を確定するとREADYになります</p>${host?'<button id="onlineStart" class="main-button">START DEAD SET</button><button id="onlineKick" class="secondary-button">KICK GUEST</button>':'<p>ホストの開始を待っています</p>'}<button id="onlineLeave" class="secondary-button">LEAVE ROOM</button>`);
+    onlineContents.dataset.signature=signature;
+    if(host){byId('onlineStart').disabled=!s.guestPresent;byId('onlineStart').onclick=()=>action('start');byId('onlineKick').hidden=!s.guestPresent;byId('onlineKick').onclick=()=>action('kick');}
+    byId('onlineLeave').onclick=leave;
+  }
+  function setup(s) {
+    const own=mySeat(s),opp=theirSeat(s);
+    const key=`${s.roomId}:${s.match}`;
+    if(lastSetup!==key){
+      cleanEffects();aliveCount=s.rules.alive;totalCards=aliveCount+1;diceRollCount=s.rules.rolls;
+      setupTitle.textContent='SET YOUR DEAD';buildSetupCards();lastSetup=key;lastGame='';lastBoard='';lastResult='';
+    }
+    showScreen(setupScreen);lockOfflineScreens(true);
+    confirmSetupButton.disabled=own.ready;
+    confirmSetupButton.textContent=own.ready?'READY ✓':'SET / READY';
+    onlineKickSetup.hidden=identity.role!=='host'||!s.guestPresent||opp.ready;
+    onlineLeaveSetup.hidden=false;onlineLeaveGame.hidden=true;onlineLeaveResult.hidden=true;
+    onlineIndicator.hidden=false;
+    onlineIndicator.textContent=own.ready ? (opp.ready?'STARTING...':'READY — WAIT FOR OPPONENT') : `ROOM ${s.roomId} — SET YOUR DEAD`;
+  }
+  function syncModel(s){
+    aliveCount=s.rules.alive;totalCards=aliveCount+1;diceRollCount=s.rules.rolls;
+    const mine=mySeat(s),opp=theirSeat(s),idx=myIndex();
+    const from=(p,own)=>Array.from({length:totalCards},(_,i)=>{
+      const revealed=p.opened.find(x=>x.index===i);
+      return {type:revealed?.type||(own&&p.deadIndex===i?'DEAD':'ALIVE'),opened:!!revealed};
+    });
+    playerDeck=from(mine,true);cpuDeck=from(opp,false);
+    blindMode=!!mine.blind;
+    playerOpenedCount=mine.opened.length;cpuOpenedCount=opp.opened.length;
+    playerRoll=s.totals[idx];cpuRoll=s.totals[1-idx];
+  }
+  function board(s,force=false) {
+    syncModel(s);
+    const mine=mySeat(s),opp=theirSeat(s),idx=myIndex();
+    const key=JSON.stringify([s.match,s.seats.map(p=>p.opened),mine.deadIndex,mine.blind]);
+    if(force||key!==lastBoard){
+      renderGameCards();lastBoard=key;
+    }
+    topPlayerLabel.textContent=opp.name||'OPPONENT';bottomPlayerLabel.textContent=mine.name||'YOU';
+    leftRollLabel.textContent='YOU';rightRollLabel.textContent='OPPONENT';
+    playerRollDisplay.textContent=s.rollsDone[idx]?String(s.totals[idx]):'-';
+    cpuRollDisplay.textContent=s.rollsDone[1-idx]?String(s.totals[1-idx]):'-';
+    const active=s.phase==='game',myTurn=s.turn===identity.role;
+    p1RollButton.disabled=!active||s.turn!==null||s.rollsDone[idx]>=s.rules.rolls||busy||animating;
+    p2RollButton.disabled=true;
+    rollButton.disabled=true;
+    const prompt=!active?'MATCH ENDED':s.turn===null?(s.rollsDone[idx]<s.rules.rolls?'ROLL THE DICE':'WAIT FOR OPPONENT ROLL'):(myTurn?'CHOOSE OPPONENT CARD':'OPPONENT CHOOSES');
+    status.textContent=prompt;
+    cpuCards.querySelectorAll('.game-card').forEach(card=>{
+      const index=Number(card.dataset.index),chosen=cpuDeck[index];
+      const selectable=active&&myTurn&&!chosen.opened&&!busy&&!animating;
+      card.classList.toggle('selectable',selectable);
+      card.disabled=!selectable;
+    });
+    if(active){
+      const danger=mine.opened.length===s.rules.alive && !mine.opened.some(x=>x.type==='DEAD');
+      if(danger&&!dangerMode)startDangerMode();
+      if(!danger&&dangerMode)stopDangerMode();
+    }
+    onlineIndicator.hidden=false;
+    onlineIndicator.textContent=`${s.roomId} / ${identity.role.toUpperCase()} / ROUND ${s.round}`;
+    onlineLeaveGame.hidden=false;onlineLeaveSetup.hidden=true;onlineKickSetup.hidden=true;onlineLeaveResult.hidden=true;
+  }
+  function beginGame(s,force=false){
+    const key=s.roomId+':'+s.match;
+    if(lastGame!==key){
+      lastGame=key;lastBoard='';gameOver=false;rolling=false;dangerMode=false;
+      stopDangerAudio();stopEcgCanvas();resetDeadEffect();dangerOverlay.classList.remove('active');ecgLayer.classList.remove('active');
+      renderDiceFace(1);startBgm();
+    }
+    showScreen(gameScreen);lockOfflineScreens(true);board(s,force);
+  }
+  function showResult(s){
+    const key=s.roomId+':'+s.match;
+    if(lastResult!==key){stopBgm();lastResult=key;}
+    const win=s.winner===identity.role,r=s.result,pen=s.rules.penalty;
+    resultTitle.textContent=win?'YOU WIN':'YOU LOSE';
+    resultTitle.style.color=win?'#fff':'#d00000';
+    resultScreen.classList.remove('p2-lose');
+    if(pen.mode==='RANDOM'){
+      resultPenalty.textContent='RANDOM PENALTY';
+      resultDetail.textContent=`TOTAL：${r.penalties.length}\n${r.penalties.map((x,i)=>`${i+1}. ${x}`).join('\n')}\nLOSER：${r.loserName}`;
+    } else if(pen.mode==='LEVEL'){
+      resultPenalty.textContent=`LEVEL ${r.level}（${1+r.openedBonus}）`;
+      resultDetail.textContent=`${r.penalties[0]||''}\nLOSER：${r.loserName}`;
+    }else {
+      resultPenalty.textContent=pen.mode==='IKKI'?`${r.shots} IKKI`:`${r.shots} SHOT${r.shots===1?'':'S'}`;
+      resultDetail.textContent=`DEAD：${s.rules.deadPenalty}\nOPENED：${r.openedBonus} × ${s.rules.openedPenalty}\nLOSER：${r.loserName}`;
+    }
+    resultDetail.style.whiteSpace='pre-line';
+    retryButton.disabled=identity.role!=='host';
+    retryButton.textContent=identity.role==='host'?'PLAY AGAIN':'WAIT FOR HOST';
+    onlineLeaveResult.hidden=false;onlineLeaveGame.hidden=true;onlineLeaveSetup.hidden=true;onlineKickSetup.hidden=true;
+    onlineIndicator.hidden=false;onlineIndicator.textContent=`ROOM ${s.roomId} / RESULT`;
+    showScreen(resultScreen);
+  }
+  async function receive(s){
+    if(!identity||s.roomId!==identity.roomId)return;
+    if(current&&s.match===current.match&&s.rev<current.rev)return;
+    if(animating){pendingState=s;return;}
+    const before=current;current=s;
+    if(s.phase==='closed'){exitLocal('ホストが部屋を解散しました');return;}
+    if(s.phase==='timeout'){exitLocal('通信切断から120秒が経過したため、設定に戻ります');return;}
+    if(s.phase==='lobby'||s.phase==='guest_left'){lobby(s);return;}
+    if(s.phase==='setup'){setup(s);return;}
+    if(s.phase==='game'||s.phase==='result'){
+      const sameMatch=before && before.match===s.match;
+      if(sameMatch&&before.phase==='game'&&s.lastRoll?.seq!==before.lastRoll?.seq&&s.lastRoll?.seq){
+        animating=true;try{await animateDice(s.lastRoll.value);}finally{animating=false;}
+      }
+      if(sameMatch&&before.phase==='game'){
+        const newOpen=[];
+        s.seats.forEach((p,i)=>p.opened.forEach(card=>{
+          if(!before.seats[i].opened.some(x=>x.index===card.index))newOpen.push({...card,owner:i});
+        }));
+        if(newOpen.length===1){
+          const ev=newOpen[0];
+          if(ev.type==='DEAD'&&s.phase==='result'){
+            animating=true;
+            try{
+              beginGame(s,true);
+              const own=ev.owner===myIndex();
+              const target=(own?playerCards:cpuCards).querySelector(`.game-card[data-index="${ev.index}"]`);
+              if(target)await startDeadEffect(target,s.winner===identity.role?'PLAYER':'CPU');
+            }catch(e){console.error('DEAD animation',e);}finally{animating=false;}
+          }else playSound(cardSound);
         }
-
-        finishGame(
-
-          pendingLoser
-
-        );
-
       }
-
-    );
-
-    const dbSelectButton = document.getElementById("dbSelectButton");
-
-    dbSelectButton.addEventListener("click", async () => {
-
-      await resumeDealAudio();
-
-      startBgm();
-
-      showScreen(settingsScreen);
-
-    });
-
-    titleStartButton.addEventListener("click", () => {
-
-      pauseBgm();
-
-      window.location.href = "dtg/";
-
-    });
-
-    backTitleButton.addEventListener("click", () => {
-
-      pauseBgm();
-
-      showScreen(titleScreen);
-
-    });
-
-    gameStartButton.addEventListener(
-
-      "click",
-
-      startGameFromSettings
-
-    );
-
-    retryButton.addEventListener(
-
-      "click",
-
-      startGame
-
-    );
-
-    resultSettingsButton.addEventListener(
-
-      "click",
-
-      () => {
-
-        showScreen(
-
-          settingsScreen
-
-        );
-
-      }
-
-    );
-
-    boardSizeSelect.addEventListener(
-
-      "change",
-
-      updateDeadOptions
-
-    );
-
-    deadCountSelect.addEventListener(
-
-  "change",
-
-  updateDeadShuffleVisibility
-
-);
-    
-    humanCountSelect.addEventListener(
-
-      "change",
-
-      () => {
-
-        settingError.textContent =
-
-          "";
-
-      }
-
-    );
-
-    cpuCountSelect.addEventListener(
-
-      "change",
-
-      () => {
-
-        settingError.textContent =
-
-          "";
-
-      }
-
-    );
-
-    bgmSettingSelect.addEventListener(
-
-      "change",
-
-      () => {
-
-        bgmEnabled =
-
-          bgmSettingSelect.value
-
-          === "ON";
-
-        if (bgmEnabled) {
-
-          startBgm();
-
-        } else {
-
-          pauseBgm();
-
-        }
-
-      }
-
-    );
-
-    seSettingSelect.addEventListener(
-
-      "change",
-
-      () => {
-
-        seEnabled =
-
-          seSettingSelect.value
-
-          === "ON";
-
-      }
-
-    );
-    
-initializeCustomPenaltyInputs();
-
-penaltyTypeSelect.addEventListener("change", updatePenaltySettings);
-
-updatePenaltySettings();
-    
-    initializeSettingSections();
-    
-    updateDeadOptions();
-
-    loadDealSound();
+      if(s.phase==='result'){showResult(s);}
+      else beginGame(s);
+    }
+    const pending=pendingState;pendingState=null;
+    if(pending&&pending.rev>s.rev)await receive(pending);
+  }
+
+  // Original CPU/VS handlers remain installed. Online mode intercepts only its own actions.
+  function intercept(button,fn){button.addEventListener('click',event=>{
+    if(!identity||!isOnline())return;
+    event.preventDefault();event.stopImmediatePropagation();fn();
+  },true);}
+  gameModeSelect.addEventListener('change',()=>{
+    if(identity)return;
+    applyGameMode();
+    setupStartButton.textContent=isOnline()?'ONLINE ROOM':'SET DEAD';
+  });
+  modeSettingsButton.onclick=()=>{applyGameMode();showScreen(settingsScreen);startBgm();};
+  modeTitleButton.onclick=()=>{stopBgm();window.location.href='../';};
+  // Override original TITLE navigation only in detailed settings, returning to mode selector.
+  byId('backTitleButton').addEventListener('click',e=>{e.preventDefault();e.stopImmediatePropagation();stopBgm();showScreen(modeScreen);},true);
+  // Online room opens from existing 'SET DEAD' (CPU/VS remains unchanged).
+  setupStartButton.addEventListener('click',e=>{
+    if(!isOnline())return;
+    e.preventDefault();e.stopImmediatePropagation();
+    if(identity){beginPolling();refresh();}else{stopBgm();entryMenu();}
+  },true);
+  intercept(confirmSetupButton,()=>action('set',{dead:selectedDeadIndex,blind:blindMode}));
+  intercept(setupBackButton,leave);
+  intercept(retryButton,()=>{if(identity.role==='host')action('again');});
+  intercept(settingsButton,leave);
+  // Roll buttons are selected based on local/remote player's perspective, not host position.
+  p1RollButton.addEventListener('click',e=>{if(!identity||!isOnline())return;e.preventDefault();e.stopImmediatePropagation();action('roll');},true);
+  p2RollButton.addEventListener('click',e=>{if(!identity||!isOnline())return;e.preventDefault();e.stopImmediatePropagation();},true);
+  rollButton.addEventListener('click',e=>{if(!identity||!isOnline())return;e.preventDefault();e.stopImmediatePropagation();},true);
+  cpuCards.addEventListener('click',e=>{
+    if(!identity||!isOnline()||busy||animating||current?.phase!=='game'||current.turn!==identity.role)return;
+    const element=e.target.closest('.game-card');
+    if(!element||!cpuCards.contains(element)||element.disabled)return;
+    const index=Number(element.dataset.index);
+    if(!Number.isInteger(index))return;
+    action('open',{index});
+  },true);
+  [onlineLeaveSetup,onlineLeaveGame,onlineLeaveResult].forEach(b=>{b.onclick=leave;});
+  onlineKickSetup.onclick=()=>action('kick');
+  // Reset online UI when returning to CPU/VS; no extra listeners on existing game cards.
+  window.addEventListener('pagehide',dropTimers);
+  try {
+    const saved=JSON.parse(sessionStorage.getItem(identityKey)||'null');
+    if(saved&&/^[A-HJ-NP-Z2-9]{6}$/.test(saved.roomId)&&typeof saved.token==='string'&&['host','guest'].includes(saved.role)){
+      identity=saved;gameModeSelect.value='ONLINE';modeChoice.value='ONLINE';applyGameMode();lockOfflineScreens(true);
+      beginPolling();refresh();
+    }
+  }catch(e){sessionStorage.removeItem(identityKey);}
+  if(!identity)showScreen(modeScreen);
+})();
+;
 
   </script>
-
+  
+<script src="../assets/dtg-settings-common.js"></script>
+  
 </body>
 
 </html>
+
