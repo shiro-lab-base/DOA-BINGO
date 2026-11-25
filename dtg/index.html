@@ -2053,6 +2053,31 @@ body.dtg-online-connected #setupBackButton {display:none;}
 #hostSubmissionModal .setting-box {margin:10px 0 14px;text-align:left;}
 #hostSubmissionModal label {color:#f0dfbf;font:700 14px Georgia,serif;text-shadow:none;}
 #hostSubmissionModal select,#hostSubmissionModal input {width:100%;min-height:40px;padding:8px;border:0;border-radius:0;background:transparent;color:#f0dfbf;font:16px Georgia,serif;color-scheme:dark;}
+
+/* V15: host waiting board */
+#onlineScreen:has(#hostWaitBoard) {padding:0;justify-content:center;background:#1c120b;min-height:100dvh;}
+#onlineScreen:has(#hostWaitBoard) .online-container {width:min(100%,56.25dvh);max-width:none;margin:auto;}
+#onlineContents:has(#hostWaitBoard) {padding:0;border:0;border-radius:0;background:none;box-shadow:none;}
+#hostWaitBoard {position:relative;width:100%;aspect-ratio:9/16;background:url('../images/online-hroom.PNG') center/100% 100% no-repeat;color:#2f2216;font-family:Georgia,serif;container-type:inline-size;}
+#hostWaitBoard button {font-family:inherit;cursor:pointer;}
+#hostWaitBoard .host-card-copy {position:absolute;left:24%;top:26.5%;width:52%;height:12%;transform:rotate(-8.2deg);display:flex;flex-direction:column;justify-content:space-between;color:#3f2e1f;text-shadow:0 1px 0 rgba(255,245,224,.28);}
+#hostWaitBoard .host-card-line {font-weight:700;letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+#hostWaitBoard .host-card-copy .kicker {font-size:clamp(7px,2.1cqw,12px);letter-spacing:.18em;color:#8a765d;font-weight:600;}
+#hostWaitBoard .host-card-copy .title {font-size:clamp(18px,5.4cqw,30px);letter-spacing:.16em;color:#3f2e1f;font-weight:700;line-height:1;}
+#hostWaitBoard .host-card-copy .roomid {font-size:clamp(10px,3.0cqw,17px);}
+#hostWaitBoard .host-card-copy .meta-row {display:flex;justify-content:space-between;gap:4%;font-size:clamp(10px,3.0cqw,17px);}
+#hostWaitBoard .host-card-copy .status {align-self:flex-end;margin-top:-1%;font-size:clamp(10px,2.9cqw,17px);letter-spacing:.14em;color:#8a5b2b;}
+#hostWaitBoard .host-roomdata-title {position:absolute;left:15%;top:47%;font-size:clamp(14px,4.2cqw,24px);font-weight:700;letter-spacing:.18em;color:#3d2b1c;text-shadow:0 1px 0 rgba(255,244,222,.35);}
+#hostWaitBoard .host-roomdata {position:absolute;left:15%;right:15%;top:50.5%;bottom:28%;overflow:auto;color:#3a2b1d;}
+#hostWaitBoard .host-roomdata .rule-sheet {display:grid;gap:2.1cqw;}
+#hostWaitBoard .host-roomdata .rule-row {display:flex;justify-content:space-between;gap:12px;padding-bottom:1.25cqw;border-bottom:1px dotted rgba(74,49,24,.32);}
+#hostWaitBoard .host-roomdata .rule-row strong,#hostWaitBoard .host-roomdata .rule-row span {font-size:clamp(11px,3.35cqw,19px);color:#3a2b1d;overflow-wrap:anywhere;}
+#hostWaitBoard .host-roomdata .rule-row span {text-align:right;max-width:45%;}
+#hostWaitBoard #onlineStart {position:absolute;left:17%;right:17%;bottom:23%;padding:0;border:0;background:transparent;color:#2c2016;font-size:clamp(18px,5.4cqw,31px);font-weight:700;letter-spacing:.08em;text-shadow:0 1px 0 rgba(255,245,224,.35);}
+#hostWaitBoard #onlineKick {position:absolute;left:17%;right:17%;bottom:19%;padding:0;border:0;background:transparent;color:#2c2016;font-size:3cqw;font-weight:bold;}
+#hostWaitBoard #onlineStart[disabled] {opacity:.38;}
+#hostWaitBoard #onlineLeave {position:absolute;right:8.5%;bottom:4.8%;padding:0;border:0;background:transparent;color:#2c2016;font-size:clamp(13px,3.9cqw,22px);font-weight:700;letter-spacing:.12em;text-shadow:0 1px 0 rgba(255,245,224,.35);}
+
 #hostSubmissionModal input::placeholder {color:#f0dfbf;opacity:.65;}
 #hostSubmissionModal select option {background:#241b15;color:#f0dfbf;}
 #hostSubmissionModal #dtgRandomSettings,#hostSubmissionModal #dtgLevelSettings {max-height:none;overflow:visible;}
@@ -6162,6 +6187,13 @@ function renderDtgPenalty(openedBonus, loser) {
     }).join('');
     return `<div class="details-card"><h3>ROOM DETAILS</h3><div class="rule-sheet">${rows}</div></div>`;
   }
+
+  function hostWaitingRows(r) {
+    const html=lobbyRules(r);
+    const m=html.match(/<div class="rule-sheet">([\s\S]*?)<\/div><\/div>$/);
+    return m?m[1]:'';
+  }
+
   function lobby(s) {
     const host=identity.role==='host';
     const guest=s.guestPresent ? s.seats[1].name : 'WAITING...';
@@ -6173,6 +6205,17 @@ function renderDtgPenalty(openedBonus, loser) {
         showOnline('<div class="board-stack"><div class="board-paper"><div class="paper-kicker">ROOM NOTICE</div><h2 class="board-title">GUEST LEFT</h2><p class="paper-text">ゲストが退出しました。</p></div><div class="board-actions"><button id="onlineHostBack" class="main-button">BACK</button></div></div>');
         byId('onlineHostBack').onclick=leave;
       }else exitLocal('部屋から退出しました');
+      return;
+    }
+    if(host){
+      const roomDataRows=hostWaitingRows(s.rules);
+      const waitLabel=!s.guestPresent?'WAITING':guestReady?'READY':'CHECKING';
+      showOnline(`<div id="hostWaitBoard"><div class="host-card-copy"><div class="host-card-line kicker">MATCH REGISTRATION</div><div class="host-card-line title">WAITING ROOM</div><div class="host-card-line roomid">ROOM ID : ${escapeHtml(s.roomId)}</div><div class="host-card-line meta-row"><span>HOST : ${escapeHtml(s.seats[0].name)}</span><span>GUEST : ${escapeHtml(guest)}</span></div><div class="host-card-line status">${waitLabel}</div></div><div class="host-roomdata-title">ROOM DATA</div><div class="host-roomdata"><div class="rule-sheet">${roomDataRows}</div></div><button id="onlineStart" type="button">SET DEAD</button><button id="onlineKick" type="button">KICK GUEST</button><button id="onlineLeave" type="button">BACK</button></div>`);
+      onlineContents.dataset.signature=signature;
+      byId('onlineStart').disabled=!s.guestPresent||!guestReady;
+      byId('onlineStart').onclick=()=>action('start');
+      byId('onlineKick').hidden=!s.guestPresent;byId('onlineKick').onclick=()=>action('kick');
+      byId('onlineLeave').onclick=leave;
       return;
     }
     showOnline(`<div class="board-stack"><div class="board-paper"><div class="paper-kicker">MATCH REGISTRATION</div><h2 class="board-title">WAITING ROOM</h2><div class="details-grid"><span><strong>ROOM ID</strong> : ${escapeHtml(s.roomId)}</span><span class="stamp ${!s.guestPresent?'waiting':guestReady?'ready':'notice'}">${!s.guestPresent?'WAITING':guestReady?'READY':'CHECKING'}</span></div><div class="waiting-meta"><span><strong>HOST</strong> : ${escapeHtml(s.seats[0].name)}</span><span><strong>GUEST</strong> : ${escapeHtml(guest)}</span></div></div>${lobbyRules(s.rules)}<div class="details-card"><h3>TABLE STATUS</h3><p class="waiting-status">${!s.guestPresent?'WAITING FOR GUEST...':guestReady?'GUEST READY ✓':host?'GUEST NOT READY':'ルールを確認してREADYを押してください'}</p><div class="board-actions${host&&s.guestPresent?' dual':''}">${host?'<button id="onlineStart" class="main-button">START DEAD SET</button><button id="onlineKick" class="secondary-button">KICK GUEST</button>':`<button id="onlineLobbyReady" class="main-button">${guestReady?'CANCEL READY':'READY'}</button>`}<button id="onlineLeave" class="secondary-button">LEAVE ROOM</button></div>${host?'':`<p class="online-small">${guestReady?'WAITING FOR HOST...':'READY後にホストがゲームを開始します'}</p>`}</div></div>`);
