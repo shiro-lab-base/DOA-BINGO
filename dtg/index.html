@@ -1931,6 +1931,13 @@ body.dtg-online-connected #setupBackButton {display:none;}
   #dtgRandomSettings,#dtgLevelSettings {max-height:48dvh;overflow-y:auto;background:transparent;}
 }
 
+/* ONLINE host settings only */
+#settingsScreen.online-host-settings {height:auto;min-height:100dvh;overflow:visible;}
+#settingsScreen.online-host-settings .container {height:auto;max-height:none;overflow:visible;}
+#onlineHostFields {grid-column:1/-1;text-align:left;}
+#onlineHostFields input {box-sizing:border-box;width:100%;min-height:48px;padding:10px;border:1px solid #888;border-radius:7px;background:#1c1c1c;color:#fff;font-size:16px;}
+#onlineHostError {color:#ff7777;white-space:pre-line;}
+#onlineContents .online-rules {text-align:left;border-top:1px solid #666;border-bottom:1px solid #666;padding:12px 0;overflow-wrap:anywhere;}
   </style>
 
 </head>
@@ -5853,10 +5860,13 @@ function renderDtgPenalty(openedBonus, loser) {
   function getName(){ return (byId('onlinePlayerName')?.value||'').trim().slice(0,20); }
   function saveName(n){localStorage.setItem(nameKey,n);}
   function entryMenu(){
+    settingsScreen.classList.remove('online-host-settings');
+    byId('onlineHostFields').hidden=true;
+    setupStartButton.textContent='ONLINE ROOM';
     showOnline(`<h2>ONLINE ROOM</h2><button id="onlineCreateMenu" class="main-button">CREATE ROOM</button><button id="onlineJoinMenu" class="secondary-button">JOIN ROOM</button><button id="onlineMenuBack" class="secondary-button">BACK</button>`);
     byId('onlineCreateMenu').onclick=createMenu;
     byId('onlineJoinMenu').onclick=joinMenu;
-    byId('onlineMenuBack').onclick=()=>{showScreen(settingsScreen);startBgm();};
+    byId('onlineMenuBack').onclick=()=>{showScreen(modeScreen);if(bgm.paused)startBgm();};
   }
   function settingsSnapshot() {
     return {alive:Number(aliveCountSelect.value),rolls:Number(diceModeSelect.value),deadPenalty:Number(byId('deadPenalty').value),openedPenalty:Number(byId('openedPenalty').value),penalty:dtgPenaltySnapshot()};
@@ -5871,20 +5881,32 @@ function renderDtgPenalty(openedBonus, loser) {
     }
     return '';
   }
+  // Reuse the existing game settings controls, adding host-only room fields.
+  const hostFields=document.createElement('div');
+  hostFields.id='onlineHostFields';hostFields.hidden=true;
+  hostFields.innerHTML=`<h2>ROOM SETTINGS</h2><div class="setting-box"><label for="onlineHostName">PLAYER NAME（任意）</label><input id="onlineHostName" maxlength="20" autocomplete="nickname" placeholder="HOST"></div><div class="setting-box"><label for="onlineHostPassword">ROOM PASSWORD（任意）</label><input id="onlineHostPassword" maxlength="64" type="text" autocomplete="off"></div><p id="onlineHostError" role="status"></p>`;
+  setupStartButton.before(hostFields);
   function createMenu() {
-    showOnline(`<h2>CREATE ROOM</h2><label>PLAYER NAME（任意）</label><input id="onlinePlayerName" maxlength="20" autocomplete="nickname" placeholder="HOST"><label>ROOM PASSWORD（任意）</label><input id="onlinePassword" maxlength="64" type="text" autocomplete="off"><p class="online-small">ALIVE / DICE / PENALTYは現在のSETTINGSで指定した値を使用します</p><button id="onlineCreate" class="main-button">CREATE</button><button id="onlineBack" class="secondary-button">BACK</button>`);
-    byId('onlinePlayerName').value=localStorage.getItem(nameKey)||'';
-    byId('onlineBack').onclick=entryMenu;
-    byId('onlineCreate').onclick=async()=>{
-      const rules=settingsSnapshot(),problem=validateSnapshot(rules);
-      if(problem){say(problem);return;}
-      const playerName=getName()||'HOST', password=byId('onlinePassword').value;
-      const button=byId('onlineCreate');button.disabled=true;
-      try{
-        const r=await api('create',{name:playerName,password,rules});
-        identity={roomId:r.roomId,token:r.token,role:'host'};saveName(playerName);saveIdentity();beginPolling();await receive(r.state);
-      }catch(e){say(e.message);button.disabled=false;}
-    };
+    settingsScreen.classList.add('online-host-settings');hostFields.hidden=false;
+    byId('onlineHostName').value=localStorage.getItem(nameKey)||'';
+    byId('onlineHostPassword').value='';byId('onlineHostError').textContent='';
+    setupStartButton.textContent='CREATE ROOM';
+    showScreen(settingsScreen);if(bgm.paused)startBgm();
+  }
+  async function createHostRoom(){
+    const rules=settingsSnapshot(),problem=validateSnapshot(rules);
+    const error=byId('onlineHostError');error.textContent=problem;
+    if(problem)return;
+    const playerName=byId('onlineHostName').value.trim().slice(0,20)||'HOST';
+    const password=byId('onlineHostPassword').value;
+    const back=byId('backTitleButton');setupStartButton.disabled=true;back.disabled=true;
+    try{
+      const r=await api('create',{name:playerName,password,rules});
+      identity={roomId:r.roomId,token:r.token,role:'host'};saveName(playerName);saveIdentity();
+      hostFields.hidden=true;settingsScreen.classList.remove('online-host-settings');
+      beginPolling();await receive(r.state);
+    }catch(e){error.textContent=e.message;}
+    finally{setupStartButton.disabled=false;back.disabled=false;}
   }
   async function joinMenu() {
     showOnline(`<h2>JOIN ROOM</h2><label>PLAYER NAME（任意）</label><input id="onlinePlayerName" maxlength="20" autocomplete="nickname" placeholder="GUEST"><label>ROOM ID</label><input id="onlineRoomId" maxlength="6" autocapitalize="characters" placeholder="選択または入力"><label>ROOM PASSWORD（必要な部屋のみ）</label><input id="onlinePassword" maxlength="64" type="text" autocomplete="off"><button id="onlineJoin" class="main-button">JOIN</button><h3>OPEN ROOMS</h3><div id="onlineRooms"></div><button id="onlineRefresh" class="secondary-button">REFRESH</button><button id="onlineBack" class="secondary-button">BACK</button>`);
@@ -5914,10 +5936,29 @@ function renderDtgPenalty(openedBonus, loser) {
       });
     }catch(e){box.textContent=e.message;}
   }
+  function lobbyRules(r){
+    const p=r.penalty;
+    const line=(label,value)=>`<p><strong>${escapeHtml(label)}</strong>：${escapeHtml(value)}</p>`;
+    let details=line('ALIVE CARDS',r.alive)+line('DEAD CARD',1)+line('DICE MODE',`${r.rolls} ROLL`)+line('PENALTY TYPE',p.mode);
+    if(p.mode==='RANDOM'){
+      details+=line('DEAD CARD（抽選回数）',p.randomDead)+line('PER OPENED CARD（抽選回数）',1);
+      details+=p.random.filter(Boolean).map((v,i)=>line(`PENALTY ${i+1}`,v)).join('');
+    }else if(p.mode==='LEVEL'){
+      details+=line('LEVEL判定','DEAD 1 ＋ 勝者側の開封枚数');
+      dtgPenaltyRanges.forEach(([min,max],i)=>{
+        if(min>r.alive+1)return;
+        details+=line(`LEVEL ${i+1}（${min===max?min:min+'〜'+max}）`,p.level.slice(i*3,i*3+3).filter(Boolean).join(' / '));
+      });
+    }else{
+      details+=line('DEAD CARD',`${r.deadPenalty} ${p.mode}`)+line('PER OPENED CARD',`${r.openedPenalty} ${p.mode}`);
+    }
+    return `<div class="online-rules"><h3>GAME RULES</h3>${details}</div>`;
+  }
   function lobby(s) {
     const host=identity.role==='host';
     const guest=s.guestPresent ? s.seats[1].name : 'WAITING...';
-    const signature=`${s.phase}:${s.guestPresent}:${s.seats.map(x=>x.name).join(',')}:${host}`;
+    const guestReady=s.guestLobbyReady===true;
+    const signature=JSON.stringify([s.phase,s.guestPresent,s.seats.map(x=>x.name),host,guestReady]);
     if(onlineContents.dataset.signature===signature&&onlineScreen.classList.contains('active'))return;
     if(s.phase==='guest_left'){
       if(host) {
@@ -5926,9 +5967,10 @@ function renderDtgPenalty(openedBonus, loser) {
       }else exitLocal('部屋から退出しました');
       return;
     }
-    showOnline(`<h2>ROOM ${escapeHtml(s.roomId)}</h2><p>HOST: ${escapeHtml(s.seats[0].name)}</p><p>GUEST: ${escapeHtml(guest)}</p><p class="online-small">DEADの配置を確定するとREADYになります</p>${host?'<button id="onlineStart" class="main-button">START DEAD SET</button><button id="onlineKick" class="secondary-button">KICK GUEST</button>':'<p>ホストの開始を待っています</p>'}<button id="onlineLeave" class="secondary-button">LEAVE ROOM</button>`);
+    showOnline(`<h2>ROOM ${escapeHtml(s.roomId)}</h2><p>HOST: ${escapeHtml(s.seats[0].name)}</p><p>GUEST: ${escapeHtml(guest)}</p>${lobbyRules(s.rules)}<p>${!s.guestPresent?'WAITING FOR GUEST...':guestReady?'GUEST READY ✓':'GUEST NOT READY'}</p>${host?'<button id="onlineStart" class="main-button">START DEAD SET</button><button id="onlineKick" class="secondary-button">KICK GUEST</button>':`<p>${guestReady?'WAITING FOR HOST...':'ルールを確認してREADYを押してください'}</p><button id="onlineLobbyReady" class="main-button">${guestReady?'CANCEL READY':'READY'}</button>`}<button id="onlineLeave" class="secondary-button">LEAVE ROOM</button>`);
     onlineContents.dataset.signature=signature;
-    if(host){byId('onlineStart').disabled=!s.guestPresent;byId('onlineStart').onclick=()=>action('start');byId('onlineKick').hidden=!s.guestPresent;byId('onlineKick').onclick=()=>action('kick');}
+    if(host){byId('onlineStart').disabled=!s.guestPresent||!guestReady;byId('onlineStart').onclick=()=>action('start');byId('onlineKick').hidden=!s.guestPresent;byId('onlineKick').onclick=()=>action('kick');}
+    else byId('onlineLobbyReady').onclick=()=>action('lobbyReady',{ready:!guestReady});
     byId('onlineLeave').onclick=leave;
   }
   function setup(s) {
@@ -6086,15 +6128,15 @@ function renderDtgPenalty(openedBonus, loser) {
   }
   modeScreen.addEventListener('click',retryModeBgm);
   modeScreen.addEventListener('change',retryModeBgm);
-  modeSettingsButton.onclick=()=>{applyGameMode();showScreen(settingsScreen);if(bgm.paused)startBgm();};
+  modeSettingsButton.onclick=()=>{applyGameMode();if(isOnline())entryMenu();else{hostFields.hidden=true;settingsScreen.classList.remove('online-host-settings');showScreen(settingsScreen);}if(bgm.paused)startBgm();};
   modeTitleButton.onclick=()=>{stopBgm();window.location.href='../';};
   // Override original TITLE navigation only in detailed settings, returning to mode selector.
-  byId('backTitleButton').addEventListener('click',e=>{e.preventDefault();e.stopImmediatePropagation();showScreen(modeScreen);if(bgm.paused)startBgm();},true);
+  byId('backTitleButton').addEventListener('click',e=>{e.preventDefault();e.stopImmediatePropagation();if(settingsScreen.classList.contains('online-host-settings'))entryMenu();else showScreen(modeScreen);if(bgm.paused)startBgm();},true);
   // Online room opens from existing 'SET DEAD' (CPU/VS remains unchanged).
   setupStartButton.addEventListener('click',e=>{
     if(!isOnline())return;
     e.preventDefault();e.stopImmediatePropagation();
-    if(identity){beginPolling();refresh();}else{entryMenu();}
+    if(identity){beginPolling();refresh();}else if(settingsScreen.classList.contains('online-host-settings')){createHostRoom();}else{entryMenu();}
   },true);
   intercept(confirmSetupButton,()=>action('set',{dead:selectedDeadIndex,blind:blindMode}));
   intercept(setupBackButton,leave);
