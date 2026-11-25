@@ -5367,7 +5367,11 @@ updatePenaltySettings();
     const stage = document.createElement('div'); stage.id='doaWheelStage';
     const canvas = document.createElement('canvas'); canvas.width=565; canvas.height=1000;
     const hit=document.createElement('button'); hit.id='doaWheelHit'; hit.type='button';
-    stage.append(canvas,hit); wrap.prepend(stage);
+    const hint = document.createElement('div');
+    hint.id = 'doaWheelHint'; hint.setAttribute('aria-hidden','true');
+    hint.innerHTML = '<span>&#8592;</span><span>&#8594;</span>';
+    style.textContent += `#doaWheelHint {position:absolute;left:30%;right:31%;top:49.9%;transform:translateY(-50%);display:flex;justify-content:space-between;color:#e5d8c5;font-size:clamp(16px,5vw,30px);line-height:1;opacity:0;pointer-events:none;transition:opacity .45s ease} #doaWheelHint.show {opacity:.42}`;
+    stage.append(canvas,hit,hint); wrap.prepend(stage);
     const ctx=canvas.getContext('2d');
     if (!ctx) {stage.remove();style.remove();return;}
     // Reference coordinates measured from the uploaded 565 × 1000 preview.
@@ -5398,6 +5402,20 @@ updatePenaltySettings();
       ctx.globalAlpha=1;ctx.drawImage(skull,0,0,565,1000);
     }
     function sync(){hit.disabled=rotating||launching;hit.setAttribute('aria-label',names[selected]);}
+    let hintTimer, hintHideTimer;
+    function resetHint(){
+      clearTimeout(hintTimer);clearTimeout(hintHideTimer);hint.classList.remove('show');
+      hintTimer=setTimeout(function pulse(){
+        if(screen.classList.contains('active')&&!rotating&&!launching){
+          hint.classList.add('show');hintHideTimer=setTimeout(()=>hint.classList.remove('show'),1400);
+        }
+        hintTimer=setTimeout(pulse,4500);
+      },3000);
+    }
+    stage.addEventListener('pointerdown',resetHint);
+    stage.addEventListener('touchstart',resetHint,{passive:true});
+    stage.addEventListener('keydown',resetHint);
+    resetHint();
     function play(audio){if(!audio)return Promise.resolve();try{audio.currentTime=0;return Promise.resolve(audio.play()).catch(()=>{});}catch{return Promise.resolve();}}
     function turn(direction=1){
       if(rotating||launching)return;
@@ -5418,8 +5436,9 @@ updatePenaltySettings();
       if(rotating||launching||performance.now()<suppressUntil)return;
       launching=true;sync();const button=selected===0?db:dtg;
       if(selected===0) resumeDealAudio();
-      let done=false,timer;const go=()=>{if(done)return;done=true;clearTimeout(timer);shotSE?.removeEventListener('ended',go);shotSE?.removeEventListener('error',go);button.click();launching=false;sync();};
-      if(shotSE){shotSE.addEventListener('ended',go,{once:true});shotSE.addEventListener('error',go,{once:true});timer=setTimeout(go,2500);try { shotSE.currentTime=0; Promise.resolve(shotSE.play()).catch(go); } catch { go(); }}else go();
+      resetHint();
+      play(shotSE);
+      setTimeout(()=>{button.click();launching=false;sync();},200);
     });
     window.addEventListener('resize',fit);if(window.ResizeObserver)new ResizeObserver(fit).observe(wrap);
     screen.classList.add('doa-wheel');fit();draw(0,0);sync();
