@@ -5369,8 +5369,8 @@ updatePenaltySettings();
     const hit=document.createElement('button'); hit.id='doaWheelHit'; hit.type='button';
     const hint = document.createElement('div');
     hint.id = 'doaWheelHint'; hint.setAttribute('aria-hidden','true');
-    hint.innerHTML = '<span>&#8592;</span><span>&#8594;</span>';
-    style.textContent += `#doaWheelHint {position:absolute;left:30%;right:31%;top:49.9%;transform:translateY(-50%);display:flex;justify-content:space-between;color:#e5d8c5;font-size:clamp(16px,5vw,30px);line-height:1;opacity:0;pointer-events:none;transition:opacity .45s ease} #doaWheelHint.show {opacity:.42}`;
+    hint.innerHTML = '<img class="left" src="images/doa-yajirushi.PNG" alt=""><img class="right" src="images/doa-yajirushi.PNG" alt="">';
+    style.textContent += `#doaWheelHint {position:absolute;inset:0;opacity:0;pointer-events:none;transition:opacity .45s ease} #doaWheelHint img {position:absolute;inset:0;width:100%;height:100%;object-fit:fill} #doaWheelHint .left {transform:scaleX(-1)} #doaWheelHint.show {opacity:.55}`;
     stage.append(canvas,hit,hint); wrap.prepend(stage);
     const ctx=canvas.getContext('2d');
     if (!ctx) {stage.remove();style.remove();return;}
@@ -5416,6 +5416,8 @@ updatePenaltySettings();
     stage.addEventListener('touchstart',resetHint,{passive:true});
     stage.addEventListener('keydown',resetHint);
     resetHint();
+    hint.classList.add('show');
+    hintHideTimer=setTimeout(()=>hint.classList.remove('show'),1400);
     function play(audio){if(!audio)return Promise.resolve();try{audio.currentTime=0;return Promise.resolve(audio.play()).catch(()=>{});}catch{return Promise.resolve();}}
     function turn(direction=1){
       if(rotating||launching)return;
