@@ -1899,12 +1899,12 @@ object-fit: contain;
 #modeScreen .mode-art button {position:absolute;display:grid;place-items:center;padding:0;margin:0;border:0;background:transparent;color:#eee8d9;cursor:pointer;touch-action:manipulation;}
 #modeScreen .mode-art button:focus-visible {outline:2px dashed #eee8d9;outline-offset:2px;}
 #modeScreen .mode-art button:active {opacity:.75;}
-#modeScreen .mode-art .mode-item {left:22%;width:57%;height:12%;}
-#modeScreen .mode-art .mode-item svg {width:68%;height:65%;overflow:visible;}
-#modeScreen .mode-art .mode-cpu {top:28%;left:25%;}
-#modeScreen .mode-art .mode-vs {top:42%;left:23%;}
-#modeScreen .mode-art .mode-online {top:56%;left:20%;width:59%;}
-#modeScreen .mode-art .mode-online svg {width:87%;}
+#modeScreen .mode-art .mode-item {color:transparent;box-shadow:none;min-width:0;min-height:0;}
+#modeScreen .mode-art .mode-item:active {opacity:1;}
+#modeScreen .mode-art .mode-cpu {top:28%;left:29%;width:43%;height:11%;}
+#modeScreen .mode-art .mode-vs {top:41%;left:32%;width:34%;height:12%;}
+#modeScreen .mode-art .mode-online {top:55%;left:17%;width:62%;height:11%;}
+#modeScreen .mode-art .mode-heading {position:absolute;top:9%;left:10%;width:80%;margin:0;text-align:center;color:#eee8d9;font-family:Georgia,serif;font-size:clamp(12px,2.5dvh,19px);letter-spacing:.06em;text-shadow:0 1px 4px #000;pointer-events:none;}
 #modeScreen .mode-art #modeTitleButton {left:30%;top:79%;width:40%;height:7%;font-family:Georgia,serif;font-size:clamp(12px,2.5dvh,19px);letter-spacing:.06em;text-shadow:0 1px 4px #000;}
 #onlineScreen .online-container {max-width:860px;}
 #onlineContents {padding:20px 16px;border-radius:16px;background:linear-gradient(180deg,rgba(23,16,11,.88),rgba(8,7,6,.9));border:1px solid rgba(175,134,82,.35);box-shadow:0 10px 28px rgba(0,0,0,.42), inset 0 0 0 1px rgba(255,255,255,.04);color:#f3ead9;}
@@ -2005,9 +2005,10 @@ body.dtg-online-connected #setupBackButton {display:none;}
         <option value="VS">VS MODE (2 PLAYERS)</option>
         <option value="ONLINE">ONLINE MODE</option>
       </select>
-      <button type="button" class="mode-item mode-cpu" data-mode="CPU" aria-label="CPU"><svg aria-hidden="true" viewBox="-4 -5 151 70" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="currentColor" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round" opacity=".94"><path transform="translate(0 0)" d="M38 9 Q29 1 16 8 Q4 16 5 34 Q6 53 18 55 Q31 59 39 46"/><path transform="translate(49 0)" d="M8 55 L10 6 Q40 1 40 21 Q40 37 10 32"/><path transform="translate(98 0)" d="M6 6 L7 38 Q7 56 22 56 Q38 56 39 36 L40 6"/></g><g fill="none" stroke="#29251f" stroke-width=".65" stroke-dasharray=".7 3.1" opacity=".55" stroke-linecap="round"><path transform="translate(0 0)" d="M38 9 Q29 1 16 8 Q4 16 5 34 Q6 53 18 55 Q31 59 39 46"/><path transform="translate(49 0)" d="M8 55 L10 6 Q40 1 40 21 Q40 37 10 32"/><path transform="translate(98 0)" d="M6 6 L7 38 Q7 56 22 56 Q38 56 39 36 L40 6"/></g></svg></button>
-      <button type="button" class="mode-item mode-vs" data-mode="VS" aria-label="VS"><svg aria-hidden="true" viewBox="-4 -5 102 70" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="currentColor" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round" opacity=".94"><path transform="translate(0 0)" d="M4 6 L21 56 L40 5"/><path transform="translate(49 0)" d="M39 10 Q26 0 13 8 Q0 18 15 27 L30 34 Q47 47 31 55 Q15 62 5 48"/></g><g fill="none" stroke="#29251f" stroke-width=".65" stroke-dasharray=".7 3.1" opacity=".55" stroke-linecap="round"><path transform="translate(0 0)" d="M4 6 L21 56 L40 5"/><path transform="translate(49 0)" d="M39 10 Q26 0 13 8 Q0 18 15 27 L30 34 Q47 47 31 55 Q15 62 5 48"/></g></svg></button>
-      <button type="button" class="mode-item mode-online" data-mode="ONLINE" aria-label="ONLINE"><svg aria-hidden="true" viewBox="-4 -5 298 70" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="currentColor" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round" opacity=".94"><path transform="translate(0 0)" d="M23 5 Q3 5 4 31 Q4 56 23 56 Q42 56 42 30 Q42 5 23 5 Z"/><path transform="translate(49 0)" d="M7 56 L8 6 L39 55 L40 5"/><path transform="translate(98 0)" d="M9 5 L8 55 L39 54"/><path transform="translate(147 0)" d="M12 7 L34 6 M23 7 L22 55 M11 55 L34 54"/><path transform="translate(196 0)" d="M7 56 L8 6 L39 55 L40 5"/><path transform="translate(245 0)" d="M39 6 L9 7 L8 55 L40 54 M9 29 L34 28"/></g><g fill="none" stroke="#29251f" stroke-width=".65" stroke-dasharray=".7 3.1" opacity=".55" stroke-linecap="round"><path transform="translate(0 0)" d="M23 5 Q3 5 4 31 Q4 56 23 56 Q42 56 42 30 Q42 5 23 5 Z"/><path transform="translate(49 0)" d="M7 56 L8 6 L39 55 L40 5"/><path transform="translate(98 0)" d="M9 5 L8 55 L39 54"/><path transform="translate(147 0)" d="M12 7 L34 6 M23 7 L22 55 M11 55 L34 54"/><path transform="translate(196 0)" d="M7 56 L8 6 L39 55 L40 5"/><path transform="translate(245 0)" d="M39 6 L9 7 L8 55 L40 54 M9 29 L34 28"/></g></svg></button>
+      <button type="button" class="mode-item mode-cpu" data-mode="CPU" aria-label="CPU"></button>
+      <button type="button" class="mode-item mode-vs" data-mode="VS" aria-label="VS"></button>
+      <button type="button" class="mode-item mode-online" data-mode="ONLINE" aria-label="ONLINE"></button>
+      <div class="mode-heading">MODE MENU</div>
       <button id="modeTitleButton" type="button">BACK TO TITLE</button>
     </div>
   </section>
