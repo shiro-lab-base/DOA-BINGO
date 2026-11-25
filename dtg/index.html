@@ -6129,7 +6129,16 @@ function renderDtgPenalty(openedBonus, loser) {
     const before=current;current=s;
     if(s.phase==='closed'){exitLocal('ホストが部屋を解散しました');return;}
     if(s.phase==='timeout'){exitLocal('通信切断から120秒が経過したため、設定に戻ります');return;}
-    if(s.phase==='lobby'||s.phase==='guest_left'){lobby(s);return;}
+    if(s.phase==='lobby'||s.phase==='guest_left'){
+      if(identity.role==='host'&&s.phase==='lobby'&&!s.guestPresent&&before&&
+          (before.phase!=='lobby'||before.guestPresent)){
+        cleanEffects(true);if(bgm.paused)startBgm();
+        lastBoard='';lastGame='';lastSetup='';lastResult='';pendingState=null;
+        [onlineLeaveSetup,onlineKickSetup,onlineLeaveGame,onlineLeaveResult].forEach(b=>b.hidden=true);
+        delete onlineContents.dataset.signature;
+      }
+      lobby(s);return;
+    }
     if(s.phase==='setup'){setup(s);return;}
     if(s.phase==='game'||s.phase==='result'){
       const sameMatch=before && before.match===s.match;
