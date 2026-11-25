@@ -1624,7 +1624,7 @@ object-fit: contain;
   
 /* DTG VS - TWO INDEPENDENT ROLL CONTROLS */
 
-#gameScreen.vs-mode .dice-zone {
+#gameScreen:is(.vs-mode, .online-mode) .dice-zone {
 
   display: flex;
 
@@ -1646,7 +1646,7 @@ object-fit: contain;
 
 /* Independent player controls */
 
-#gameScreen.vs-mode .vs-roll-row {
+#gameScreen:is(.vs-mode, .online-mode) .vs-roll-row {
 
   position: relative;
 
@@ -1660,7 +1660,7 @@ object-fit: contain;
 
 /* P2 faces the opposite direction */
 
-#gameScreen.vs-mode .vs-roll-row.p2-row {
+#gameScreen:is(.vs-mode, .online-mode) .vs-roll-row.p2-row {
 
   transform: rotate(180deg);
 
@@ -1668,7 +1668,7 @@ object-fit: contain;
 
 /* Result UI */
 
-#gameScreen.vs-mode .vs-roll-row .roll-result {
+#gameScreen:is(.vs-mode, .online-mode) .vs-roll-row .roll-result {
 
   position: absolute;
 
@@ -1686,7 +1686,7 @@ object-fit: contain;
 
 }
 
-#gameScreen.vs-mode .vs-roll-row .roll-number {
+#gameScreen:is(.vs-mode, .online-mode) .vs-roll-row .roll-number {
 
   font-size: 32px;
 
@@ -1694,7 +1694,7 @@ object-fit: contain;
 
 /* ROLL button to the right of each result */
 
-#gameScreen.vs-mode .vs-roll-row .vs-roll-button {
+#gameScreen:is(.vs-mode, .online-mode) .vs-roll-row .vs-roll-button {
 
   position: absolute;
 
@@ -1726,7 +1726,7 @@ object-fit: contain;
 
 }
 
-#gameScreen.vs-mode .vs-roll-button:disabled {
+#gameScreen:is(.vs-mode, .online-mode) .vs-roll-button:disabled {
 
   opacity: 0.35;
 
@@ -1736,7 +1736,7 @@ object-fit: contain;
 
 /* Shared central dice */
 
-#gameScreen.vs-mode .center-dice-area {
+#gameScreen:is(.vs-mode, .online-mode) .center-dice-area {
 
   display: flex;
 
@@ -1750,7 +1750,7 @@ object-fit: contain;
 
 }
 
-#gameScreen.vs-mode #centerDice {
+#gameScreen:is(.vs-mode, .online-mode) #centerDice {
 
   flex: none;
 
@@ -1786,7 +1786,7 @@ object-fit: contain;
 
 /* CPU BATTLE dice display */
 
-#gameScreen:not(.vs-mode) .dice-zone {
+#gameScreen:not(.vs-mode):not(.online-mode) .dice-zone {
 
   display: grid;
 
@@ -1802,7 +1802,7 @@ object-fit: contain;
 
 }
 
-#gameScreen:not(.vs-mode) .vs-roll-row {
+#gameScreen:not(.vs-mode):not(.online-mode) .vs-roll-row {
 
   position: static;
 
@@ -1814,7 +1814,7 @@ object-fit: contain;
 
 }
 
-#gameScreen:not(.vs-mode) .vs-roll-row.p1-row {
+#gameScreen:not(.vs-mode):not(.online-mode) .vs-roll-row.p1-row {
 
   grid-column: 1;
 
@@ -1822,7 +1822,7 @@ object-fit: contain;
 
 }
 
-#gameScreen:not(.vs-mode) .center-dice-area {
+#gameScreen:not(.vs-mode):not(.online-mode) .center-dice-area {
 
   grid-column: 2;
 
@@ -1830,7 +1830,7 @@ object-fit: contain;
 
 }
 
-#gameScreen:not(.vs-mode) .vs-roll-row.p2-row {
+#gameScreen:not(.vs-mode):not(.online-mode) .vs-roll-row.p2-row {
 
   grid-column: 3;
 
@@ -1838,7 +1838,7 @@ object-fit: contain;
 
 }
 
-#gameScreen:not(.vs-mode) .vs-roll-row .roll-result {
+#gameScreen:not(.vs-mode):not(.online-mode) .vs-roll-row .roll-result {
 
   position: static;
 
@@ -1850,13 +1850,13 @@ object-fit: contain;
 
 }
 
-#gameScreen:not(.vs-mode) .vs-roll-button {
+#gameScreen:not(.vs-mode):not(.online-mode) .vs-roll-button {
 
   display: none;
 
 }
 
-#gameScreen.vs-mode #rollButton {
+#gameScreen:is(.vs-mode, .online-mode) #rollButton {
 
   display: none;
 
@@ -2775,8 +2775,9 @@ const rollButton = document.getElementById("rollButton");
 
     function applyGameMode() {
       gameMode = gameModeSelect.value;
-      const vs = gameMode === "VS" || gameMode === "ONLINE";
+      const vs = gameMode === "VS";
       gameScreen.classList.toggle("vs-mode", vs);
+      gameScreen.classList.toggle("online-mode", gameMode === "ONLINE");
       topPlayerLabel.textContent = vs ? "PLAYER 2" : "CPU";
       bottomPlayerLabel.textContent = vs ? "PLAYER 1" : "YOU";
       leftRollLabel.textContent = vs ? "P1" : "YOU";
@@ -5755,8 +5756,27 @@ function renderDtgPenalty(openedBonus, loser) {
     onlineIndicator.hidden = true;
   }
   function lockOfflineScreens(locked) { document.body.classList.toggle('dtg-online-connected', !!locked); }
-  function saveIdentity() { if(identity) sessionStorage.setItem(identityKey, JSON.stringify(identity)); }
-  function clearIdentity() { identity = null; sessionStorage.removeItem(identityKey); }
+  function saveIdentity() {
+    if(!identity)return;
+    const value=JSON.stringify(identity);
+    try{localStorage.setItem(identityKey,value);}catch(e){console.warn('DTG persistent session',e);}
+    try{sessionStorage.setItem(identityKey,value);}catch(e){console.warn('DTG tab session',e);}
+  }
+  function readIdentity() {
+    for(const storage of ['localStorage','sessionStorage']){
+      try{
+        const saved=JSON.parse(window[storage].getItem(identityKey)||'null');
+        if(saved&&/^[A-HJ-NP-Z2-9]{6}$/.test(saved.roomId)&&typeof saved.token==='string'&&saved.token&&['host','guest'].includes(saved.role))return saved;
+      }catch(e){console.warn('DTG session restore',e);}
+    }
+    return null;
+  }
+  function clearIdentity() {
+    identity=null;
+    for(const storage of ['localStorage','sessionStorage']){
+      try{window[storage].removeItem(identityKey);}catch(e){console.warn('DTG session cleanup',e);}
+    }
+  }
   function dropTimers() { if(timer) clearInterval(timer); timer = null; }
   function mySeat(s) { return s.seats[identity.role === 'host' ? 0 : 1]; }
   function theirSeat(s) { return s.seats[identity.role === 'host' ? 1 : 0]; }
@@ -5792,19 +5812,23 @@ function renderDtgPenalty(openedBonus, loser) {
   async function refresh() {
     if(!identity||loading) return;
     loading=true;
+    const requestedIdentity=identity;
     try {
       const r=await api('state',{roomId:identity.roomId,token:identity.token});
+      if(identity!==requestedIdentity)return;
       reconnectMessage=false;
+      if(!current&&r.state.phase==='lobby'&&bgm.paused)startBgm();
       await receive(r.state);
     }catch(e) {
+      if(identity!==requestedIdentity)return;
       if(/解散|権限|見つかり|120秒|退室/.test(e.message)){exitLocal(e.message);return;}
       reconnectMessage=true;
       onlineIndicator.textContent='通信再接続中 — 120秒以内に復帰してください';
       onlineIndicator.hidden=false;
     }finally{loading=false;}
   }
-  function cleanEffects() {
-    try{stopDangerAudio();stopEcgCanvas();resetDeadEffect();stopBgm();}catch(e){console.warn('DTG effects cleanup',e);}
+  function cleanEffects(keepBgm=false) {
+    try{stopDangerAudio();stopEcgCanvas();resetDeadEffect();if(!keepBgm)stopBgm();}catch(e){console.warn('DTG effects cleanup',e);}
     dangerMode=false;gameOver=false;rolling=false;
     dangerOverlay.classList.remove('active');ecgLayer.classList.remove('active');
   }
@@ -5908,8 +5932,14 @@ function renderDtgPenalty(openedBonus, loser) {
     const own=mySeat(s),opp=theirSeat(s);
     const key=`${s.roomId}:${s.match}`;
     if(lastSetup!==key){
-      cleanEffects();aliveCount=s.rules.alive;totalCards=aliveCount+1;diceRollCount=s.rules.rolls;
-      setupTitle.textContent='SET YOUR DEAD';buildSetupCards();lastSetup=key;lastGame='';lastBoard='';lastResult='';
+      cleanEffects(true);if(bgm.paused)startBgm();aliveCount=s.rules.alive;totalCards=aliveCount+1;diceRollCount=s.rules.rolls;
+      setupTitle.textContent='SET YOUR DEAD';buildSetupCards();
+      if(own.ready){
+        blindMode=!!own.blind;
+        if(Number.isInteger(own.deadIndex))selectedDeadIndex=own.deadIndex;
+        blindStatus.textContent=blindMode?'DEAD LOCATION HIDDEN':'';renderSetupCards();
+      }
+      lastSetup=key;lastGame='';lastBoard='';lastResult='';
     }
     showScreen(setupScreen);lockOfflineScreens(true);
     confirmSetupButton.disabled=own.ready;
@@ -5968,7 +5998,7 @@ function renderDtgPenalty(openedBonus, loser) {
     if(lastGame!==key){
       lastGame=key;lastBoard='';gameOver=false;rolling=false;dangerMode=false;
       stopDangerAudio();stopEcgCanvas();resetDeadEffect();dangerOverlay.classList.remove('active');ecgLayer.classList.remove('active');
-      renderDiceFace(1);startBgm();
+      renderDiceFace(s.lastRoll?.value||1);if(bgm.paused)startBgm();
     }
     showScreen(gameScreen);lockOfflineScreens(true);board(s,force);
   }
@@ -6053,7 +6083,7 @@ function renderDtgPenalty(openedBonus, loser) {
   setupStartButton.addEventListener('click',e=>{
     if(!isOnline())return;
     e.preventDefault();e.stopImmediatePropagation();
-    if(identity){beginPolling();refresh();}else{stopBgm();entryMenu();}
+    if(identity){beginPolling();refresh();}else{entryMenu();}
   },true);
   intercept(confirmSetupButton,()=>action('set',{dead:selectedDeadIndex,blind:blindMode}));
   intercept(setupBackButton,leave);
@@ -6075,14 +6105,22 @@ function renderDtgPenalty(openedBonus, loser) {
   onlineKickSetup.onclick=()=>action('kick');
   // Reset online UI when returning to CPU/VS; no extra listeners on existing game cards.
   window.addEventListener('pagehide',dropTimers);
-  try {
-    const saved=JSON.parse(sessionStorage.getItem(identityKey)||'null');
-    if(saved&&/^[A-HJ-NP-Z2-9]{6}$/.test(saved.roomId)&&typeof saved.token==='string'&&['host','guest'].includes(saved.role)){
-      identity=saved;gameModeSelect.value='ONLINE';modeChoice.value='ONLINE';applyGameMode();lockOfflineScreens(true);
-      beginPolling();refresh();
-    }
-  }catch(e){sessionStorage.removeItem(identityKey);}
-  if(!identity)showScreen(modeScreen);
+  window.addEventListener('pageshow',e=>{
+    if(e.persisted&&identity){beginPolling();if(!busy&&!animating)refresh();}
+  });
+  const saved=readIdentity();
+  if(saved){
+    identity=saved;saveIdentity();gameModeSelect.value='ONLINE';modeChoice.value='ONLINE';applyGameMode();lockOfflineScreens(true);
+    showOnline('<h2>RECONNECTING...</h2><p>対戦ルームに再接続しています</p><button id="onlineCancelRestore" class="secondary-button">LEAVE ROOM</button>');
+    byId('onlineCancelRestore').onclick=leave;
+    // Reloaded pages may require a new user gesture before audio can play.
+    const resumeAudio=()=>{
+      if(identity&&current&&['lobby','setup','game'].includes(current.phase)&&!dangerMode&&bgm.paused)startBgm();
+      if(!identity||current)document.removeEventListener('click',resumeAudio,true);
+    };
+    document.addEventListener('click',resumeAudio,true);
+    beginPolling();refresh();
+  }else showScreen(modeScreen);
 })();
 ;
 
@@ -6093,4 +6131,3 @@ function renderDtgPenalty(openedBonus, loser) {
 </body>
 
 </html>
-
