@@ -5440,7 +5440,7 @@ updatePenaltySettings();
       if(selected===0) resumeDealAudio();
       resetHint();
       play(shotSE);
-      setTimeout(()=>{button.click();launching=false;sync();},200);
+      setTimeout(()=>{button.click();launching=false;sync();},600);
     });
     window.addEventListener('resize',fit);if(window.ResizeObserver)new ResizeObserver(fit).observe(wrap);
     screen.classList.add('doa-wheel');fit();draw(0,0);sync();
