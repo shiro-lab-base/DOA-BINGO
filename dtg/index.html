@@ -1895,15 +1895,58 @@ object-fit: contain;
 #settingsScreen .setting-box:has(#gameMode){display:none;}
 #modeScreen .container { max-width: 780px; }
 #modeScreen .setting-box {margin-top:30px;}
-#onlineScreen .online-container {max-width:700px;}
-#onlineContents {padding:24px 18px;border-radius:12px;background:rgba(10,10,10,.83);color:#fff;}
-#onlineContents label {display:block;margin:16px 0 6px;text-align:left;font-weight:bold;}
-#onlineContents input {box-sizing:border-box;display:block;width:100%;min-height:48px;padding:10px;border:1px solid #888;border-radius:7px;background:#1c1c1c;color:#fff;font-size:16px;}
+#onlineScreen .online-container {max-width:860px;}
+#onlineContents {padding:20px 16px;border-radius:16px;background:linear-gradient(180deg,rgba(23,16,11,.88),rgba(8,7,6,.9));border:1px solid rgba(175,134,82,.35);box-shadow:0 10px 28px rgba(0,0,0,.42), inset 0 0 0 1px rgba(255,255,255,.04);color:#f3ead9;}
+#onlineContents label {display:block;margin:14px 0 6px;text-align:left;font-weight:bold;letter-spacing:.04em;color:#d9c4a2;}
+#onlineContents input {box-sizing:border-box;display:block;width:100%;min-height:48px;padding:10px 12px;border:1px solid #7d6446;border-radius:9px;background:rgba(18,14,11,.95);color:#fff7ea;font-size:16px;}
 #onlineContents button[hidden], .online-only-control[hidden], #onlineIndicator[hidden] { display:none!important; }
-#onlineContents p {margin:13px 0;white-space:pre-line;}
-#onlineContents .online-small {font-size:13px;color:#ddd;}
-#onlineMessage {color:#ff7777;font-weight:bold;margin-top:15px;white-space:pre-line;}
+#onlineContents p {margin:11px 0;white-space:pre-line;}
+#onlineContents .online-small {font-size:13px;color:#d8c7b3;}
+#onlineMessage {color:#ff9f8f;font-weight:bold;margin-top:15px;white-space:pre-line;}
 #onlineIndicator {position:fixed;top:8px;left:50%;transform:translateX(-50%);z-index:100;max-width:min(96vw,680px);padding:5px 12px;border-radius:6px;background:rgba(0,0,0,.85);color:white;font-size:12px;pointer-events:none;text-align:center;}
+#onlineContents h2, #onlineContents h3, #onlineContents h4 {margin:0;}
+#onlineContents .board-title {margin-bottom:6px;letter-spacing:.18em;font-size:30px;color:#f0dfbf;text-shadow:0 2px 8px rgba(0,0,0,.35);}
+#onlineContents .board-subtitle {margin:0 0 18px;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:#d1b58f;}
+#onlineContents .board-actions {display:grid;gap:12px;margin-top:18px;}
+#onlineContents .board-stack {display:grid;gap:14px;}
+#onlineContents .board-paper {position:relative;padding:16px 16px 14px;border-radius:12px;text-align:left;background:linear-gradient(180deg,#ede2c8,#d6c3a0);color:#241a11;border:1px solid rgba(91,61,30,.45);box-shadow:0 8px 18px rgba(0,0,0,.28);}
+#onlineContents .board-paper::before {content:'';position:absolute;inset:7px;border:1px dashed rgba(71,49,24,.28);border-radius:8px;pointer-events:none;}
+#onlineContents .board-paper > * {position:relative;z-index:1;}
+#onlineContents .board-paper.board-selected {box-shadow:0 0 0 2px rgba(140,29,24,.8),0 10px 24px rgba(0,0,0,.32);}
+#onlineContents .board-paper.board-hero {padding-top:18px;padding-bottom:18px;}
+#onlineContents .paper-kicker {font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#76522e;margin-bottom:8px;}
+#onlineContents .paper-title {font-size:24px;letter-spacing:.08em;font-weight:bold;margin:0 0 8px;color:#24170f;}
+#onlineContents .paper-text {font-size:14px;line-height:1.5;color:#3d2a19;}
+#onlineContents .paper-grid {display:grid;gap:12px;}
+#onlineContents .board-fields {display:grid;grid-template-columns:1fr;gap:10px;}
+#onlineContents .room-board-grid {display:grid;grid-template-columns:1fr;gap:14px;align-items:start;}
+#onlineContents .room-board-list {display:grid;gap:12px;}
+#onlineContents .room-note {display:block;width:100%;padding:0;border:none;background:transparent;text-align:left;cursor:pointer;}
+#onlineContents .room-note .board-paper {transition:transform .15s ease, box-shadow .15s ease;}
+#onlineContents .room-note:hover .board-paper, #onlineContents .room-note:focus-visible .board-paper {transform:translateY(-2px);box-shadow:0 12px 24px rgba(0,0,0,.34);}
+#onlineContents .note-topline, #onlineContents .note-meta, #onlineContents .note-rules, #onlineContents .note-bottomline, #onlineContents .details-grid, #onlineContents .waiting-meta {display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+#onlineContents .note-roomid {font-size:23px;font-weight:bold;letter-spacing:.12em;}
+#onlineContents .note-host {font-size:14px;}
+#onlineContents .note-rules {margin-top:10px;font-size:13px;color:#4d3520;}
+#onlineContents .note-rules span, #onlineContents .details-grid span, #onlineContents .waiting-meta span {display:inline-flex;align-items:center;gap:4px;}
+#onlineContents .stamp {display:inline-block;padding:4px 10px;border:2px solid #8c1d18;border-radius:999px;font-size:11px;font-weight:bold;letter-spacing:.14em;text-transform:uppercase;color:#8c1d18;transform:rotate(-7deg);}
+#onlineContents .stamp.locked {border-color:#594537;color:#594537;}
+#onlineContents .stamp.waiting {border-color:#7b4d1b;color:#7b4d1b;}
+#onlineContents .stamp.ready {border-color:#1f5f2d;color:#1f5f2d;}
+#onlineContents .stamp.notice {border-color:#8c1d18;color:#8c1d18;}
+#onlineContents .details-card {padding:16px;border-radius:12px;background:rgba(15,11,9,.55);border:1px solid rgba(212,179,134,.28);text-align:left;}
+#onlineContents .details-card h3 {margin-bottom:12px;letter-spacing:.12em;color:#f0dfbf;}
+#onlineContents .rule-sheet {display:grid;gap:8px;text-align:left;}
+#onlineContents .rule-row {display:flex;justify-content:space-between;gap:12px;padding-bottom:6px;border-bottom:1px dashed rgba(255,255,255,.16);}
+#onlineContents .rule-row strong {color:#d7c4a7;letter-spacing:.05em;}
+#onlineContents .rule-row span {text-align:right;color:#fff6e9;}
+#onlineContents .waiting-status {margin-top:14px;font-size:14px;letter-spacing:.08em;color:#e8d8c0;}
+#onlineContents .empty-board {padding:18px;border-radius:12px;background:rgba(0,0,0,.18);border:1px dashed rgba(216,196,167,.35);color:#e3d2ba;text-align:center;}
+@media (min-width:760px) {
+  #onlineContents .board-fields {grid-template-columns:1fr 1fr;}
+  #onlineContents .room-board-grid {grid-template-columns:minmax(270px,1fr) minmax(0,1.35fr);}
+  #onlineContents .board-actions.dual {grid-template-columns:1fr 1fr;}
+}
 #gameScreen {position:relative;}
 /* ONLINE: reverse opponent visual order without changing card indices. */
 #gameScreen.online-mode #cpuCards {direction:rtl;}
@@ -5863,7 +5906,7 @@ function renderDtgPenalty(openedBonus, loser) {
     settingsScreen.classList.remove('online-host-settings');
     byId('onlineHostFields').hidden=true;
     setupStartButton.textContent='ONLINE ROOM';
-    showOnline(`<h2>ONLINE ROOM</h2><button id="onlineCreateMenu" class="main-button">CREATE ROOM</button><button id="onlineJoinMenu" class="secondary-button">JOIN ROOM</button><button id="onlineMenuBack" class="secondary-button">BACK</button>`);
+    showOnline(`<div class="board-stack"><div class="board-paper board-hero"><div class="paper-kicker">UNDERGROUND MATCH NETWORK</div><h2 class="board-title">ROOM BOARD</h2><p class="board-subtitle">SELECT HOW YOU ENTER THE TABLE</p><p class="paper-text">Create a room as host, or browse the board and join an open table as guest.</p></div><div class="board-actions"><button id="onlineCreateMenu" class="main-button">CREATE ROOM</button><button id="onlineJoinMenu" class="secondary-button">JOIN ROOM</button><button id="onlineMenuBack" class="secondary-button">BACK</button></div></div>`);
     byId('onlineCreateMenu').onclick=createMenu;
     byId('onlineJoinMenu').onclick=joinMenu;
     byId('onlineMenuBack').onclick=()=>{showScreen(modeScreen);if(bgm.paused)startBgm();};
@@ -5909,7 +5952,7 @@ function renderDtgPenalty(openedBonus, loser) {
     finally{setupStartButton.disabled=false;back.disabled=false;}
   }
   async function joinMenu() {
-    showOnline(`<h2>JOIN ROOM</h2><label>PLAYER NAME（任意）</label><input id="onlinePlayerName" maxlength="20" autocomplete="nickname" placeholder="GUEST"><label>ROOM ID</label><input id="onlineRoomId" maxlength="6" autocapitalize="characters" placeholder="選択または入力"><label>ROOM PASSWORD（必要な部屋のみ）</label><input id="onlinePassword" maxlength="64" type="text" autocomplete="off"><button id="onlineJoin" class="main-button">JOIN</button><h3>OPEN ROOMS</h3><div id="onlineRooms"></div><button id="onlineRefresh" class="secondary-button">REFRESH</button><button id="onlineBack" class="secondary-button">BACK</button>`);
+    showOnline(`<h2 class="board-title">ROOM BOARD</h2><p class="board-subtitle">BULLETIN OF OPEN TABLES</p><div class="room-board-grid"><div class="details-card"><h3>ROOM DETAILS</h3><div class="board-fields"><div><label>PLAYER NAME（任意）</label><input id="onlinePlayerName" maxlength="20" autocomplete="nickname" placeholder="GUEST"></div><div><label>ROOM ID</label><input id="onlineRoomId" maxlength="6" autocapitalize="characters" placeholder="SELECT OR TYPE"></div></div><label>ROOM PASSWORD（必要な部屋のみ）</label><input id="onlinePassword" maxlength="64" type="text" autocomplete="off"><div class="board-actions"><button id="onlineJoin" class="main-button">JOIN ROOM</button><button id="onlineBack" class="secondary-button">BACK</button></div></div><div class="details-card"><div class="note-topline"><h3>OPEN ROOMS</h3><button id="onlineRefresh" class="secondary-button">REFRESH</button></div><div id="onlineRooms" class="room-board-list"></div></div></div>`);
     byId('onlinePlayerName').value=localStorage.getItem(nameKey)||'';
     byId('onlineBack').onclick=entryMenu;
     byId('onlineRefresh').onclick=fetchRooms;
@@ -5928,13 +5971,17 @@ function renderDtgPenalty(openedBonus, loser) {
     const box=byId('onlineRooms');if(!box)return;
     try{
       const data=await api('rooms',{},'GET');box.replaceChildren();
-      if(!data.rooms.length){box.textContent='募集中の部屋はありません';return;}
+      if(!data.rooms.length){box.innerHTML='<div class="empty-board">NO OPEN ROOMS RIGHT NOW</div>';return;}
       data.rooms.forEach(r=>{
-        const b=document.createElement('button');b.className='online-room-item secondary-button';
-        b.textContent=`${r.roomId} / ${r.hostName} ${r.locked?'🔒':''}`;
-        b.onclick=()=>{byId('onlineRoomId').value=r.roomId;};box.append(b);
+        const b=document.createElement('button');b.type='button';b.className='room-note';
+        const selected=(byId('onlineRoomId')?.value||'').toUpperCase()===r.roomId;
+        b.innerHTML=`<div class="board-paper${selected?' board-selected':''}"><div class="note-topline"><div class="note-roomid">${escapeHtml(r.roomId)}</div><span class="stamp ${r.locked?'locked':'waiting'}">${r.locked?'LOCKED':'OPEN'}</span></div><div class="note-meta"><div class="note-host"><strong>HOST</strong> : ${escapeHtml(r.hostName)}</div><div><strong>${escapeHtml(String(r.players??'1'))}</strong> / 2</div></div><div class="note-rules"><span>ALIVE ${escapeHtml(String(r.alive ?? '-'))}</span><span>DICE ${escapeHtml(String(r.rolls ?? '-'))}</span><span>${escapeHtml(r.penaltyMode||'')}</span></div><div class="note-bottomline"><span>${r.note?escapeHtml(r.note):'SELECT THIS ROOM TO JOIN'}</span></div></div>`;
+        b.onclick=()=>{
+          byId('onlineRoomId').value=r.roomId;
+          fetchRooms();
+        };box.append(b);
       });
-    }catch(e){box.textContent=e.message;}
+    }catch(e){box.innerHTML=`<div class="empty-board">${escapeHtml(e.message)}</div>`;}
   }
   function lobbyRules(r){
     const p=r.penalty;
@@ -5952,7 +5999,11 @@ function renderDtgPenalty(openedBonus, loser) {
     }else{
       details+=line('DEAD CARD',`${r.deadPenalty} ${p.mode}`)+line('PER OPENED CARD',`${r.openedPenalty} ${p.mode}`);
     }
-    return `<div class="online-rules"><h3>GAME RULES</h3>${details}</div>`;
+    const rows=(details.match(/<p><strong>.*?<\/strong>：.*?<\/p>/g)||[]).map(line=>{
+      const m=line.match(/<p><strong>(.*?)<\/strong>：(.*?)<\/p>/);
+      return m?`<div class="rule-row"><strong>${m[1]}</strong><span>${m[2]}</span></div>`:'';
+    }).join('');
+    return `<div class="details-card"><h3>ROOM DETAILS</h3><div class="rule-sheet">${rows}</div></div>`;
   }
   function lobby(s) {
     const host=identity.role==='host';
@@ -5962,12 +6013,12 @@ function renderDtgPenalty(openedBonus, loser) {
     if(onlineContents.dataset.signature===signature&&onlineScreen.classList.contains('active'))return;
     if(s.phase==='guest_left'){
       if(host) {
-        showOnline('<h2>GUEST LEFT</h2><p>ゲストが退出しました</p><button id="onlineHostBack" class="main-button">BACK</button>');
+        showOnline('<div class="board-stack"><div class="board-paper"><div class="paper-kicker">ROOM NOTICE</div><h2 class="board-title">GUEST LEFT</h2><p class="paper-text">ゲストが退出しました。</p></div><div class="board-actions"><button id="onlineHostBack" class="main-button">BACK</button></div></div>');
         byId('onlineHostBack').onclick=leave;
       }else exitLocal('部屋から退出しました');
       return;
     }
-    showOnline(`<h2>ROOM ${escapeHtml(s.roomId)}</h2><p>HOST: ${escapeHtml(s.seats[0].name)}</p><p>GUEST: ${escapeHtml(guest)}</p>${lobbyRules(s.rules)}<p>${!s.guestPresent?'WAITING FOR GUEST...':guestReady?'GUEST READY ✓':'GUEST NOT READY'}</p>${host?'<button id="onlineStart" class="main-button">START DEAD SET</button><button id="onlineKick" class="secondary-button">KICK GUEST</button>':`<p>${guestReady?'WAITING FOR HOST...':'ルールを確認してREADYを押してください'}</p><button id="onlineLobbyReady" class="main-button">${guestReady?'CANCEL READY':'READY'}</button>`}<button id="onlineLeave" class="secondary-button">LEAVE ROOM</button>`);
+    showOnline(`<div class="board-stack"><div class="board-paper"><div class="paper-kicker">MATCH REGISTRATION</div><h2 class="board-title">WAITING ROOM</h2><div class="details-grid"><span><strong>ROOM ID</strong> : ${escapeHtml(s.roomId)}</span><span class="stamp ${!s.guestPresent?'waiting':guestReady?'ready':'notice'}">${!s.guestPresent?'WAITING':guestReady?'READY':'CHECKING'}</span></div><div class="waiting-meta"><span><strong>HOST</strong> : ${escapeHtml(s.seats[0].name)}</span><span><strong>GUEST</strong> : ${escapeHtml(guest)}</span></div></div>${lobbyRules(s.rules)}<div class="details-card"><h3>TABLE STATUS</h3><p class="waiting-status">${!s.guestPresent?'WAITING FOR GUEST...':guestReady?'GUEST READY ✓':host?'GUEST NOT READY':'ルールを確認してREADYを押してください'}</p><div class="board-actions${host&&s.guestPresent?' dual':''}">${host?'<button id="onlineStart" class="main-button">START DEAD SET</button><button id="onlineKick" class="secondary-button">KICK GUEST</button>':`<button id="onlineLobbyReady" class="main-button">${guestReady?'CANCEL READY':'READY'}</button>`}<button id="onlineLeave" class="secondary-button">LEAVE ROOM</button></div>${host?'':`<p class="online-small">${guestReady?'WAITING FOR HOST...':'READY後にホストがゲームを開始します'}</p>`}</div></div>`);
     onlineContents.dataset.signature=signature;
     if(host){byId('onlineStart').disabled=!s.guestPresent||!guestReady;byId('onlineStart').onclick=()=>action('start');byId('onlineKick').hidden=!s.guestPresent;byId('onlineKick').onclick=()=>action('kick');}
     else byId('onlineLobbyReady').onclick=()=>action('lobbyReady',{ready:!guestReady});
