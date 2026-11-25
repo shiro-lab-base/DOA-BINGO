@@ -1890,37 +1890,96 @@ object-fit: contain;
 
 }
     
+
+/* ONLINE additions: original phone portrait presentation stays flexible. */
+#settingsScreen .setting-box:has(#gameMode){display:none;}
+#modeScreen .container { max-width: 780px; }
+#modeScreen .setting-box {margin-top:30px;}
+#onlineScreen .online-container {max-width:700px;}
+#onlineContents {padding:24px 18px;border-radius:12px;background:rgba(10,10,10,.83);color:#fff;}
+#onlineContents label {display:block;margin:16px 0 6px;text-align:left;font-weight:bold;}
+#onlineContents input {box-sizing:border-box;display:block;width:100%;min-height:48px;padding:10px;border:1px solid #888;border-radius:7px;background:#1c1c1c;color:#fff;font-size:16px;}
+#onlineContents button[hidden], .online-only-control[hidden], #onlineIndicator[hidden] { display:none!important; }
+#onlineContents p {margin:13px 0;white-space:pre-line;}
+#onlineContents .online-small {font-size:13px;color:#ddd;}
+#onlineMessage {color:#ff7777;font-weight:bold;margin-top:15px;white-space:pre-line;}
+#onlineIndicator {position:fixed;top:8px;left:50%;transform:translateX(-50%);z-index:100;max-width:min(96vw,680px);padding:5px 12px;border-radius:6px;background:rgba(0,0,0,.85);color:white;font-size:12px;pointer-events:none;text-align:center;}
+#gameScreen {position:relative;}
+body.dtg-online-connected #setupBackButton {display:none;}
+#onlineLeaveGame {position:absolute;bottom:10px;right:12px;width:auto;min-height:38px;margin:0;padding:5px 16px;z-index:20;font-size:12px;}
+.online-only-control {max-width:700px;}
+#settingsScreen .container {text-align:center;}
+@media (min-width:660px) and (orientation:landscape) {
+  #settingsScreen {height:100dvh;min-height:0;overflow:hidden;}
+  #settingsScreen .container {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 22px;align-content:center;max-height:calc(100dvh - 36px);overflow:hidden;margin:auto;}
+  #settingsScreen .container > h1,#settingsScreen .container > h2,#settingsScreen .container > button {grid-column:1/-1;}
+  #settingsScreen .setting-box {margin-top:5px;min-width:0;}
+  #settingsScreen .dtg-accordion {min-width:0;max-height:55dvh;overflow-y:auto;}
+  #dtgRandomSettings,#dtgLevelSettings {max-height:38dvh;overflow-y:auto;background:transparent;}
+  #setupScreen {height:100dvh;min-height:0;overflow:hidden;}
+  #setupCards {max-width:100%;overflow-x:auto;overflow-y:hidden;}
+}
+@media (min-width:760px) and (orientation:landscape) {
+  #settingsScreen .container {grid-template-columns:repeat(3,minmax(0,1fr));}
+  #dtgRandomSettings,#dtgLevelSettings {max-height:45dvh;}
+}
+@media (max-width:659px) and (orientation:portrait) {
+  #settingsScreen {min-height:100dvh;height:auto;overflow-y:visible;}
+  #settingsScreen .container {display:block;max-height:none;overflow:visible;}
+  #dtgRandomSettings,#dtgLevelSettings {max-height:48dvh;overflow-y:auto;background:transparent;}
+}
+
   </style>
 
 </head>
 
 <body>
 
+  <section id="modeScreen" class="screen active">
+    <div class="container">
+      <h1>GAME SETTINGS</h1>
+      <div class="setting-box">
+
+  <label for="modeChoice">GAME MODE</label>
+
+  <select id="modeChoice">
+
+    <option value="CPU" selected>CPU BATTLE</option>
+
+    <option value="VS">VS MODE (2 PLAYERS)</option>
+    <option value="ONLINE">ONLINE MODE</option>
+
+  </select>
+
+</div>
+      <button id="modeSettingsButton" class="main-button" type="button">SETTINGS</button>
+      <button id="modeTitleButton" class="secondary-button" type="button">TITLE</button>
+    </div>
+  </section>
+  <section id="onlineScreen" class="screen">
+    <div class="container online-container">
+      <div id="onlineContents"></div>
+      <div id="onlineMessage" role="status" aria-live="polite"></div>
+    </div>
+  </section>
+  <div id="onlineIndicator" hidden role="status" aria-live="polite"></div>
   <section
 
     id="settingsScreen"
 
-    class="screen active"
+    class="screen"
 
   >
 
     <div class="container">    
 
 <h1>DOA TARGET GUESS</h1>
+<div class="setting-box"><label for="gameMode">GAME MODE</label>
+<select id="gameMode"><option value="CPU" selected>CPU BATTLE</option>
+<option value="VS">VS MODE (2 PLAYERS)</option>
+<option value="ONLINE">ONLINE MODE</option></select></div>
 
-<div class="setting-box">
 
-  <label for="gameMode">GAME MODE</label>
-
-  <select id="gameMode">
-
-    <option value="CPU" selected>CPU BATTLE</option>
-
-    <option value="VS">VS MODE (2 PLAYERS)</option>
-
-  </select>
-
-</div>
 
       <div class="setting-box">
 
@@ -2040,7 +2099,7 @@ object-fit: contain;
 
       >
 
-        TITLE
+        BACK
 
       </button>
       
@@ -2390,6 +2449,7 @@ object-fit: contain;
 
       "../images/doa-dead.PNG";
 
+    const modeScreen = document.getElementById('modeScreen');
     const settingsScreen =
 
       document.getElementById(
@@ -2715,7 +2775,7 @@ const rollButton = document.getElementById("rollButton");
 
     function applyGameMode() {
       gameMode = gameModeSelect.value;
-      const vs = gameMode === "VS";
+      const vs = gameMode === "VS" || gameMode === "ONLINE";
       gameScreen.classList.toggle("vs-mode", vs);
       topPlayerLabel.textContent = vs ? "PLAYER 2" : "CPU";
       bottomPlayerLabel.textContent = vs ? "PLAYER 1" : "YOU";
@@ -2789,6 +2849,8 @@ heartMonitorSound.volume = 0.02;
 
       [
 
+        modeScreen,
+        document.getElementById('onlineScreen'),
         settingsScreen,
         handoffScreen,
         setupScreen,
@@ -5648,6 +5710,382 @@ function renderDtgPenalty(openedBonus, loser) {
 
 }
     
+
+/* DTG ONLINE ADDITION — existing CPU/VS gameplay remains unchanged. */
+(() => {
+  'use strict';
+  const byId = id => document.getElementById(id);
+  const ONLINE_API_URL = 'https://dtg-online.shiro-lab-base.workers.dev';
+  // Change the single URL above to your deployed Worker URL before publishing.
+  const API = ONLINE_API_URL.replace(/\/$/, '');
+  const identityKey = 'dtg-online-session-v3';
+  const nameKey = 'dtg-online-player-name';
+  const ms = 1000;
+  let identity = null, current = null, busy = false, timer = null;
+  let loading = false, disposed = false, pendingState = null, previous = null;
+  let lastBoard = '', lastGame = '', lastSetup = '', lastResult = '';
+  let animating = false, changedToOnline = false, reconnectMessage = false;
+  let pendingRequest = null;
+
+  const onlineScreen = byId('onlineScreen');
+  const onlineContents = byId('onlineContents');
+  const onlineMessage = byId('onlineMessage');
+  const onlineIndicator = byId('onlineIndicator');
+  const makeButton = (parent,id,label) => {
+    const b=document.createElement('button');b.id=id;b.textContent=label;
+    b.type='button';b.className='secondary-button online-only-control';b.hidden=true;
+    parent.appendChild(b);return b;
+  };
+  const onlineLeaveSetup=makeButton(setupScreen.querySelector('.container'),'onlineLeaveSetup','LEAVE ROOM');
+  const onlineKickSetup=makeButton(setupScreen.querySelector('.container'),'onlineKickSetup','KICK GUEST');
+  const onlineLeaveGame=makeButton(gameScreen,'onlineLeaveGame','LEAVE ROOM');
+  const onlineLeaveResult=makeButton(resultScreen.querySelector('.result-box'),'onlineLeaveResult','LEAVE ROOM');
+  const modeChoice=byId('modeChoice');
+  modeChoice.addEventListener('change',()=>{gameModeSelect.value=modeChoice.value;gameModeSelect.dispatchEvent(new Event('change',{bubbles:true}));});
+  const modeSettingsButton = byId('modeSettingsButton');
+  const modeTitleButton = byId('modeTitleButton');
+
+  const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  function say(message) { onlineMessage.textContent = String(message || ''); }
+  function showOnline(html) {
+    onlineContents.innerHTML = html;
+    delete onlineContents.dataset.signature;
+    say('');
+    showScreen(onlineScreen);
+    onlineIndicator.hidden = true;
+  }
+  function lockOfflineScreens(locked) { document.body.classList.toggle('dtg-online-connected', !!locked); }
+  function saveIdentity() { if(identity) sessionStorage.setItem(identityKey, JSON.stringify(identity)); }
+  function clearIdentity() { identity = null; sessionStorage.removeItem(identityKey); }
+  function dropTimers() { if(timer) clearInterval(timer); timer = null; }
+  function mySeat(s) { return s.seats[identity.role === 'host' ? 0 : 1]; }
+  function theirSeat(s) { return s.seats[identity.role === 'host' ? 1 : 0]; }
+  function myIndex() { return identity.role === 'host' ? 0 : 1; }
+  function isOnline() { return gameModeSelect.value === 'ONLINE'; }
+  function messageFor(error) {
+    const table={ROOM_NOT_FOUND:'部屋が見つかりません',ROOM_CLOSED:'部屋が解散しました',ROOM_UNAVAILABLE:'この部屋には参加できません',WRONG_PASSWORD:'パスワードが違います',UNAUTHORIZED:'部屋への参加権限がありません',CONNECTION_TIMEOUT:'復帰猶予120秒を過ぎたため終了しました',INVALID_SETTINGS:'設定を確認してください',INVALID_PASSWORD:'パスワードを確認してください',KICKED:'ホストにより退室されました',GUEST_LEFT:'ゲストが退出しました'};
+    return table[error] || String(error || '通信エラー');
+  }
+  async function api(op, data={}, method='POST') {
+    if(API.includes('REPLACE-WITH-YOUR-WORKER')) throw new Error('Cloudflare Worker のURLが未設定です');
+    const options={method,cache:'no-store',headers:{'content-type':'application/json'}};
+    if(method!=='GET')options.body=JSON.stringify(data);
+    const res=await fetch(API + '/api/' + op,options);
+    let body; try {body=await res.json();}catch {throw new Error('通信応答の形式が不正です');}
+    if(!res.ok) throw new Error(messageFor(body.error));
+    return body;
+  }
+  async function action(op, more={}) {
+    if(!identity || busy) return;
+    busy=true;
+    try {
+      const result=await api(op,{roomId:identity.roomId,token:identity.token,...more});
+      if(result.state) await receive(result.state);
+    } catch(e) {
+      say(e.message); onlineIndicator.textContent=e.message;
+    } finally {busy=false;}
+  }
+  function beginPolling() {
+    dropTimers();
+    timer=setInterval(()=>{if(identity&&!busy&&!animating&&!loading)refresh();},ms);
+  }
+  async function refresh() {
+    if(!identity||loading) return;
+    loading=true;
+    try {
+      const r=await api('state',{roomId:identity.roomId,token:identity.token});
+      reconnectMessage=false;
+      await receive(r.state);
+    }catch(e) {
+      if(/解散|権限|見つかり|120秒|退室/.test(e.message)){exitLocal(e.message);return;}
+      reconnectMessage=true;
+      onlineIndicator.textContent='通信再接続中 — 120秒以内に復帰してください';
+      onlineIndicator.hidden=false;
+    }finally{loading=false;}
+  }
+  function cleanEffects() {
+    try{stopDangerAudio();stopEcgCanvas();resetDeadEffect();stopBgm();}catch(e){console.warn('DTG effects cleanup',e);}
+    dangerMode=false;gameOver=false;rolling=false;
+    dangerOverlay.classList.remove('active');ecgLayer.classList.remove('active');
+  }
+  function exitLocal(reason) {
+    dropTimers();clearIdentity();current=null;previous=null;
+    lastBoard='';lastGame='';lastSetup='';lastResult='';animating=false;
+    lockOfflineScreens(false);cleanEffects();
+    [onlineLeaveSetup,onlineKickSetup,onlineLeaveGame,onlineLeaveResult].forEach(b=>b.hidden=true);
+    gameModeSelect.value='ONLINE';modeChoice.value='ONLINE';applyGameMode();
+    showScreen(modeScreen);
+    onlineIndicator.hidden=true;
+    if(reason)window.alert(reason);
+  }
+  async function leave() {
+    const copy=identity;
+    if(copy) {try{await api('leave',{roomId:copy.roomId,token:copy.token});}catch(e){console.warn(e);}}
+    exitLocal();
+  }
+  function getName(){ return (byId('onlinePlayerName')?.value||'').trim().slice(0,20); }
+  function saveName(n){localStorage.setItem(nameKey,n);}
+  function entryMenu(){
+    showOnline(`<h2>ONLINE ROOM</h2><button id="onlineCreateMenu" class="main-button">CREATE ROOM</button><button id="onlineJoinMenu" class="secondary-button">JOIN ROOM</button><button id="onlineMenuBack" class="secondary-button">BACK</button>`);
+    byId('onlineCreateMenu').onclick=createMenu;
+    byId('onlineJoinMenu').onclick=joinMenu;
+    byId('onlineMenuBack').onclick=()=>{showScreen(settingsScreen);startBgm();};
+  }
+  function settingsSnapshot() {
+    return {alive:Number(aliveCountSelect.value),rolls:Number(diceModeSelect.value),deadPenalty:Number(byId('deadPenalty').value),openedPenalty:Number(byId('openedPenalty').value),penalty:dtgPenaltySnapshot()};
+  }
+  function validateSnapshot(r) {
+    const p=r.penalty;
+    if(p.mode==='RANDOM'&&!p.random.some(Boolean))return 'RANDOM PENALTYを1種類以上入力してください';
+    if(p.mode==='LEVEL') {
+      const maxCount=r.alive+1;
+      const maxLevel=dtgPenaltyRanges.findIndex(([a,b])=>maxCount<=b)+1;
+      for(let i=0;i<maxLevel;i++)if(!p.level.slice(i*3,i*3+3).some(Boolean))return `LEVEL ${i+1}の罰ゲームを入力してください`;
+    }
+    return '';
+  }
+  function createMenu() {
+    showOnline(`<h2>CREATE ROOM</h2><label>PLAYER NAME（任意）</label><input id="onlinePlayerName" maxlength="20" autocomplete="nickname" placeholder="HOST"><label>ROOM PASSWORD（任意）</label><input id="onlinePassword" maxlength="64" type="text" autocomplete="off"><p class="online-small">ALIVE / DICE / PENALTYは現在のSETTINGSで指定した値を使用します</p><button id="onlineCreate" class="main-button">CREATE</button><button id="onlineBack" class="secondary-button">BACK</button>`);
+    byId('onlinePlayerName').value=localStorage.getItem(nameKey)||'';
+    byId('onlineBack').onclick=entryMenu;
+    byId('onlineCreate').onclick=async()=>{
+      const rules=settingsSnapshot(),problem=validateSnapshot(rules);
+      if(problem){say(problem);return;}
+      const playerName=getName()||'HOST', password=byId('onlinePassword').value;
+      const button=byId('onlineCreate');button.disabled=true;
+      try{
+        const r=await api('create',{name:playerName,password,rules});
+        identity={roomId:r.roomId,token:r.token,role:'host'};saveName(playerName);saveIdentity();beginPolling();await receive(r.state);
+      }catch(e){say(e.message);button.disabled=false;}
+    };
+  }
+  async function joinMenu() {
+    showOnline(`<h2>JOIN ROOM</h2><label>PLAYER NAME（任意）</label><input id="onlinePlayerName" maxlength="20" autocomplete="nickname" placeholder="GUEST"><label>ROOM ID</label><input id="onlineRoomId" maxlength="6" autocapitalize="characters" placeholder="選択または入力"><label>ROOM PASSWORD（必要な部屋のみ）</label><input id="onlinePassword" maxlength="64" type="text" autocomplete="off"><button id="onlineJoin" class="main-button">JOIN</button><h3>OPEN ROOMS</h3><div id="onlineRooms"></div><button id="onlineRefresh" class="secondary-button">REFRESH</button><button id="onlineBack" class="secondary-button">BACK</button>`);
+    byId('onlinePlayerName').value=localStorage.getItem(nameKey)||'';
+    byId('onlineBack').onclick=entryMenu;
+    byId('onlineRefresh').onclick=fetchRooms;
+    byId('onlineJoin').onclick=async()=>{
+      const name=getName()||'GUEST',roomId=byId('onlineRoomId').value.trim().toUpperCase(),password=byId('onlinePassword').value;
+      if(!/^[A-HJ-NP-Z2-9]{6}$/.test(roomId)){say('部屋を選択してください');return;}
+      const button=byId('onlineJoin');button.disabled=true;
+      try{
+        const r=await api('join',{name,roomId,password});
+        identity={roomId:r.roomId,token:r.token,role:'guest'};saveName(name);saveIdentity();beginPolling();await receive(r.state);
+      }catch(e){say(e.message);button.disabled=false;}
+    };
+    await fetchRooms();
+  }
+  async function fetchRooms() {
+    const box=byId('onlineRooms');if(!box)return;
+    try{
+      const data=await api('rooms',{},'GET');box.replaceChildren();
+      if(!data.rooms.length){box.textContent='募集中の部屋はありません';return;}
+      data.rooms.forEach(r=>{
+        const b=document.createElement('button');b.className='online-room-item secondary-button';
+        b.textContent=`${r.roomId} / ${r.hostName} ${r.locked?'🔒':''}`;
+        b.onclick=()=>{byId('onlineRoomId').value=r.roomId;};box.append(b);
+      });
+    }catch(e){box.textContent=e.message;}
+  }
+  function lobby(s) {
+    const host=identity.role==='host';
+    const guest=s.guestPresent ? s.seats[1].name : 'WAITING...';
+    const signature=`${s.phase}:${s.guestPresent}:${s.seats.map(x=>x.name).join(',')}:${host}`;
+    if(onlineContents.dataset.signature===signature&&onlineScreen.classList.contains('active'))return;
+    if(s.phase==='guest_left'){
+      if(host) {
+        showOnline('<h2>GUEST LEFT</h2><p>ゲストが退出しました</p><button id="onlineHostBack" class="main-button">BACK</button>');
+        byId('onlineHostBack').onclick=leave;
+      }else exitLocal('部屋から退出しました');
+      return;
+    }
+    showOnline(`<h2>ROOM ${escapeHtml(s.roomId)}</h2><p>HOST: ${escapeHtml(s.seats[0].name)}</p><p>GUEST: ${escapeHtml(guest)}</p><p class="online-small">DEADの配置を確定するとREADYになります</p>${host?'<button id="onlineStart" class="main-button">START DEAD SET</button><button id="onlineKick" class="secondary-button">KICK GUEST</button>':'<p>ホストの開始を待っています</p>'}<button id="onlineLeave" class="secondary-button">LEAVE ROOM</button>`);
+    onlineContents.dataset.signature=signature;
+    if(host){byId('onlineStart').disabled=!s.guestPresent;byId('onlineStart').onclick=()=>action('start');byId('onlineKick').hidden=!s.guestPresent;byId('onlineKick').onclick=()=>action('kick');}
+    byId('onlineLeave').onclick=leave;
+  }
+  function setup(s) {
+    const own=mySeat(s),opp=theirSeat(s);
+    const key=`${s.roomId}:${s.match}`;
+    if(lastSetup!==key){
+      cleanEffects();aliveCount=s.rules.alive;totalCards=aliveCount+1;diceRollCount=s.rules.rolls;
+      setupTitle.textContent='SET YOUR DEAD';buildSetupCards();lastSetup=key;lastGame='';lastBoard='';lastResult='';
+    }
+    showScreen(setupScreen);lockOfflineScreens(true);
+    confirmSetupButton.disabled=own.ready;
+    confirmSetupButton.textContent=own.ready?'READY ✓':'SET / READY';
+    onlineKickSetup.hidden=identity.role!=='host'||!s.guestPresent||opp.ready;
+    onlineLeaveSetup.hidden=false;onlineLeaveGame.hidden=true;onlineLeaveResult.hidden=true;
+    onlineIndicator.hidden=false;
+    onlineIndicator.textContent=own.ready ? (opp.ready?'STARTING...':'READY — WAIT FOR OPPONENT') : `ROOM ${s.roomId} — SET YOUR DEAD`;
+  }
+  function syncModel(s){
+    aliveCount=s.rules.alive;totalCards=aliveCount+1;diceRollCount=s.rules.rolls;
+    const mine=mySeat(s),opp=theirSeat(s),idx=myIndex();
+    const from=(p,own)=>Array.from({length:totalCards},(_,i)=>{
+      const revealed=p.opened.find(x=>x.index===i);
+      return {type:revealed?.type||(own&&p.deadIndex===i?'DEAD':'ALIVE'),opened:!!revealed};
+    });
+    playerDeck=from(mine,true);cpuDeck=from(opp,false);
+    blindMode=!!mine.blind;
+    playerOpenedCount=mine.opened.length;cpuOpenedCount=opp.opened.length;
+    playerRoll=s.totals[idx];cpuRoll=s.totals[1-idx];
+  }
+  function board(s,force=false) {
+    syncModel(s);
+    const mine=mySeat(s),opp=theirSeat(s),idx=myIndex();
+    const key=JSON.stringify([s.match,s.seats.map(p=>p.opened),mine.deadIndex,mine.blind]);
+    if(force||key!==lastBoard){
+      renderGameCards();lastBoard=key;
+    }
+    topPlayerLabel.textContent=opp.name||'OPPONENT';bottomPlayerLabel.textContent=mine.name||'YOU';
+    leftRollLabel.textContent='YOU';rightRollLabel.textContent='OPPONENT';
+    playerRollDisplay.textContent=s.rollsDone[idx]?String(s.totals[idx]):'-';
+    cpuRollDisplay.textContent=s.rollsDone[1-idx]?String(s.totals[1-idx]):'-';
+    const active=s.phase==='game',myTurn=s.turn===identity.role;
+    p1RollButton.disabled=!active||s.turn!==null||s.rollsDone[idx]>=s.rules.rolls||busy||animating;
+    p2RollButton.disabled=true;
+    rollButton.disabled=true;
+    const prompt=!active?'MATCH ENDED':s.turn===null?(s.rollsDone[idx]<s.rules.rolls?'ROLL THE DICE':'WAIT FOR OPPONENT ROLL'):(myTurn?'CHOOSE OPPONENT CARD':'OPPONENT CHOOSES');
+    status.textContent=prompt;
+    cpuCards.querySelectorAll('.game-card').forEach(card=>{
+      const index=Number(card.dataset.index),chosen=cpuDeck[index];
+      const selectable=active&&myTurn&&!chosen.opened&&!busy&&!animating;
+      card.classList.toggle('selectable',selectable);
+      card.disabled=!selectable;
+    });
+    if(active){
+      const danger=mine.opened.length===s.rules.alive && !mine.opened.some(x=>x.type==='DEAD');
+      if(danger&&!dangerMode)startDangerMode();
+      if(!danger&&dangerMode)stopDangerMode();
+    }
+    onlineIndicator.hidden=false;
+    onlineIndicator.textContent=`${s.roomId} / ${identity.role.toUpperCase()} / ROUND ${s.round}`;
+    onlineLeaveGame.hidden=false;onlineLeaveSetup.hidden=true;onlineKickSetup.hidden=true;onlineLeaveResult.hidden=true;
+  }
+  function beginGame(s,force=false){
+    const key=s.roomId+':'+s.match;
+    if(lastGame!==key){
+      lastGame=key;lastBoard='';gameOver=false;rolling=false;dangerMode=false;
+      stopDangerAudio();stopEcgCanvas();resetDeadEffect();dangerOverlay.classList.remove('active');ecgLayer.classList.remove('active');
+      renderDiceFace(1);startBgm();
+    }
+    showScreen(gameScreen);lockOfflineScreens(true);board(s,force);
+  }
+  function showResult(s){
+    const key=s.roomId+':'+s.match;
+    if(lastResult!==key){stopBgm();lastResult=key;}
+    const win=s.winner===identity.role,r=s.result,pen=s.rules.penalty;
+    resultTitle.textContent=win?'YOU WIN':'YOU LOSE';
+    resultTitle.style.color=win?'#fff':'#d00000';
+    resultScreen.classList.remove('p2-lose');
+    if(pen.mode==='RANDOM'){
+      resultPenalty.textContent='RANDOM PENALTY';
+      resultDetail.textContent=`TOTAL：${r.penalties.length}\n${r.penalties.map((x,i)=>`${i+1}. ${x}`).join('\n')}\nLOSER：${r.loserName}`;
+    } else if(pen.mode==='LEVEL'){
+      resultPenalty.textContent=`LEVEL ${r.level}（${1+r.openedBonus}）`;
+      resultDetail.textContent=`${r.penalties[0]||''}\nLOSER：${r.loserName}`;
+    }else {
+      resultPenalty.textContent=pen.mode==='IKKI'?`${r.shots} IKKI`:`${r.shots} SHOT${r.shots===1?'':'S'}`;
+      resultDetail.textContent=`DEAD：${s.rules.deadPenalty}\nOPENED：${r.openedBonus} × ${s.rules.openedPenalty}\nLOSER：${r.loserName}`;
+    }
+    resultDetail.style.whiteSpace='pre-line';
+    retryButton.disabled=identity.role!=='host';
+    retryButton.textContent=identity.role==='host'?'PLAY AGAIN':'WAIT FOR HOST';
+    onlineLeaveResult.hidden=false;onlineLeaveGame.hidden=true;onlineLeaveSetup.hidden=true;onlineKickSetup.hidden=true;
+    onlineIndicator.hidden=false;onlineIndicator.textContent=`ROOM ${s.roomId} / RESULT`;
+    showScreen(resultScreen);
+  }
+  async function receive(s){
+    if(!identity||s.roomId!==identity.roomId)return;
+    if(current&&s.match===current.match&&s.rev<current.rev)return;
+    if(animating){pendingState=s;return;}
+    const before=current;current=s;
+    if(s.phase==='closed'){exitLocal('ホストが部屋を解散しました');return;}
+    if(s.phase==='timeout'){exitLocal('通信切断から120秒が経過したため、設定に戻ります');return;}
+    if(s.phase==='lobby'||s.phase==='guest_left'){lobby(s);return;}
+    if(s.phase==='setup'){setup(s);return;}
+    if(s.phase==='game'||s.phase==='result'){
+      const sameMatch=before && before.match===s.match;
+      if(sameMatch&&before.phase==='game'&&s.lastRoll?.seq!==before.lastRoll?.seq&&s.lastRoll?.seq){
+        animating=true;try{await animateDice(s.lastRoll.value);}finally{animating=false;}
+      }
+      if(sameMatch&&before.phase==='game'){
+        const newOpen=[];
+        s.seats.forEach((p,i)=>p.opened.forEach(card=>{
+          if(!before.seats[i].opened.some(x=>x.index===card.index))newOpen.push({...card,owner:i});
+        }));
+        if(newOpen.length===1){
+          const ev=newOpen[0];
+          if(ev.type==='DEAD'&&s.phase==='result'){
+            animating=true;
+            try{
+              beginGame(s,true);
+              const own=ev.owner===myIndex();
+              const target=(own?playerCards:cpuCards).querySelector(`.game-card[data-index="${ev.index}"]`);
+              if(target)await startDeadEffect(target,s.winner===identity.role?'PLAYER':'CPU');
+            }catch(e){console.error('DEAD animation',e);}finally{animating=false;}
+          }else playSound(cardSound);
+        }
+      }
+      if(s.phase==='result'){showResult(s);}
+      else beginGame(s);
+    }
+    const pending=pendingState;pendingState=null;
+    if(pending&&pending.rev>s.rev)await receive(pending);
+  }
+
+  // Original CPU/VS handlers remain installed. Online mode intercepts only its own actions.
+  function intercept(button,fn){button.addEventListener('click',event=>{
+    if(!identity||!isOnline())return;
+    event.preventDefault();event.stopImmediatePropagation();fn();
+  },true);}
+  gameModeSelect.addEventListener('change',()=>{
+    if(identity)return;
+    applyGameMode();
+    setupStartButton.textContent=isOnline()?'ONLINE ROOM':'SET DEAD';
+  });
+  modeSettingsButton.onclick=()=>{applyGameMode();showScreen(settingsScreen);startBgm();};
+  modeTitleButton.onclick=()=>{stopBgm();window.location.href='../';};
+  // Override original TITLE navigation only in detailed settings, returning to mode selector.
+  byId('backTitleButton').addEventListener('click',e=>{e.preventDefault();e.stopImmediatePropagation();stopBgm();showScreen(modeScreen);},true);
+  // Online room opens from existing 'SET DEAD' (CPU/VS remains unchanged).
+  setupStartButton.addEventListener('click',e=>{
+    if(!isOnline())return;
+    e.preventDefault();e.stopImmediatePropagation();
+    if(identity){beginPolling();refresh();}else{stopBgm();entryMenu();}
+  },true);
+  intercept(confirmSetupButton,()=>action('set',{dead:selectedDeadIndex,blind:blindMode}));
+  intercept(setupBackButton,leave);
+  intercept(retryButton,()=>{if(identity.role==='host')action('again');});
+  intercept(settingsButton,leave);
+  // Roll buttons are selected based on local/remote player's perspective, not host position.
+  p1RollButton.addEventListener('click',e=>{if(!identity||!isOnline())return;e.preventDefault();e.stopImmediatePropagation();action('roll');},true);
+  p2RollButton.addEventListener('click',e=>{if(!identity||!isOnline())return;e.preventDefault();e.stopImmediatePropagation();},true);
+  rollButton.addEventListener('click',e=>{if(!identity||!isOnline())return;e.preventDefault();e.stopImmediatePropagation();},true);
+  cpuCards.addEventListener('click',e=>{
+    if(!identity||!isOnline()||busy||animating||current?.phase!=='game'||current.turn!==identity.role)return;
+    const element=e.target.closest('.game-card');
+    if(!element||!cpuCards.contains(element)||element.disabled)return;
+    const index=Number(element.dataset.index);
+    if(!Number.isInteger(index))return;
+    action('open',{index});
+  },true);
+  [onlineLeaveSetup,onlineLeaveGame,onlineLeaveResult].forEach(b=>{b.onclick=leave;});
+  onlineKickSetup.onclick=()=>action('kick');
+  // Reset online UI when returning to CPU/VS; no extra listeners on existing game cards.
+  window.addEventListener('pagehide',dropTimers);
+  try {
+    const saved=JSON.parse(sessionStorage.getItem(identityKey)||'null');
+    if(saved&&/^[A-HJ-NP-Z2-9]{6}$/.test(saved.roomId)&&typeof saved.token==='string'&&['host','guest'].includes(saved.role)){
+      identity=saved;gameModeSelect.value='ONLINE';modeChoice.value='ONLINE';applyGameMode();lockOfflineScreens(true);
+      beginPolling();refresh();
+    }
+  }catch(e){sessionStorage.removeItem(identityKey);}
+  if(!identity)showScreen(modeScreen);
+})();
+;
+
   </script>
   
 <script src="../assets/dtg-settings-common.js"></script>
