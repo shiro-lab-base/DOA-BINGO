@@ -2101,6 +2101,32 @@ body.dtg-online-connected #setupBackButton {display:none;}
 #hostSubmissionModal #dtgRandomSettings,#hostSubmissionModal #dtgLevelSettings {max-height:none;overflow:visible;}
 #hostSubmissionModal #dtgRandomInputs input,#hostSubmissionModal #dtgLevelInputs input {background:transparent!important;color:#f0dfbf!important;border:0!important;border-radius:0!important;}
 #hostSubmissionModal #hostModalClose {display:block;width:100%;padding:12px;margin-top:16px;border:0;background:transparent;color:#f0dfbf;font:700 17px Georgia,serif;}
+
+/* V20: online result report only */
+body.dtg-online-connected #resultScreen {
+  --report-width:min(100vw,56.25dvh);
+  position:relative; padding:0; height:100dvh; min-height:0; overflow:hidden;
+  background:#1c120b url('../images/doa-result.PNG') center / var(--report-width) auto no-repeat;
+}
+body.dtg-online-connected #resultScreen .result-box {
+  position:absolute; box-sizing:border-box; max-width:none;
+  left:calc(50% - var(--report-width)*.35);
+  top:calc(50% - var(--report-width)*.25);
+  width:calc(var(--report-width)*.59); height:calc(var(--report-width)*.76);
+  transform-origin:top left; transform:skewY(-5.5deg) skewX(8deg);
+  padding:0; border:0; border-radius:0; background:none; box-shadow:none;
+  color:#392518; font-family:Georgia,serif; text-align:center;
+  display:flex; flex-direction:column; justify-content:center; align-items:stretch;
+  --report-unit:calc(var(--report-width)*.035); gap:calc(var(--report-unit)*.5);
+}
+body.dtg-online-connected #resultScreen .result-box > * {flex:none; min-width:0; max-width:100%; overflow-wrap:anywhere;}
+body.dtg-online-connected #resultScreen #resultTitle {font-size:calc(var(--report-unit)*1.95);line-height:1.12;margin:0;letter-spacing:.03em;}
+body.dtg-online-connected #resultScreen #resultTitle[style*="255"] {color:#392518!important;}
+body.dtg-online-connected #resultScreen #resultPenalty {font-size:calc(var(--report-unit)*1.65);line-height:1.12;margin:0;}
+body.dtg-online-connected #resultScreen #resultDetail {font-size:var(--report-unit);line-height:1.2;margin:0;color:#392518;white-space:pre-line;}
+body.dtg-online-connected #resultScreen .result-box button {width:100%;min-height:0;margin:0;padding:calc(var(--report-unit)*.25) 0;border:0;border-radius:0;background:none;color:#392518;box-shadow:none;font-size:calc(var(--report-unit)*1.15);line-height:1.15;}
+body.dtg-online-connected #resultScreen .result-box button:disabled {opacity:.48;cursor:default;}
+body.dtg-online-connected:has(#resultScreen.active) #onlineIndicator {background:none;border:0;box-shadow:none;color:#f0dfbf;}
   </style>
 
 </head>
@@ -6569,6 +6595,45 @@ function renderDtgPenalty(openedBonus, loser) {
 </script>
 
   
+
+<script>
+/* V20: fit online result text to the report paper without changing its contents. */
+(() => {
+  const screen=document.getElementById('resultScreen');
+  const sheet=screen.querySelector('.result-box');
+  let frame=0;
+  function fit(){
+    frame=0;
+    if(!screen.classList.contains('active')||!document.body.classList.contains('dtg-online-connected')){
+      sheet.style.removeProperty('--report-unit');return;
+    }
+    sheet.style.removeProperty('--report-unit');
+    const start=parseFloat(getComputedStyle(sheet).width)/.59*.035;
+    if(!start)return;
+    const items=Array.from(sheet.children).filter(el=>getComputedStyle(el).display!=='none');
+    const fits=()=>{
+      const gap=parseFloat(getComputedStyle(sheet).rowGap)||0;
+      return items.reduce((sum,el)=>sum+el.offsetHeight,0)+gap*Math.max(0,items.length-1)<=sheet.clientHeight-2
+        && items.every(el=>el.scrollWidth<=el.clientWidth+1);
+    };
+    let low=0,high=start;
+    sheet.style.setProperty('--report-unit',start+'px');
+    if(fits())return;
+    for(let i=0;i<16;i++){
+      const middle=(low+high)/2;
+      sheet.style.setProperty('--report-unit',middle+'px');
+      if(fits())low=middle;else high=middle;
+    }
+    sheet.style.setProperty('--report-unit',low+'px');
+  }
+  function schedule(){if(!frame)frame=requestAnimationFrame(fit);}
+  new MutationObserver(schedule).observe(screen,{attributes:true,attributeFilter:['class']});
+  new MutationObserver(schedule).observe(document.body,{attributes:true,attributeFilter:['class']});
+  new MutationObserver(schedule).observe(sheet,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['hidden','disabled']});
+  new ResizeObserver(schedule).observe(sheet);
+  window.addEventListener('resize',schedule);schedule();
+})();
+</script>
 </body>
 
 </html>
