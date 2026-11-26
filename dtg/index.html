@@ -2103,6 +2103,21 @@ body.dtg-online-connected #setupBackButton {display:none;}
 #hostSubmissionModal #dtgRandomInputs input,#hostSubmissionModal #dtgLevelInputs input {background:transparent!important;color:#f0dfbf!important;border:0!important;border-radius:0!important;}
 #hostSubmissionModal #hostModalClose {display:block;width:100%;padding:12px;margin-top:16px;border:0;background:transparent;color:#f0dfbf;font:700 17px Georgia,serif;}
 
+/* V24: online entry cards only */
+#onlineScreen:has(#onlineEntryCards) {padding:0;height:100dvh;min-height:0;justify-content:center;overflow:hidden;background:#1c120b;}
+#onlineScreen:has(#onlineEntryCards) .online-container {width:min(100%,56.25dvh);max-width:none;margin:auto;}
+#onlineContents:has(#onlineEntryCards) {padding:0;border:0;border-radius:0;background:none;box-shadow:none;}
+#onlineScreen:has(#onlineEntryCards) #onlineMessage:empty {display:none;}
+#onlineEntryCards {position:relative;width:100%;aspect-ratio:9/16;overflow:hidden;background:url('../images/doa-vs-back.PNG') center/cover no-repeat;container-type:inline-size;}
+#onlineEntryCards button {position:absolute;left:var(--x);top:var(--y);width:45%;aspect-ratio:1270/1800;transform:translate(-50%,-50%) rotate(var(--angle));padding:0;margin:0;border:0;border-radius:0;background:url('../images/dtg-mainroom.PNG') center/contain no-repeat;box-shadow:none;display:grid;place-items:center;color:#d3b77c;font:700 5.2cqw Georgia,serif;text-shadow:0 1px 2px #201308;line-height:1.15;opacity:0;pointer-events:none;}
+#onlineEntryCards button span {width:80%;text-align:center;}
+#onlineEntryCards button.dealt {opacity:1;pointer-events:auto;animation:entryCardDeal .26s ease-out both;}
+#onlineEntryCards button:focus-visible {outline:2px solid #d3b77c;outline-offset:3px;}
+#onlineEntryCards #onlineCreateMenu {--x:37%;--y:30%;--angle:38deg;z-index:3;}
+#onlineEntryCards #onlineJoinMenu {--x:72%;--y:51%;--angle:-10deg;z-index:2;}
+#onlineEntryCards #onlineMenuBack {--x:49%;--y:77%;--angle:43deg;z-index:1;}
+@keyframes entryCardDeal {from {opacity:0;transform:translate(-50%,-160%) rotate(calc(var(--angle) - 22deg));}to {opacity:1;transform:translate(-50%,-50%) rotate(var(--angle));}}
+
 /* V20: online result report only */
 body.dtg-online-connected #resultScreen {
   --report-width:min(100vw,56.25dvh);
@@ -6066,10 +6081,29 @@ function renderDtgPenalty(openedBonus, loser) {
     settingsScreen.classList.remove('online-host-settings');
     byId('onlineHostFields').hidden=true;
     setupStartButton.textContent='ONLINE ROOM';
-    showOnline(`<div class="board-stack"><div class="board-paper board-hero"><div class="paper-kicker">UNDERGROUND MATCH NETWORK</div><h2 class="board-title">ROOM BOARD</h2><p class="board-subtitle">SELECT HOW YOU ENTER THE TABLE</p><p class="paper-text">Create a room as host, or browse the board and join an open table as guest.</p></div><div class="board-actions"><button id="onlineCreateMenu" class="main-button">CREATE ROOM</button><button id="onlineJoinMenu" class="secondary-button">JOIN ROOM</button><button id="onlineMenuBack" class="secondary-button">BACK</button></div></div>`);
-    byId('onlineCreateMenu').onclick=createMenu;
-    byId('onlineJoinMenu').onclick=joinMenu;
-    byId('onlineMenuBack').onclick=()=>{showScreen(modeScreen);if(bgm.paused)startBgm();};
+    showOnline(`<div id="onlineEntryCards"><button id="onlineCreateMenu" type="button" disabled><span>CREATE<br>ROOM</span></button><button id="onlineJoinMenu" type="button" disabled><span>JOIN<br>ROOM</span></button><button id="onlineMenuBack" type="button" disabled><span>BACK</span></button></div>`);
+    const board=byId('onlineEntryCards');
+    const cards=[byId('onlineCreateMenu'),byId('onlineJoinMenu'),byId('onlineMenuBack')];
+    const placement=new Audio('../audio/doa-card-placement.wav');
+    placement.preload='auto';
+    const active=()=>board.isConnected&&onlineScreen.classList.contains('active');
+    let selected=false;
+    function deal(i){
+      if(!active()||selected)return;
+      cards[i].classList.add('dealt');
+      playSound(placement);
+      if(i+1<cards.length)setTimeout(()=>deal(i+1),280);
+      else cards.forEach(card=>card.disabled=false);
+    }
+    const choose=next=>()=>{
+      if(selected||!active())return;
+      selected=true;cards.forEach(card=>card.disabled=true);
+      playSound(cardSound);next();
+    };
+    cards[0].onclick=choose(createMenu);
+    cards[1].onclick=choose(joinMenu);
+    cards[2].onclick=choose(()=>{showScreen(modeScreen);if(bgm.paused)startBgm();});
+    deal(0);
   }
   function settingsSnapshot() {
     return {alive:Number(aliveCountSelect.value),rolls:Number(diceModeSelect.value),deadPenalty:Number(byId('deadPenalty').value),openedPenalty:Number(byId('openedPenalty').value),penalty:dtgPenaltySnapshot()};
