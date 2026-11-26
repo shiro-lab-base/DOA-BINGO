@@ -4802,6 +4802,82 @@ function pulseEcg(strong) {
 
 }
 
+// ONLINE only: reuse a gesture-unlocked audio context for asynchronous cues.
+const onlineCueAudio = (() => {
+  const AudioCtx = window.AudioContext || window.webkitAudioContext;
+  const assets = {
+    heartbeat: heartbeatSound,
+    placement: new Audio('../audio/doa-card-placement.wav')
+  };
+  assets.placement.preload = 'auto';
+  let ctx = null, heart = null, heartRequest = 0, wantsHeart = false;
+  const buffers = {}, loads = {};
+  try { if (AudioCtx) ctx = new AudioCtx(); } catch (e) { console.warn('DTG audio context', e); }
+  if (ctx) Object.keys(assets).forEach(key => {
+    loads[key] = fetch(assets[key].src).then(r => {
+      if (!r.ok) throw new Error('Audio HTTP ' + r.status);
+      return r.arrayBuffer();
+    }).then(bytes => new Promise((resolve, reject) => {
+      ctx.decodeAudioData(bytes, resolve, reject);
+    })).then(buffer => buffers[key] = buffer).catch(e => {
+      console.warn('DTG audio preload', key, e); return null;
+    });
+  });
+  function source(key, loop) {
+    if (!ctx || ctx.state !== 'running' || !buffers[key]) return null;
+    const node = ctx.createBufferSource();
+    node.buffer = buffers[key]; node.loop = loop;
+    node.connect(ctx.destination);
+    node.onended = () => node.disconnect();
+    const at = ctx.currentTime;
+    node.start();
+    return { node, at, duration: node.buffer.duration };
+  }
+  function nativeHeart() {
+    if (!wantsHeart || heart || !heartbeatSound.paused) return;
+    heartbeatSound.play().catch(e => console.warn('DTG heartbeat playback', e));
+  }
+  function tryHeart() {
+    if (!wantsHeart || heart) return;
+    if (!heartbeatSound.paused) return;
+    try { heart = source('heartbeat', true); } catch (e) { console.warn('DTG heartbeat source', e); }
+    if (!heart && (!ctx || !loads.heartbeat || ctx.state !== 'running')) nativeHeart();
+  }
+  function unlock(e) {
+    if (!e.isTrusted || (gameModeSelect.value !== 'ONLINE' && !e.target.closest?.('[data-mode="ONLINE"]'))) return;
+    if (ctx && ctx.state !== 'running') {
+      ctx.resume().then(tryHeart).catch(e => console.warn('DTG audio resume', e));
+    }
+    if (wantsHeart && (!ctx || !buffers.heartbeat)) nativeHeart();
+  }
+  document.addEventListener('click', unlock, true);
+  document.addEventListener('touchend', unlock, true);
+  return {
+    startHeart() {
+      wantsHeart = true;
+      const request = ++heartRequest;
+      tryHeart();
+      if (!heart && loads.heartbeat) loads.heartbeat.then(() => {
+        if (!wantsHeart || request !== heartRequest) return;
+        tryHeart();
+        if (!heart) nativeHeart();
+      });
+      else if (!heart) nativeHeart();
+    },
+    stopHeart() {
+      wantsHeart = false; ++heartRequest;
+      if (heart) { try { heart.node.stop(); } catch (_) {} heart = null; }
+    },
+    clock() {
+      return heart && ctx ? { time: (ctx.currentTime - heart.at) % heart.duration, duration: heart.duration } : null;
+    },
+    placement() {
+      try { if (source('placement', false)) return; } catch (e) { console.warn('DTG placement source', e); }
+      playSound(assets.placement);
+    }
+  };
+})();
+
 let guestEcgFallback = false;
 let guestEcgClockAt = 0;
 let guestEcgAudioTime = 0;
@@ -4814,14 +4890,15 @@ function syncHeartbeat() {
 
   }
 
-  let time = heartbeatSound.currentTime;
+  const onlineClock = guestEcgFallback ? onlineCueAudio.clock() : null;
+  let time = onlineClock ? onlineClock.time : heartbeatSound.currentTime;
   if (guestEcgFallback) {
     const now = performance.now();
     if (time !== guestEcgAudioTime) {
       guestEcgAudioTime = time;
       guestEcgClockAt = now;
     } else {
-      const duration = heartbeatSound.duration;
+      const duration = onlineClock ? onlineClock.duration : heartbeatSound.duration;
       const cycle = Number.isFinite(duration) && duration > 16.27 ? duration : 17.2;
       time = (guestEcgAudioTime + Math.max(0, now - guestEcgClockAt) / 1000) % cycle;
     }
@@ -4876,12 +4953,11 @@ function startDangerAudio(guestFallback = false) {
 
   heartbeatSound.currentTime = 0;
 
-  const promise = heartbeatSound.play();
-
-  if (promise && typeof promise.catch === "function") {
-
-    promise.catch(() => {});
-
+  if (guestFallback) {
+    onlineCueAudio.startHeart();
+  } else {
+    const promise = heartbeatSound.play();
+    if (promise && typeof promise.catch === "function") promise.catch(() => {});
   }
 
   heartbeatFrame =
@@ -4916,6 +4992,7 @@ function stopDangerAudio() {
 
   ecgPulseTimer = null;
 
+  onlineCueAudio.stopHeart();
   heartbeatSound.pause();
 
   heartMonitorSound.pause();
@@ -6084,14 +6161,12 @@ function renderDtgPenalty(openedBonus, loser) {
     showOnline(`<div id="onlineEntryCards"><button id="onlineCreateMenu" type="button" disabled><span>CREATE<br>ROOM</span></button><button id="onlineJoinMenu" type="button" disabled><span>JOIN<br>ROOM</span></button><button id="onlineMenuBack" type="button" disabled><span>BACK</span></button></div>`);
     const board=byId('onlineEntryCards');
     const cards=[byId('onlineCreateMenu'),byId('onlineJoinMenu'),byId('onlineMenuBack')];
-    const placement=new Audio('../audio/doa-card-placement.wav');
-    placement.preload='auto';
     const active=()=>board.isConnected&&onlineScreen.classList.contains('active');
     let selected=false;
     function deal(i){
       if(!active()||selected)return;
       cards[i].classList.add('dealt');
-      playSound(placement);
+      onlineCueAudio.placement();
       if(i+1<cards.length)setTimeout(()=>deal(i+1),280);
       else cards.forEach(card=>card.disabled=false);
     }
@@ -6417,7 +6492,7 @@ function renderDtgPenalty(openedBonus, loser) {
     });
     if(active){
       const danger=mine.opened.length===s.rules.alive && !mine.opened.some(x=>x.type==='DEAD');
-      if(danger&&!dangerMode)startDangerMode(identity.role==='guest');
+      if(danger&&!dangerMode)startDangerMode(true);
       if(!danger&&dangerMode)stopDangerMode();
     }
     onlineIndicator.hidden=false;
@@ -6435,7 +6510,7 @@ function renderDtgPenalty(openedBonus, loser) {
   }
   function showResult(s){
     const key=s.roomId+':'+s.match;
-    if(lastResult!==key){stopBgm();lastResult=key;}
+    if(lastResult!==key){stopBgm();stopDangerAudio();stopEcgCanvas();dangerMode=false;lastResult=key;}
     const win=s.winner===identity.role,r=s.result,pen=s.rules.penalty;
     resultTitle.textContent=win?'YOU WIN':'YOU LOSE';
     resultTitle.style.color=win?'#fff':'#d00000';
