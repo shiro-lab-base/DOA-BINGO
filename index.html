@@ -41,6 +41,9 @@ or commercial use of original assets is prohibited.
 <link rel="apple-touch-icon" href="/images/9646games-icon.PNG">
 
 <link rel="icon" type="image/png" href="/images/9646games-icon.PNG">
+<link rel="preload" as="image" href="images/skull-logo.PNG">
+<link rel="preload" as="image" href="images/ballad-db.PNG">
+<link rel="preload" as="image" href="images/ballad-dtg.PNG">
 
   <style>
 
@@ -197,6 +200,10 @@ or commercial use of original assets is prohibited.
       background-color: #000;
 
     }
+
+    /* Keep the legacy title hidden until the wheel is ready. */
+    #titleScreen.doa-loading { background-image: none; background-color: #000; }
+    #titleScreen.doa-loading .title-wrap { visibility: hidden; }
 
     #settingsScreen {
 
@@ -1189,7 +1196,7 @@ white-space: nowrap;
 
     id="titleScreen"
 
-    class="screen active"
+    class="screen active doa-loading"
 
   >
 
@@ -5356,7 +5363,7 @@ updatePenaltySettings();
   const dtg = document.getElementById('titleStartButton');
   const clickSE = document.getElementById('gunClickSound');
   const shotSE = document.getElementById('gunShotSound');
-  if (!wrap || !db || !dtg) return;
+  if (!wrap || !db || !dtg) { screen?.classList.remove('doa-loading'); return; }
   const load = src => new Promise((resolve,reject) => {
     const img = new Image(); img.onload = () => resolve(img); img.onerror = reject; img.src = src;
   });
@@ -5378,7 +5385,7 @@ updatePenaltySettings();
     style.textContent += `#doaWheelHint {position:absolute;inset:0;opacity:0;pointer-events:none;transition:opacity .45s ease} #doaWheelHint img {position:absolute;inset:0;width:100%;height:100%;object-fit:fill} #doaWheelHint .left {transform:scaleX(-1)} #doaWheelHint.show {opacity:.55}`;
     stage.append(canvas,hit,hint); wrap.prepend(stage);
     const ctx=canvas.getContext('2d');
-    if (!ctx) {stage.remove();style.remove();return;}
+    if (!ctx) {stage.remove();style.remove();screen.classList.remove('doa-loading');return;}
     // Reference coordinates measured from the uploaded 565 × 1000 preview.
     const cx=278.5, cy=364, rx=137, ry=135;
     const crop=(img,x,y,w,h)=>{
@@ -5467,8 +5474,8 @@ updatePenaltySettings();
     window.addEventListener('pagehide',resetHiddenSkull);
     window.addEventListener('pageshow',e=>{if(e.persisted)resetHiddenSkull();});
     window.addEventListener('resize',fit);if(window.ResizeObserver)new ResizeObserver(fit).observe(wrap);
-    screen.classList.add('doa-wheel');fit();draw(0,0);sync();
-  }).catch(error=>console.warn('DOA title assets unavailable; original menu retained.',error));
+    screen.classList.add('doa-wheel');fit();draw(0,0);sync();screen.classList.remove('doa-loading');
+  }).catch(error=>{screen.classList.remove('doa-wheel','doa-loading');document.getElementById('doaWheelStage')?.remove();console.warn('DOA title assets unavailable; original menu retained.',error);});
 })();
 </script>
 
