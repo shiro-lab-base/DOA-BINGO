@@ -2110,22 +2110,25 @@ body.dtg-online-connected #resultScreen {
 }
 body.dtg-online-connected #resultScreen .result-box {
   position:absolute; box-sizing:border-box; max-width:none;
-  left:calc(50% - var(--report-width)*.35);
-  top:calc(50% - var(--report-width)*.25);
-  width:calc(var(--report-width)*.59); height:calc(var(--report-width)*.76);
-  transform-origin:top left; transform:skewY(-5.5deg) skewX(8deg);
+  left:calc(50% - var(--report-width)*.347);
+  top:calc(50% - var(--report-width)*.257);
+  width:calc(var(--report-width)*.595); height:calc(var(--report-width)*.775);
+  transform-origin:50% 50%; transform:rotate(8.2deg) skewX(-3deg);
   padding:0; border:0; border-radius:0; background:none; box-shadow:none;
   color:#392518; font-family:Georgia,serif; text-align:center;
-  display:flex; flex-direction:column; justify-content:center; align-items:stretch;
-  --report-unit:calc(var(--report-width)*.035); gap:calc(var(--report-unit)*.5);
+  display:flex; flex-direction:column; justify-content:flex-start; align-items:stretch;
+  --report-unit:calc(var(--report-width)*.035); gap:calc(var(--report-unit)*.38);
 }
 body.dtg-online-connected #resultScreen .result-box > * {flex:none; min-width:0; max-width:100%; overflow-wrap:anywhere;}
-body.dtg-online-connected #resultScreen #resultTitle {font-size:calc(var(--report-unit)*1.95);line-height:1.12;margin:0;letter-spacing:.03em;}
+body.dtg-online-connected #resultScreen #resultTitle {font-size:calc(var(--report-unit)*2.08);line-height:1.08;margin:calc(var(--report-unit)*1.15) 0 0;letter-spacing:.02em;}
 body.dtg-online-connected #resultScreen #resultTitle[style*="255"] {color:#392518!important;}
-body.dtg-online-connected #resultScreen #resultPenalty {font-size:calc(var(--report-unit)*1.65);line-height:1.12;margin:0;}
-body.dtg-online-connected #resultScreen #resultDetail {font-size:var(--report-unit);line-height:1.2;margin:0;color:#392518;white-space:pre-line;}
-body.dtg-online-connected #resultScreen .result-box button {width:100%;min-height:0;margin:0;padding:calc(var(--report-unit)*.25) 0;border:0;border-radius:0;background:none;color:#392518;box-shadow:none;font-size:calc(var(--report-unit)*1.15);line-height:1.15;}
-body.dtg-online-connected #resultScreen .result-box button:disabled {opacity:.48;cursor:default;}
+body.dtg-online-connected #resultScreen #resultPenalty {font-size:calc(var(--report-unit)*1.72);line-height:1.08;margin:0;}
+body.dtg-online-connected #resultScreen #resultDetail {font-size:calc(var(--report-unit)*1.04);line-height:1.16;margin:0;color:#392518;white-space:pre-line;}
+body.dtg-online-connected #resultScreen .result-box button {width:100%;min-height:0;margin:0;padding:calc(var(--report-unit)*.42) 0;border:0;border-radius:0;background:none;color:#392518;box-shadow:none;font-size:calc(var(--report-unit)*1.34);font-weight:700;line-height:1.18;}
+body.dtg-online-connected #resultScreen .result-box button:first-of-type {margin-top:calc(var(--report-unit)*1.25);}
+body.dtg-online-connected #resultScreen .result-box button:disabled {opacity:.52;cursor:default;}
+body.dtg-online-connected #resultScreen.online-win #resultPenalty,
+body.dtg-online-connected #resultScreen.online-win #resultDetail {color:rgba(57,37,24,.70);}
 body.dtg-online-connected:has(#resultScreen.active) #onlineIndicator {background:none;border:0;box-shadow:none;color:#f0dfbf;}
   </style>
 
@@ -6389,6 +6392,8 @@ function renderDtgPenalty(openedBonus, loser) {
     resultTitle.textContent=win?'YOU WIN':'YOU LOSE';
     resultTitle.style.color=win?'#fff':'#d00000';
     resultScreen.classList.remove('p2-lose');
+    resultScreen.classList.toggle('online-win',win);
+    resultScreen.classList.toggle('online-lose',!win);
     if(pen.mode==='RANDOM'){
       resultPenalty.textContent='RANDOM PENALTY';
       resultDetail.textContent=`TOTAL：${r.penalties.length}\n${r.penalties.map((x,i)=>`${i+1}. ${x}`).join('\n')}\nLOSER：${r.loserName}`;
