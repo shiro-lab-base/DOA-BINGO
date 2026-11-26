@@ -2086,7 +2086,7 @@ body.dtg-online-connected #setupBackButton {display:none;}
 #hostWaitBoard .host-roomdata .rule-row {display:flex;justify-content:space-between;gap:.5em;padding-bottom:.22em;border-bottom:1px dotted rgba(74,49,24,.32);}
 #hostWaitBoard .host-roomdata .rule-row strong,#hostWaitBoard .host-roomdata .rule-row span {font-size:1em;color:#3a2b1d;overflow-wrap:anywhere;min-width:0;}
 #hostWaitBoard .host-roomdata .rule-row span {text-align:right;max-width:45%;}
-#hostWaitBoard #onlineStart {position:absolute;left:17%;right:17%;bottom:23%;padding:0;border:0;background:transparent;color:#2c2016;font-size:clamp(18px,5.4cqw,31px);font-weight:700;letter-spacing:.08em;text-shadow:0 1px 0 rgba(255,245,224,.35);}
+#hostWaitBoard #onlineStart, #hostWaitBoard #onlineLobbyReady {position:absolute;left:17%;right:17%;bottom:23%;padding:0;border:0;background:transparent;color:#2c2016;font-size:clamp(18px,5.4cqw,31px);font-weight:700;letter-spacing:.08em;text-shadow:0 1px 0 rgba(255,245,224,.35);}
 #hostWaitBoard #onlineKick {position:absolute;left:17%;right:17%;bottom:19%;padding:0;border:0;background:transparent;color:#2c2016;font-size:3cqw;font-weight:bold;}
 #hostWaitBoard #onlineStart[disabled] {opacity:.38;}
 /* V17: host READY stamp only */
@@ -6265,25 +6265,22 @@ function renderDtgPenalty(openedBonus, loser) {
       }else exitLocal('部屋から退出しました');
       return;
     }
-    if(host){
+    {
       const roomDataRows=hostWaitingRows(s.rules);
       const waitLabel=!s.guestPresent?'WAITING':guestReady?'READY':'CHECKING';
       const stampPress=!byId('hostWaitBoard') || !onlineContents.querySelector('.host-ready-stamp');
       const readyStamp=s.guestPresent&&guestReady?`<svg class="host-ready-stamp${stampPress?' stamp-press':''}" viewBox="0 0 220 76" aria-label="READY" role="img"><defs><pattern id="hostReadyInkPattern" width="13" height="11" patternUnits="userSpaceOnUse"><rect width="13" height="11" fill="white"/><path d="M2 1l1 .7M8 5l1.5 .4M4 9l.8 -.7M12 2l.3 1.2" stroke="black" stroke-width=".65" stroke-linecap="round"/></pattern><mask id="hostReadyInkMask"><rect width="220" height="76" fill="url(#hostReadyInkPattern)"/></mask></defs><g mask="url(#hostReadyInkMask)" stroke="#a0251c"><rect x="5" y="5" width="210" height="66" rx="3" fill="none" stroke-width="4"/><rect x="11" y="11" width="198" height="54" rx="1" fill="none" stroke-width="1.2"/><text x="110" y="54" text-anchor="middle" font-family="Georgia,serif" font-weight="900" font-size="44" letter-spacing="5" fill="#a0251c" stroke="none">READY</text></g></svg>`:'';
-      showOnline(`<div id="hostWaitBoard"><div class="host-card-copy"><div class="host-card-line kicker">MATCH REGISTRATION</div><div class="host-card-line title">WAITING ROOM</div><div class="host-card-line roomid">ROOM ID : ${escapeHtml(s.roomId)}</div><div class="host-card-line meta-row"><span>HOST : ${escapeHtml(s.seats[0].name)}</span><span>GUEST : ${escapeHtml(guest)}</span></div><div class="host-card-line status">${waitLabel}</div></div><div class="host-roomdata-title">ROOM DATA</div><div class="host-roomdata"><div class="rule-sheet">${roomDataRows}</div></div>${readyStamp}<button id="onlineStart" type="button">SET DEAD</button><button id="onlineKick" type="button">KICK GUEST</button><button id="onlineLeave" type="button">BACK</button></div>`);
+      showOnline(`<div id="hostWaitBoard"><div class="host-card-copy"><div class="host-card-line kicker">MATCH REGISTRATION</div><div class="host-card-line title">WAITING ROOM</div><div class="host-card-line roomid">ROOM ID : ${escapeHtml(s.roomId)}</div><div class="host-card-line meta-row"><span>NAME : ${escapeHtml(host?s.seats[0].name:guest)}</span><span>OPPONENT : ${escapeHtml(host?guest:s.seats[0].name)}</span></div><div class="host-card-line status">${waitLabel}</div></div><div class="host-roomdata-title">ROOM DATA</div><div class="host-roomdata"><div class="rule-sheet">${roomDataRows}</div></div>${readyStamp}${host?'<button id="onlineStart" type="button">SET DEAD</button><button id="onlineKick" type="button">KICK GUEST</button>':`<button id="onlineLobbyReady" type="button">${guestReady?'CANCEL READY':'READY'}</button>`}<button id="onlineLeave" type="button">BACK</button></div>`);
       onlineContents.dataset.signature=signature;
+      if(host){
       byId('onlineStart').disabled=!s.guestPresent||!guestReady;
       byId('onlineStart').onclick=()=>action('start');
       byId('onlineKick').hidden=!s.guestPresent;byId('onlineKick').onclick=()=>action('kick');
+      }else byId('onlineLobbyReady').onclick=()=>action('lobbyReady',{ready:!guestReady});
       byId('onlineLeave').onclick=leave;
       fitHostWaitingBoard();
       return;
     }
-    showOnline(`<div class="board-stack"><div class="board-paper"><div class="paper-kicker">MATCH REGISTRATION</div><h2 class="board-title">WAITING ROOM</h2><div class="details-grid"><span><strong>ROOM ID</strong> : ${escapeHtml(s.roomId)}</span><span class="stamp ${!s.guestPresent?'waiting':guestReady?'ready':'notice'}">${!s.guestPresent?'WAITING':guestReady?'READY':'CHECKING'}</span></div><div class="waiting-meta"><span><strong>HOST</strong> : ${escapeHtml(s.seats[0].name)}</span><span><strong>GUEST</strong> : ${escapeHtml(guest)}</span></div></div>${lobbyRules(s.rules)}<div class="details-card"><h3>TABLE STATUS</h3><p class="waiting-status">${!s.guestPresent?'WAITING FOR GUEST...':guestReady?'GUEST READY ✓':host?'GUEST NOT READY':'ルールを確認してREADYを押してください'}</p><div class="board-actions${host&&s.guestPresent?' dual':''}">${host?'<button id="onlineStart" class="main-button">START DEAD SET</button><button id="onlineKick" class="secondary-button">KICK GUEST</button>':`<button id="onlineLobbyReady" class="main-button">${guestReady?'CANCEL READY':'READY'}</button>`}<button id="onlineLeave" class="secondary-button">LEAVE ROOM</button></div>${host?'':`<p class="online-small">${guestReady?'WAITING FOR HOST...':'READY後にホストがゲームを開始します'}</p>`}</div></div>`);
-    onlineContents.dataset.signature=signature;
-    if(host){byId('onlineStart').disabled=!s.guestPresent||!guestReady;byId('onlineStart').onclick=()=>action('start');byId('onlineKick').hidden=!s.guestPresent;byId('onlineKick').onclick=()=>action('kick');}
-    else byId('onlineLobbyReady').onclick=()=>action('lobbyReady',{ready:!guestReady});
-    byId('onlineLeave').onclick=leave;
   }
   function setup(s) {
     const own=mySeat(s),opp=theirSeat(s);
