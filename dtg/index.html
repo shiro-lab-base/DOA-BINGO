@@ -2077,8 +2077,9 @@ body.dtg-online-connected #setupBackButton {display:none;}
 #hostWaitBoard .host-card-copy .kicker {font-size:.7em;letter-spacing:.12em;color:#8a765d;font-weight:600;}
 #hostWaitBoard .host-card-copy .title {font-size:1.28em;letter-spacing:.07em;color:#3f2e1f;font-weight:700;line-height:1.05;}
 #hostWaitBoard .host-card-copy .roomid {font-size:1em;}
-#hostWaitBoard .host-card-copy .meta-row {display:flex;justify-content:space-between;gap:4%;font-size:.9em;white-space:normal;}
-#hostWaitBoard .host-card-copy .meta-row span {min-width:0;overflow-wrap:anywhere;}
+#hostWaitBoard .host-card-copy .meta-row {display:grid;grid-template-columns:minmax(0,42fr) minmax(0,58fr);align-items:center;gap:4%;font-size:.9em;white-space:nowrap;}
+#hostWaitBoard .host-card-copy .meta-row span {display:block;min-width:0;white-space:nowrap;overflow:hidden;overflow-wrap:normal;text-align:left;}
+#hostWaitBoard .host-card-copy .meta-row span:last-child {text-align:right;}
 #hostWaitBoard .host-card-copy .status {align-self:flex-end;margin-top:0;font-size:.9em;letter-spacing:.10em;color:#8a5b2b;}
 #hostWaitBoard .host-roomdata-title {position:absolute;left:15%;top:47%;font-size:clamp(14px,4.2cqw,24px);font-weight:700;letter-spacing:.18em;color:#3d2b1c;text-shadow:0 1px 0 rgba(255,244,222,.35);}
 #hostWaitBoard .host-roomdata {position:absolute;left:15%;right:15%;top:50.5%;bottom:28%;overflow:hidden;color:#3a2b1d;font-size:3cqw;line-height:1.15;}
@@ -2110,10 +2111,10 @@ body.dtg-online-connected #resultScreen {
 }
 body.dtg-online-connected #resultScreen .result-box {
   position:absolute; box-sizing:border-box; max-width:none;
-  left:calc(50% - var(--report-width)*.347);
-  top:calc(50% - var(--report-width)*.257);
+  left:calc(50% - var(--report-width)*.34507042);
+  top:calc(50% - var(--report-width)*.24241002);
   width:calc(var(--report-width)*.595); height:calc(var(--report-width)*.775);
-  transform-origin:50% 50%; transform:skewY(-6.5deg) skewX(8deg);
+  transform-origin:0 0; transform:var(--report-paper-transform, skewY(-5deg) skewX(9deg));
   padding:0; border:0; border-radius:0; background:none; box-shadow:none;
   color:#392518; font-family:Georgia,serif; text-align:center;
   display:flex; flex-direction:column; justify-content:flex-start; align-items:stretch;
@@ -6260,18 +6261,31 @@ function renderDtgPenalty(openedBonus, loser) {
     if(!board || !board.clientWidth || !onlineScreen.classList.contains('active'))return;
     for(const selector of ['.host-card-copy','.host-roomdata']){
       const area=board.querySelector(selector);
+      const names=Array.from(area.querySelectorAll('.meta-row span'));
+      names.forEach(el=>el.style.removeProperty('font-size'));
       const max=board.clientWidth*.03;
       const fits=()=>area.scrollHeight<=area.clientHeight && area.scrollWidth<=area.clientWidth &&
         Array.from(area.querySelectorAll('.host-card-line,.rule-row')).every(el=>el.scrollWidth<=el.clientWidth);
       let low=0.25,high=max;
       area.style.fontSize=high+'px';
-      if(fits())continue;
-      for(let i=0;i<16;i++){
-        const mid=(low+high)/2;
-        area.style.fontSize=mid+'px';
-        if(fits())low=mid;else high=mid;
+      if(!fits()){
+        for(let i=0;i<16;i++){
+          const mid=(low+high)/2;
+          area.style.fontSize=mid+'px';
+          if(fits())low=mid;else high=mid;
+        }
+        area.style.fontSize=low+'px';
       }
-      area.style.fontSize=low+'px';
+      for(const el of names){
+        let lo=0,hi=parseFloat(getComputedStyle(el).fontSize);
+        if(el.scrollWidth<=el.clientWidth)continue;
+        for(let i=0;i<16;i++){
+          const mid=(lo+hi)/2;
+          el.style.fontSize=mid+'px';
+          if(el.scrollWidth<=el.clientWidth)lo=mid;else hi=mid;
+        }
+        el.style.fontSize=lo+'px';
+      }
     }
   }
   window.addEventListener('resize',fitHostWaitingBoard);
@@ -6610,11 +6624,13 @@ function renderDtgPenalty(openedBonus, loser) {
   function fit(){
     frame=0;
     if(!screen.classList.contains('active')||!document.body.classList.contains('dtg-online-connected')){
-      sheet.style.removeProperty('--report-unit');return;
+      sheet.style.removeProperty('--report-unit');sheet.style.removeProperty('--report-paper-transform');return;
     }
     sheet.style.removeProperty('--report-unit');
     const start=parseFloat(getComputedStyle(sheet).width)/.59*.035;
     if(!start)return;
+    const paperWidth=parseFloat(getComputedStyle(sheet).width)/.595;
+    sheet.style.setProperty('--report-paper-transform',`matrix3d(0.9983413560,-0.0831951130,0,${0.0070000233/paperWidth},0.1440124670,0.9403166964,0,${-0.0873949150/paperWidth},0,0,1,0,0,0,0,1)`);
     const items=Array.from(sheet.children).filter(el=>getComputedStyle(el).display!=='none');
     const fits=()=>{
       const gap=parseFloat(getComputedStyle(sheet).rowGap)||0;
