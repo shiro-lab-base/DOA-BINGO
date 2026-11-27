@@ -3152,6 +3152,8 @@ heartMonitorSound.volume = 0.02;
 
     ) {
 
+      const enteringResult = screen === resultScreen && !resultScreen.classList.contains("active");
+
       [
 
         modeScreen,
@@ -3181,6 +3183,13 @@ heartMonitorSound.volume = 0.02;
         "active"
 
       );
+
+      if (enteringResult) {
+        const bgmToggle = [...document.querySelectorAll('input[type="checkbox"]')].find(input => /bgm/i.test([input.id, input.name, input.labels?.[0]?.textContent, input.parentElement?.textContent].join(' ')));
+        if ((!bgmToggle || bgmToggle.checked) && !bgm.muted && bgm.volume > 0 && bgm.paused) {
+          startBgm();
+        }
+      }
 
       if (screen === settingsScreen && !screen.classList.contains('online-host-settings')) {
         screen.dispatchEvent(new Event('local-menu-enter'));
@@ -6609,7 +6618,7 @@ function renderDtgPenalty(openedBonus, loser) {
   }
   function showResult(s){
     const key=s.roomId+':'+s.match;
-    if(lastResult!==key){stopBgm();stopDangerAudio();stopEcgCanvas();dangerMode=false;lastResult=key;}
+    if(lastResult!==key){stopDangerAudio();stopEcgCanvas();dangerMode=false;lastResult=key;}
     const win=s.winner===identity.role,r=s.result,pen=s.rules.penalty;
     resultTitle.textContent=win?'YOU WIN':'YOU LOSE';
     resultTitle.style.color=win?'#fff':'#d00000';
