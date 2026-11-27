@@ -2174,6 +2174,11 @@ body.dtg-online-connected:has(#resultScreen.active) #onlineIndicator {background
 #localMenuStage .local-heading::after{bottom:0}#localMenuStage .local-back::before{top:0}
 #localMenuArt #localBell{position:absolute;left:55%;top:72%;width:25%;height:13%;border:0;background:transparent;color:transparent;z-index:9;touch-action:manipulation}
 #localMenuArt #localBell:focus-visible{outline:2px solid #ffdf9a;border-radius:50%}
+/* V34: local name card, on the left side of the table. */
+#localMenuArt #localNameCard{position:absolute;left:6%;top:72.5%;width:47%;aspect-ratio:16/9;min-height:0;padding:0;margin:0;border:0;border-radius:0;background:url('../images/name-card.PNG') center/100% 100% no-repeat;box-shadow:none;filter:drop-shadow(2px 5px 3px #0008);transform:perspective(85cqw) rotateX(38deg) rotateZ(-12deg);z-index:8;color:#422c1b;display:grid;place-items:center;touch-action:manipulation}
+#localNameCard .name-copy{width:62%;height:48%;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:.12em;font:italic 700 3.2cqw 'Bradley Hand','Segoe Print','Comic Sans MS',cursive;line-height:1.1;overflow:hidden}
+#localNameCard .name-copy span{max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#localMenuModal .local-name-field{display:block;width:100%;margin:6px 0 18px;padding:8px;font-size:16px}
 #localMenuModal{display:none}#settingsScreen:not(.online-host-settings) #localMenuModal:not([hidden]){display:flex;position:fixed;inset:0;z-index:1001;align-items:center;justify-content:center;background:rgba(0,0,0,.72);padding:18px}
 #localMenuModal .local-modal-paper{background:#e4c28c;color:#412817;border:5px solid #684321;border-radius:10px;padding:18px;width:min(100%,460px);max-height:85dvh;overflow:auto;font-family:Georgia,serif;box-shadow:0 12px 40px #0008}
 #localMenuModal h2{font-size:24px;text-align:center;margin:0 0 16px;color:inherit}
@@ -2207,27 +2212,24 @@ body.dtg-online-connected:has(#resultScreen.active) #onlineIndicator {background
 #localReceipt{display:none}
 body:not(.dtg-online-connected) #resultScreen .result-box{width:min(94vw,48dvh);max-width:none;padding:0;border:0;background:none;box-shadow:none;display:flex;flex-direction:column;align-items:center;gap:1.5dvh;container-type:inline-size;overflow:visible}
 body:not(.dtg-online-connected) #resultScreen #resultTitle,body:not(.dtg-online-connected) #resultScreen #resultPenalty,body:not(.dtg-online-connected) #resultScreen #resultDetail{display:none}
-body:not(.dtg-online-connected) #resultScreen #localReceipt{display:block;position:relative;width:100%;aspect-ratio:634/1064;color:#422c1b;font:italic 4.3cqw 'Bradley Hand','Segoe Print','Comic Sans MS',cursive;text-align:left;isolation:isolate;transform:rotate(-2deg);}
+body:not(.dtg-online-connected) #resultScreen #localReceipt{display:block;position:relative;width:100%;aspect-ratio:634/1064;color:#422c1b;font:italic 4.8cqw 'Bradley Hand','Segoe Print','Comic Sans MS',cursive;text-align:left;isolation:isolate;transform:rotate(-2deg);}
 #localReceipt::before{content:'';position:absolute;inset:0;background:url('../images/dtg-account.PNG') 55.7% 40.3% / 136.28% 144.36% no-repeat;z-index:-1;filter:drop-shadow(2px 5px 4px #0008)}
 #localReceipt .receipt-entry{position:absolute;white-space:nowrap;line-height:1;transform:rotate(-2deg);font-weight:600;max-width:72%;overflow:hidden;text-overflow:ellipsis}
 #localReceipt .receipt-no{left:19%;top:20.5%}#localReceipt .receipt-date{left:24%;top:24% ;letter-spacing:.38em}
 #localReceipt .receipt-table{left:16%;top:32%}#localReceipt .receipt-persons{left:47%;top:32%}#localReceipt .receipt-server{left:66%;top:32%}
-#localReceipt .receipt-items{position:absolute;left:10%;right:12%;top:39%;bottom:16.5%;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;font-size:4cqw;line-height:1.2;}
+#localReceipt .receipt-items{position:absolute;left:10%;right:12%;top:39%;bottom:16.5%;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;font-size:4.5cqw;line-height:1.2;}
 #localReceipt .receipt-row{display:grid;grid-template-columns:38% 23% 39%;align-items:start;min-height:9.1cqw;padding:.9cqw 0;gap:0;overflow-wrap:anywhere}
 #localReceipt .receipt-row span:nth-child(2),#localReceipt .receipt-row span:nth-child(3){text-align:center}
 #localReceipt .receipt-row.full{display:block;white-space:pre-wrap;min-height:0;padding:.7cqw 0}
-#localReceipt .receipt-total{left:36%;top:88.5%;font-size:6cqw;max-width:52%;}
-#localReceipt .receipt-stamp{position:absolute;left:50%;top:78%;transform:translate(-50%,-50%) rotate(-15deg);color:#9a2424;border:double .9cqw currentColor;border-radius:1cqw;padding:.2cqw 3cqw;font:900 11cqw Georgia,serif;letter-spacing:.07em;opacity:.78;pointer-events:none;white-space:nowrap;}
-#localReceipt .receipt-stamp.win{color:#29643b}#localReceipt .receipt-vs-win{position:absolute;right:12%;top:70%;font:700 4cqw Georgia,serif;color:#29643b;transform:rotate(8deg);border:double .5cqw currentColor;padding:.5cqw 1cqw;pointer-events:none;}
-#localReceipt .receipt-vs-win[hidden]{display:none}
+#localReceipt .receipt-total{right:12%;top:85%;font-size:9.5cqw;max-width:58%;text-align:right;}
+#localReceipt .receipt-stamp{position:absolute;left:50%;top:63%;width:100%;height:auto;transform:translate(-50%,-50%) rotate(-15deg);opacity:.85;pointer-events:none;mix-blend-mode:multiply;}
 body:not(.dtg-online-connected) #resultScreen .result-box #retryButton,body:not(.dtg-online-connected) #resultScreen .result-box #settingsButton{width:100%;min-height:0;padding:1.5cqw 0;margin:0;border:0;border-radius:0;box-shadow:none;background:transparent;color:#f0dfbf;text-shadow:0 2px 4px #000;font:700 5.1cqw Georgia,serif;letter-spacing:.05em}
 body:not(.dtg-online-connected) #resultScreen .result-box #retryButton{border-bottom:1px solid #c9a66d80}
 #resultScreen.active #localReceipt{animation:receiptSlide .65s cubic-bezier(.16,.85,.25,1) both}
-#resultScreen.active #localReceipt .receipt-stamp,#resultScreen.active #localReceipt .receipt-vs-win{animation:receiptStamp .28s .72s ease-out both}
-#resultScreen.active #localReceipt .receipt-vs-win{animation-name:receiptFade}
+#resultScreen.active #localReceipt .receipt-stamp{animation:receiptStamp .28s .72s ease-out both}
 body:not(.dtg-online-connected) #resultScreen.active #retryButton,body:not(.dtg-online-connected) #resultScreen.active #settingsButton{animation:receiptFade .22s .95s both}
 @keyframes receiptSlide{0%{transform:translateY(-45dvh) rotate(14deg);opacity:0}80%{transform:translateY(1.5dvh) rotate(-3deg);opacity:1}100%{transform:translateY(0) rotate(-2deg);opacity:1}}
-@keyframes receiptStamp{0%{opacity:0;transform:translate(-50%,-50%) rotate(-15deg) scale(1.6)}100%{opacity:.78;transform:translate(-50%,-50%) rotate(-15deg) scale(1)}}
+@keyframes receiptStamp{0%{opacity:0;transform:translate(-50%,-50%) rotate(-15deg) scale(1.6)}100%{opacity:.85;transform:translate(-50%,-50%) rotate(-15deg) scale(1)}}
 @keyframes receiptFade{from{opacity:0}to{opacity:1}}
 @media(prefers-reduced-motion:reduce){#resultScreen.active #localReceipt,#resultScreen.active #localReceipt *,body:not(.dtg-online-connected) #resultScreen.active #retryButton,body:not(.dtg-online-connected) #resultScreen.active #settingsButton{animation:none!important}}
 body:not(.dtg-online-connected) #resultScreen .result-box{display:grid;grid-template-columns:1fr 1fr;gap:1.5dvh 3cqw}body:not(.dtg-online-connected) #resultScreen #localReceipt{grid-column:1/-1}body:not(.dtg-online-connected) #resultScreen .result-box #retryButton,body:not(.dtg-online-connected) #resultScreen .result-box #settingsButton{border-bottom:1px solid #c9a66d80;white-space:nowrap}
@@ -2582,7 +2584,7 @@ body:not(.dtg-online-connected) #resultScreen .result-box{display:grid;grid-temp
 
     <div class="result-box">
 <div id="localReceipt" aria-label="Match account">
-<span class="receipt-entry receipt-no"></span><span class="receipt-entry receipt-date"></span><span class="receipt-entry receipt-table"></span><span class="receipt-entry receipt-persons"></span><span class="receipt-entry receipt-server"></span><div class="receipt-items"></div><span class="receipt-entry receipt-total"></span><span class="receipt-stamp"></span><span class="receipt-vs-win" hidden></span></div>
+<span class="receipt-entry receipt-no"></span><span class="receipt-entry receipt-date"></span><span class="receipt-entry receipt-table"></span><span class="receipt-entry receipt-persons"></span><span class="receipt-entry receipt-server"></span><div class="receipt-items"></div><span class="receipt-entry receipt-total"></span><img class="receipt-stamp" alt=""></div>
 
       <div id="resultTitle">
 
@@ -3052,6 +3054,11 @@ const rollButton = document.getElementById("rollButton");
     const leftRollLabel = document.getElementById("leftRollLabel");
     const rightRollLabel = document.getElementById("rightRollLabel");
     let gameMode = "CPU";
+    const localPlayerNames = {CPU:['','CPU'],VS:['','']};
+    function localDisplayName(mode,seat){
+      const fallback=mode==='VS'?(seat===0?'PLAYER 1':'PLAYER 2'):(seat===0?'YOU':'CPU');
+      return localPlayerNames[mode]?.[seat] || fallback;
+    }
     let setupPlayer = 1;
     let p1DeadIndex = 0;
     let p1BlindMode = false;
@@ -3075,8 +3082,8 @@ const rollButton = document.getElementById("rollButton");
       const vs = gameMode === "VS";
       gameScreen.classList.toggle("vs-mode", vs);
       gameScreen.classList.toggle("online-mode", gameMode === "ONLINE");
-      topPlayerLabel.textContent = vs ? "PLAYER 2" : "CPU";
-      bottomPlayerLabel.textContent = vs ? "PLAYER 1" : "YOU";
+      topPlayerLabel.textContent = gameMode === "ONLINE" ? "CPU" : localDisplayName(gameMode,1);
+      bottomPlayerLabel.textContent = gameMode === "ONLINE" ? "YOU" : localDisplayName(gameMode,0);
       leftRollLabel.textContent = vs ? "P1" : "YOU";
       rightRollLabel.textContent = vs ? "P2" : "CPU";
     }
@@ -4047,7 +4054,7 @@ async function rollRound() {
 
   status.textContent = "CPU CHOOSES";
 
-  if (dangerMode) stopDangerMode();
+  // V34: last-card danger continues until a DEAD card is revealed.
 
   await wait(650);
 
@@ -6871,7 +6878,7 @@ function renderDtgPenalty(openedBonus, loser) {
  <div class="local-copy local-game"><button class="local-heading" data-local="GAME">GAME</button><button data-local="GAME" class="local-summary-button"><span class="local-summary" id="localGameSummary"></span></button></div>
  <div class="local-copy local-penalty"><button class="local-heading" data-local="PENALTY">PENALTY</button><button data-local="PENALTY"><span class="local-summary" id="localPenaltySummary"></span></button></div>
  <div class="local-copy local-sound"><button class="local-heading" data-local="SOUND">SOUND</button><button data-local="SOUND"><span class="local-summary" id="localSoundSummary">BGM<br>SE</span></button><button type="button" class="local-back" id="localMenuBack">BACK</button></div>
- </div><button id="localBell" type="button" aria-label="START — SET DEAD">START</button>`;
+ </div><button id="localNameCard" type="button" aria-label="PLAYER NAME"><span class="name-copy"></span></button><button id="localBell" type="button" aria-label="START — SET DEAD">START</button>`;
  screen.append(art);
  const stage=byId('localMenuStage'),bell=byId('localBell');
  const doorSE=new Audio('../audio/dtg-door-creak.wav'),bellSE=new Audio('../audio/dtg-start-bell.wav');
@@ -6904,6 +6911,9 @@ function renderDtgPenalty(openedBonus, loser) {
    function line(el,label,value){const d=document.createElement('div'),s=document.createElement('span');d.textContent=label;s.textContent=value;d.append(s);el.append(d);}
    line(game,'ALIVE CARDS',val('aliveCount'));line(game,'DICE MODE',val('diceMode'));
    line(penalty,'PENALTY TYPE',val('dtgPenaltyType'));
+   const nameCopy=byId('localNameCard').querySelector('.name-copy');nameCopy.replaceChildren();
+   const mode=gameModeSelect.value;
+   for(const seat of (mode==='VS'?[0,1]:[0])){const span=document.createElement('span');span.textContent=localDisplayName(mode,seat);nameCopy.append(span);}
    if(!dtgDeadBox.hidden){line(penalty,'DEAD CARD',val('deadPenalty'));line(penalty,'PER OPENED CARD',val('openedPenalty'));}
  }
  function closeModal(){for(const [node,marker] of moved)marker.replaceWith(node);moved=[];fields.replaceChildren();modal.hidden=true;summary();if(trigger&&active())trigger.focus({preventScroll:true});trigger=null;}
@@ -6914,6 +6924,20 @@ function renderDtgPenalty(openedBonus, loser) {
    if(!moved.length){const p=document.createElement('p');p.textContent='SOUND settings unavailable.';fields.append(p);}
    byId('localModalTitle').textContent=section;modal.hidden=false;modal.querySelector('.local-modal-paper').scrollTop=0;
  }
+ function openNames(){
+   closeModal();trigger=byId('localNameCard');
+   const mode=gameModeSelect.value;if(!localPlayerNames[mode])return;
+   byId('localModalTitle').textContent='PLAYER NAME';
+   for(const seat of (mode==='VS'?[0,1]:[0])){
+     const label=document.createElement('label'),input=document.createElement('input');
+     input.type='text';input.id='localNameInput'+seat;input.className='local-name-field';input.maxLength=20;input.autocomplete='off';input.value=localPlayerNames[mode][seat];
+     input.placeholder=mode==='VS'?'PLAYER '+(seat+1):'YOU';label.htmlFor=input.id;label.textContent=input.placeholder;
+     input.addEventListener('input',()=>{localPlayerNames[mode][seat]=input.value.trim();summary();});
+     fields.append(label,input);
+   }
+   modal.hidden=false;modal.querySelector('.local-modal-paper').scrollTop=0;
+ }
+ byId('localNameCard').addEventListener('click',openNames);
  art.querySelectorAll('[data-local]').forEach(b=>b.addEventListener('click',()=>openModal(b.dataset.local,b)));
  byId('localModalClose').addEventListener('click',closeModal);
  modal.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
@@ -6932,7 +6956,7 @@ function fillLocalReceipt(winner,loser,openedBonus,vs){
  const root=document.getElementById('localReceipt');
  if(!root)return;
  const set=(key,value)=>root.querySelector('.receipt-'+key).textContent=value;
- set('no',loser);set('date','D T G');set('table',vs?'VS':'CPU');set('persons','2');set('server','96/46');
+ set('no',localDisplayName(vs?'VS':'CPU',winner==='PLAYER'?1:0));set('date','D T G');set('table',vs?'VS':'CPU');set('persons','2');set('server','96/46');
  const items=root.querySelector('.receipt-items');items.replaceChildren();
  function row(a,b,c){const d=document.createElement('div');d.className='receipt-row';for(const v of [a,b,c]){const s=document.createElement('span');s.textContent=v;d.append(s);}items.append(d);}
  function full(text){const d=document.createElement('div');d.className='receipt-row full';d.textContent=text;items.append(d);}
@@ -6940,8 +6964,8 @@ function fillLocalReceipt(winner,loser,openedBonus,vs){
  if(mode==='RANDOM'){set('total',detail[0].replace(/^TOTAL：/,''));full(resultPenalty.textContent);detail.slice(1,-1).forEach(full);}
  else if(mode==='LEVEL'){set('total',resultPenalty.textContent);detail.slice(0,-1).forEach(full);}
  else{const dead=Number(document.getElementById('deadPenalty').value),opened=Number(document.getElementById('openedPenalty').value),unit=mode==='IKKI'?'IKKI':'SHOT';row('DEAD CARD','1',dead+' '+unit);row('OPENED CARD',openedBonus+' × '+opened,(openedBonus*opened)+' '+unit);set('total',resultPenalty.textContent);}
- const stamp=root.querySelector('.receipt-stamp'),win=!vs&&winner==='PLAYER';stamp.textContent=win?'WIN':'LOSE';stamp.classList.toggle('win',win);
- const other=root.querySelector('.receipt-vs-win');other.hidden=!vs;other.textContent=vs?(winner==='PLAYER'?'PLAYER 1 WIN':'PLAYER 2 WIN'):'';
+ const stamp=root.querySelector('.receipt-stamp'),win=!vs&&winner==='PLAYER';stamp.src='../images/dtg-'+(win?'win':'lose')+'-stamp.PNG';stamp.alt=win?'WIN':'LOSE';
+ const total=root.querySelector('.receipt-total');total.style.fontSize=Math.min(9.5,Math.max(4.5,85/Math.max(1,total.textContent.length)))+'cqw';
  items.scrollTop=0;
 }
 </script>
