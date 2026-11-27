@@ -4616,65 +4616,23 @@ status.classList.add("turn-pop");
 
             cards[index];
 
-          button.innerHTML =
+          const image = button.querySelector("img");
 
-            "";
+          const src = !card.opened
+            ? IMAGE_BACK
+            : card.type === "ALIVE" ? IMAGE_ALIVE : IMAGE_DEAD;
 
-          const image =
+          const alt = !card.opened
+            ? "CARD BACK"
+            : card.type === "ALIVE" ? "ALIVE" : "DEAD";
 
-            document.createElement(
-
-              "img"
-
-            );
-
-          if (
-
-            !card.opened
-
-          ) {
-
-            image.src =
-
-              IMAGE_BACK;
-
-            image.alt =
-
-              "CARD BACK";
-
-          } else if (
-
-            card.type
-
-            === "ALIVE"
-
-          ) {
-
-            image.src =
-
-              IMAGE_ALIVE;
-
-            image.alt =
-
-              "ALIVE";
-
-          } else {
-
-            image.src =
-
-              IMAGE_DEAD;
-
-            image.alt =
-
-              "DEAD";
-
+          if (image.getAttribute("src") !== src) {
+            image.src = src;
           }
 
-          button.appendChild(
-
-            image
-
-          );
+          if (image.alt !== alt) {
+            image.alt = alt;
+          }
 
           button.classList.toggle(
 
