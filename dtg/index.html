@@ -2152,7 +2152,7 @@ body.dtg-online-connected:has(#resultScreen.active) #onlineIndicator {background
 #localMenuArt{display:none;position:relative;flex:none;width:min(100%,56.25dvh);aspect-ratio:9/16;container-type:inline-size;background:url('../images/dtg-menu-back.PNG') center/100% 100% no-repeat;color:#482c17;font-family:Georgia,'Times New Roman',serif;overflow:hidden}
 #settingsScreen:not(.online-host-settings) > #localMenuArt{display:block}
 #localMenuStage{position:absolute;width:126%;left:-17%;top:26%;aspect-ratio:16/9;perspective:100cqw;perspective-origin:50% 50%;isolation:isolate}
-#localMenuStage .local-face{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;pointer-events:none;backface-visibility:hidden;-webkit-backface-visibility:hidden;transition:transform 1.1s cubic-bezier(.3,.1,.25,1);}
+#localMenuStage .local-face{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;pointer-events:none;backface-visibility:hidden;-webkit-backface-visibility:hidden;transition:transform 2s cubic-bezier(.3,.1,.25,1);}
 #localMenuStage .local-main{clip-path:inset(2% 27% 1% 33%);}
 #localMenuStage .local-left-out{clip-path:inset(2% 46.5% 1% 34%);transform-origin:34.2% 50%;z-index:3;transform:rotateY(0deg)}
 #localMenuStage .local-right-out{clip-path:inset(2% 27.8% 1% 53%);transform-origin:72.1% 50%;z-index:3;transform:rotateY(0deg)}
@@ -2163,7 +2163,7 @@ body.dtg-online-connected:has(#resultScreen.active) #onlineIndicator {background
 #localMenuStage.open .local-left-in{transform:rotateY(28deg)}
 #localMenuStage.open .local-right-in{transform:rotateY(-28deg)}
 #localMenuStage .local-copy{position:absolute;top:32%;bottom:12%;z-index:4;display:flex;flex-direction:column;align-items:center;gap:2cqw;opacity:0;pointer-events:none;transition:opacity .15s;color:#482c17;text-align:center}
-#localMenuStage.open .local-copy{opacity:1;pointer-events:auto;transition-delay:.85s}
+#localMenuStage.open .local-copy{opacity:1;pointer-events:auto;transition-delay:1.75s}
 #localMenuStage .local-game{left:17%;width:15.8%}#localMenuStage .local-penalty{left:37%;width:32.5%}#localMenuStage .local-sound{left:74%;width:15.6%}
 #localMenuStage button{border:0;background:transparent;color:inherit;font:inherit;font-weight:bold;text-shadow:none;min-height:30px;padding:2px 0;width:100%}
 #localMenuStage .local-heading{font-size:clamp(10px,3.4cqw,24px);letter-spacing:.025em;border-bottom:0;padding-bottom:2cqw;position:relative}
@@ -2189,7 +2189,7 @@ body.dtg-online-connected:has(#resultScreen.active) #onlineIndicator {background
 #localMenuStage .local-game{--hinge-x:108.86%;width:15.8%}
 #localMenuStage .local-sound{--hinge-x:-12.18%}
 #localMenuStage .local-game .local-summary{font-size:clamp(7px,2.25cqw,15px)}
-#localMenuStage::before,#localMenuStage::after{content:"";position:absolute;pointer-events:none;z-index:-1;background:#100904;filter:blur(1.8cqw);border-radius:50%;top:95%;height:7%;opacity:.64;transition:transform 1.1s cubic-bezier(.3,.1,.25,1),opacity 1.1s}
+#localMenuStage::before,#localMenuStage::after{content:"";position:absolute;pointer-events:none;z-index:-1;background:#100904;filter:blur(1.8cqw);border-radius:50%;top:95%;height:7%;opacity:.64;transition:transform 2s cubic-bezier(.3,.1,.25,1),opacity 2s}
 #localMenuStage::before{left:33%;width:40%;transform:scaleX(1)}
 #localMenuStage::after{left:17%;width:72%;transform:scaleX(.52);opacity:.25}
 #localMenuStage.open::after{transform:scaleX(1);opacity:.56}
@@ -3143,6 +3143,10 @@ heartMonitorSound.volume = 0.02;
         "active"
 
       );
+
+      if (screen === settingsScreen && !screen.classList.contains('online-host-settings')) {
+        screen.dispatchEvent(new Event('local-menu-enter'));
+      }
 
     }
 
@@ -6838,6 +6842,15 @@ function renderDtgPenalty(openedBonus, loser) {
  </div><button id="localBell" type="button" aria-label="START — SET DEAD">START</button>`;
  screen.append(art);
  const stage=byId('localMenuStage'),bell=byId('localBell');
+ const doorSE=new Audio('../audio/dtg-door-creak.wav'),bellSE=new Audio('../audio/dtg-start-bell.wav');
+ doorSE.preload=bellSE.preload='auto';
+ function localCue(sound){
+   const se=[...soundNodes().flatMap(node=>[...node.querySelectorAll('input[type="checkbox"]')])].find(input=>/(?:^|[^a-z])se(?:$|[^a-z])|sound.?effect/i.test([input.id,input.name,input.labels?.[0]?.textContent,input.parentElement?.textContent].join(' ')));
+   if(cardSound.muted||cardSound.volume===0||(se&&!se.checked))return;
+   sound.volume=cardSound.volume;
+   playSound(sound);
+ }
+ screen.addEventListener('local-menu-enter',()=>{if(!wasActive)localCue(doorSE);});
  const modal=document.createElement('div');modal.id='localMenuModal';modal.hidden=true;
  modal.innerHTML='<div class="local-modal-paper" role="dialog" aria-modal="true" aria-labelledby="localModalTitle"><h2 id="localModalTitle"></h2><div id="localModalFields"></div><button type="button" id="localModalClose">CLOSE</button></div>';
  screen.append(modal);
@@ -6874,8 +6887,8 @@ function renderDtgPenalty(openedBonus, loser) {
  modal.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
  modal.addEventListener('change',summary);original.addEventListener('change',summary);
  byId('localMenuBack').addEventListener('click',()=>byId('backTitleButton').click());
- bell.addEventListener('click',()=>{if(!active())return;byId('setupStartButton').click();if(active()&&dtgPenaltyError.textContent)openModal('PENALTY',bell);});
- function sync(){const on=active();if(on&&!wasActive){stage.classList.remove('open');summary();frame=requestAnimationFrame(()=>{frame=requestAnimationFrame(()=>{frame=0;if(active())stage.classList.add('open');});});}else if(!on&&wasActive){if(frame)cancelAnimationFrame(frame);frame=0;stage.classList.remove('open');if(!modal.hidden)closeModal();}wasActive=on;}
+ bell.addEventListener('click',()=>{if(!active())return;localCue(bellSE);byId('setupStartButton').click();if(active()&&dtgPenaltyError.textContent)openModal('PENALTY',bell);});
+ function sync(){const on=active();if(on&&!wasActive){stage.classList.remove('open');summary();frame=requestAnimationFrame(()=>{frame=requestAnimationFrame(()=>{frame=0;if(active())stage.classList.add('open');});});}else if(!on&&wasActive){doorSE.pause();if(frame)cancelAnimationFrame(frame);frame=0;stage.classList.remove('open');if(!modal.hidden)closeModal();}wasActive=on;}
  new MutationObserver(sync).observe(screen,{attributes:true,attributeFilter:['class']});sync();
 })();
 </script>
