@@ -6896,6 +6896,10 @@ function renderDtgPenalty(openedBonus, loser) {
    const se=[...soundNodes().flatMap(node=>[...node.querySelectorAll('input[type="checkbox"]')])].find(input=>/(?:^|[^a-z])se(?:$|[^a-z])|sound.?effect/i.test([input.id,input.name,input.labels?.[0]?.textContent,input.parentElement?.textContent].join(' ')));
    if(cardSound.muted||cardSound.volume===0||(se&&!se.checked))return;
    sound.volume=cardSound.volume;
+   if(sound===bellSE){
+     sound.pause();sound.currentTime=0;
+     return sound.play();
+   }
    playSound(sound);
  }
  screen.addEventListener('local-menu-enter',()=>{if(!wasActive)localCue(doorSE);});
@@ -6952,8 +6956,31 @@ function renderDtgPenalty(openedBonus, loser) {
  modal.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
  modal.addEventListener('change',summary);original.addEventListener('change',summary);
  byId('localMenuBack').addEventListener('click',()=>byId('backTitleButton').click());
- bell.addEventListener('click',()=>{if(!active())return;localCue(bellSE);byId('setupStartButton').click();if(active()&&dtgPenaltyError.textContent)openModal('PENALTY',bell);});
- function sync(){const on=active();if(on&&!wasActive){stage.classList.remove('open');summary();frame=requestAnimationFrame(()=>{frame=requestAnimationFrame(()=>{frame=0;if(active())stage.classList.add('open');});});}else if(!on&&wasActive){doorSE.pause();if(frame)cancelAnimationFrame(frame);frame=0;stage.classList.remove('open');if(!modal.hidden)closeModal();}wasActive=on;}
+ let bellPending=null;
+ function cancelBellStart(){if(bellPending){clearTimeout(bellPending.timer);bellPending=null;bell.disabled=false;}}
+ bell.addEventListener('click',()=>{
+   if(!active()||bellPending)return;
+   const pending={timer:0};bellPending=pending;bell.disabled=true;
+   const proceed=()=>{
+     if(bellPending!==pending)return;
+     cancelBellStart();
+     if(!active()||!modal.hidden)return;
+     byId('setupStartButton').click();
+     if(active()&&dtgPenaltyError.textContent)openModal('PENALTY',bell);
+   };
+   // Start the sound within the tap gesture, then wait for actual playback.
+   // A muted or unavailable sound must not block the game.
+   try{
+     const playback=localCue(bellSE);
+     if(!playback){proceed();return;}
+     pending.timer=setTimeout(proceed,1200);
+     Promise.resolve(playback).then(()=>{
+       if(bellPending!==pending)return;
+       clearTimeout(pending.timer);pending.timer=setTimeout(proceed,300);
+     },proceed);
+   }catch(error){proceed();}
+ });
+ function sync(){const on=active();if(on&&!wasActive){stage.classList.remove('open');summary();frame=requestAnimationFrame(()=>{frame=requestAnimationFrame(()=>{frame=0;if(active())stage.classList.add('open');});});}else if(!on&&wasActive){cancelBellStart();doorSE.pause();if(frame)cancelAnimationFrame(frame);frame=0;stage.classList.remove('open');if(!modal.hidden)closeModal();}wasActive=on;}
  new MutationObserver(sync).observe(screen,{attributes:true,attributeFilter:['class']});sync();
 })();
 </script>
